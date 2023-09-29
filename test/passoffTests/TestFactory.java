@@ -2,6 +2,8 @@ package passoffTests;
 
 import chess.*;
 
+import javax.swing.text.Position;
+
 /**
  * Used for testing your code
  * Add in code using your classes for each method for each FIXME
@@ -22,12 +24,12 @@ public class TestFactory {
 
     public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type){
         // FIXME
-		return null;
+		return null; //new Piece(pieceColor, type);
     }
 
     public static ChessPosition getNewPosition(Integer row, Integer col){
         // FIXME
-		return null;
+		return null; //new ChessPosition(row, col);
     }
 
     public static ChessMove getNewMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece){

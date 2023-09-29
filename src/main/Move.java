@@ -1,6 +1,4 @@
-import chess.ChessMove;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 
 public class Move implements ChessMove {
     @Override
@@ -17,4 +15,23 @@ public class Move implements ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         return null;
     }
+
+    private boolean PawnMove(ChessPiece piece, ChessPosition start, ChessPosition end) {
+        if (piece.getPieceType().equals(ChessGame.TeamColor.WHITE) && ((start.getRow() + 1) == (end.getRow())) && end.getRow() < 8) {
+            return true;
+        } else if (piece.getPieceType().equals(ChessGame.TeamColor.BLACK) && ((start.getRow() - 1) == (end.getRow()))) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean RookMove() {return false;}
+
+    private boolean BishopMove() {return false;}
+
+    private boolean KnightMove() {return false;}
+
+    private boolean QueenMove() {return false;}
+
+    private boolean KingMove() {return false;}
 }
