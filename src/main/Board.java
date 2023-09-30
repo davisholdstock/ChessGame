@@ -6,13 +6,21 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class Board implements ChessBoard {
-    public static final int rows = 8;
-    public final int columns = 8;
+public class Board extends Game implements ChessBoard {
+    final int rows = 8;
+    final int columns = 8;
     ChessPiece[][] chessBoard;
 
     public Board() {
-        chessBoard = new ChessPiece[8][8];
+        chessBoard = new ChessPiece[rows][columns];
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
     }
 
     @Override
@@ -23,6 +31,17 @@ public class Board implements ChessBoard {
     @Override
     public ChessPiece getPiece(ChessPosition position) {
         return chessBoard[position.getRow() - 1][position.getColumn() - 1];
+    }
+
+    public ChessPosition findKing(ChessGame.TeamColor color) {
+        for (int i = 1; i <= rows; ++i) {
+            for (int j = 1; j <= columns; ++j) {
+                if (getPiece(new Position(i, j)).getPieceType() == ChessPiece.PieceType.KING && getPiece(new Position(i, j)).getTeamColor() == color) {
+                    return new Position(i,j);
+                }
+            }
+        }
+        return null;
     }
 
     @Override

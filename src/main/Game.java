@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Game implements ChessGame {
@@ -12,6 +13,10 @@ public class Game implements ChessGame {
     public Game() {
         turn = TeamColor.WHITE;
         board = new Board();
+    }
+
+    public Game getGame() {
+        return this;
     }
 
     @Override
@@ -26,17 +31,34 @@ public class Game implements ChessGame {
 
     @Override
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        return null;
+        ArrayList<ChessMove> validMoves = new ArrayList<>();
+
+        for (int i = 1; i <= board.getRows(); ++i) {
+            for (int j = 1; j <= board.getColumns(); ++j) {
+                if (new Move(startPosition, new Position(i,j), null).getEndPosition() != startPosition) {
+                    validMoves.add(new Move(startPosition, new Position(i,j), null));
+                }
+            }
+        }
+        return validMoves;
     }
 
     @Override
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        // FIXME
+        Collection<ChessMove> moves = validMoves(move.getStartPosition());
+        for (ChessMove move1: moves) {
+            if (move1 == move) {
+                // FIXME make the move
+            }
+        }
     }
 
     @Override
     public boolean isInCheck(TeamColor teamColor) {
         // FIXME
+        //if (teamColor == board.findKing(teamColor)) {
+            //return true;
+        //}
         return false;
     }
 
@@ -54,16 +76,13 @@ public class Game implements ChessGame {
 
     @Override
     public void setBoard(ChessBoard board) {
-        board.resetBoard();
+        this.board = board;
     }
 
     @Override
     public ChessBoard getBoard() {
         return board;
     }
-
-
-
 
 
 

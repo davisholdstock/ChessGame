@@ -30,4 +30,11 @@ public interface ChessBoard {
      * (How the game of chess normally starts)
      */
     void resetBoard();
+
+    // I don't know if we can add methods to the interface
+    int getRows();
+
+    int getColumns();
+
+    ChessPosition findKing(ChessGame.TeamColor teamColor);
 }
