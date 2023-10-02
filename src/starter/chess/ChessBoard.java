@@ -37,4 +37,6 @@ public interface ChessBoard {
     int getColumns();
 
     ChessPosition findKing(ChessGame.TeamColor teamColor);
+
+    void movePiece(ChessPosition start, ChessPosition end);
 }

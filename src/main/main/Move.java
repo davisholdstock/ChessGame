@@ -1,4 +1,11 @@
-import chess.*;
+package main;
+
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPiece;
+import chess.ChessPosition;
+
+import java.util.Objects;
 
 public class Move extends Game implements ChessMove {
     ChessPiece.PieceType promotionPiece;
@@ -20,44 +27,7 @@ public class Move extends Game implements ChessMove {
 
     @Override
     public ChessPosition getEndPosition() {
-        if (piece != null) {
-            switch (piece.getPieceType()) {
-                case PAWN -> {
-                    if (PawnMove())
-                        return end;
-                    return start;
-                }
-                case ROOK -> {
-                    if (RookMove())
-                        return end;
-                    return start;
-                }
-                case BISHOP -> {
-                    if (BishopMove())
-                        return end;
-                    return start;
-                }
-                case KNIGHT -> {
-                    if (KnightMove())
-                        return end;
-                    return start;
-                }
-                case KING -> {
-                    if (KingMove())
-                        return end;
-                    return start;
-                }
-                case QUEEN -> {
-                    if (QueenMove())
-                        return end;
-                    return start;
-                }
-                default -> {
-                    return start;
-                }
-            }
-        }
-        return start;
+        return end;
     }
 
     @Override
@@ -65,6 +35,20 @@ public class Move extends Game implements ChessMove {
         return promotionPiece;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return promotionPiece == move.promotionPiece && start.equals(move.start) && end.equals(move.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(promotionPiece, piece, start, end);
+    }
+
+    /////////////////////////////////////////////////////////////////////
     private boolean PawnMove() {
         // FIXME
         if (piece.getTeamColor().equals(ChessGame.TeamColor.WHITE)
