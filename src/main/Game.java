@@ -32,7 +32,7 @@ public class Game implements ChessGame {
     @Override
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ArrayList<ChessMove> validMoves = new ArrayList<>();
-
+//////////////////////////////////////////////////
         for (int i = 1; i <= board.getRows(); ++i) {
             for (int j = 1; j <= board.getColumns(); ++j) {
                 if (new Move(startPosition, new Position(i,j), null).getEndPosition() != startPosition) {

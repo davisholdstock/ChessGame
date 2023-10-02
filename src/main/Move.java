@@ -66,6 +66,7 @@ public class Move extends Game implements ChessMove {
     }
 
     private boolean PawnMove() {
+        // FIXME
         if (piece.getTeamColor().equals(ChessGame.TeamColor.WHITE)
                 && ((start.getRow() + 1) == (end.getRow()))
                 && start.getRow() >= 1
@@ -81,54 +82,69 @@ public class Move extends Game implements ChessMove {
     }
 
     private boolean RookMove() {
-        if (start.getRow() == end.getRow()
-                && start.getColumn() >= 1
-                && start.getColumn() <= 8
-                && end.getColumn() >= 1
-                && end.getColumn() <= 8) {
-            return true;
-        }else if (start.getColumn() == end.getColumn()
-                && start.getRow() >= 1
-                && start.getRow() <= 8
-                && end.getRow() >= 1
-                && end.getRow() <= 8) {
-            return true;
+        if (isOnBoard(start) && isOnBoard(end)) {
+            for (int i = start.getRow(); i <= getGame().getBoard().getRows(); ++i) {
+                if (moveForward(i)) return true;
+            }
+
+            for (int i = start.getRow(); i >= 1; --i) {
+                if (moveBackward(i)) return true;
+            }
+
+            for (int i = start.getColumn(); i <= getGame().getBoard().getColumns(); ++i) {
+                if (moveRight(i)) return true;
+            }
+
+            for (int i = start.getRow(); i >= 1; --i) {
+                if (moveLeft(i)) return true;
+            }
         }
         return false;
     }
 
-    private boolean BishopMove() {return false;}
+    private boolean BishopMove() {
+        if (isOnBoard(start) && isOnBoard(end)) {
+            for (int i = Math.max(start.getRow(), start.getColumn()); i <= getGame().getBoard().getRows(); ++i) {
+                if (moveForwardRight(i)) return true;
+            }
+            for (int i = Math.min(start.getRow(), start.getColumn()); i >= 1; --i) {
+                if (moveForwardLeft(i)) return true;
+            }
+            for (int i = Math.min(start.getRow(), start.getColumn()); i >= 1; --i) {
+                if (moveBackwardRight(i)) return true;
+            }
+            for (int i = Math.min(start.getRow(), start.getColumn()); i >= 1; --i) {
+                if (moveBackwardLeft(i)) return true;
+            }
+
+            // FIXME add backward right and backward left
+
+            for (int i = start.getRow(); i >= 1; --i) {
+                if (moveBackward(i)) return true;
+            }
+        }
+        return false;
+    }
 
     private boolean KnightMove() {return false;}
 
-    private boolean QueenMove() {return false;}
+    private boolean QueenMove() {
+        if (isOnBoard(start) && isOnBoard(end)) {
+
+        }
+        return false;
+    }
 
     private boolean KingMove() {
         if (isOnBoard(start) && isOnBoard(end)) {
-            // Move right
-            if (start.getRow() == end.getRow()
-                    && (start.getColumn() + 1) == end.getColumn()) {
-                return true;
-            }
-
-            // Move left
-            else if (start.getRow() == end.getRow()
-                    && (start.getColumn() - 1) == end.getColumn()) {
-                return true;
-            }
-
-            // Move forward
-            else if (start.getColumn() == end.getColumn()
-                    && (start.getRow() + 1) == end.getRow()) {
-                return true;
-            }
-
-            // Move backward
-            else if (start.getColumn() == end.getColumn()
-                    && (start.getRow() + 1) == end.getRow()) {
-                return true;
-            }
-
+            if (moveRight(1)) return true;
+            if (moveLeft(1)) return true;
+            if (moveForward(1)) return true;
+            if (moveBackward(1)) return true;
+            if (moveForwardRight(1)) return true;
+            if (moveForwardLeft(1)) return true;
+            if (moveBackwardRight(1)) return true;
+            if (moveBackwardLeft(1)) return true;
             return false;
         }
         return false;
@@ -141,5 +157,37 @@ public class Move extends Game implements ChessMove {
                 && position.getColumn() <= getGame().getBoard().getColumns())
             return true;
         return false;
+    }
+
+    private boolean moveForward(int numSquares) {
+        return (start.getColumn() == end.getColumn() && (start.getRow() + numSquares) == end.getRow());
+    }
+
+    private boolean moveBackward(int numSquares) {
+        return (start.getColumn() == end.getColumn() && (start.getRow() - numSquares) == end.getRow());
+    }
+
+    private boolean moveRight(int numSquares) {
+        return (start.getRow() == end.getRow() && (start.getColumn() + numSquares) == end.getColumn());
+    }
+
+    private boolean moveLeft(int numSquares) {
+        return (start.getRow() == end.getRow() && (start.getColumn() - numSquares) == end.getColumn());
+    }
+
+    private boolean moveForwardRight(int numSquares) {
+        return ((start.getColumn() + numSquares) == end.getColumn() && (start.getRow() + numSquares) == end.getRow());
+    }
+
+    private boolean moveForwardLeft(int numSquares) {
+        return ((start.getColumn() - numSquares) == end.getColumn() && (start.getRow() + numSquares) == end.getRow());
+    }
+
+    private boolean moveBackwardRight(int numSquares) {
+        return ((start.getColumn() + numSquares) == end.getColumn() && (start.getRow() - numSquares) == end.getRow());
+    }
+
+    private boolean moveBackwardLeft(int numSquares) {
+        return ((start.getColumn() - numSquares) == end.getColumn() && (start.getRow() - numSquares) == end.getRow());
     }
 }
