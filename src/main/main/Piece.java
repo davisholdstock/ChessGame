@@ -25,9 +25,39 @@ public class Piece implements ChessPiece {
         return type;
     }
 
-    @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return rules.pawnMoves(board, myPosition);
+    public void setPieceType(PieceType type) {
+        this.type = type;
     }
 
+    @Override
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        switch (getPieceType()) {
+            case PAWN -> {
+                return rules.pawnMoves(board, myPosition);
+            }
+////            case ROOK -> {
+////                validMoves = rookMoves(startPosition);
+//            // FIXME add Rook
+////            }
+////            case BISHOP -> {
+////                validMoves = bishopMoves(startPosition);
+//            // FIXME add Bishop
+////            }
+////            case KNIGHT -> {
+////                validMoves = knightMoves(startPosition);
+//            // FIXME add Knight
+////            }
+////            case KING -> {
+////                validMoves = kingMoves(startPosition);
+//            // FIXME add King
+////            }
+////            case QUEEN -> {
+////                validMoves = queenMoves(startPosition);
+//            // FIXME add Queen
+////            }
+            default -> {
+                return null;
+            }
+        }
+    }
 }

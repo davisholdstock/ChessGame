@@ -2,7 +2,6 @@ package main;
 
 import chess.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Game implements ChessGame {
@@ -30,38 +29,7 @@ public class Game implements ChessGame {
 
     @Override
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-
-        Collection<ChessMove> validMoves = new ArrayList<>();
-        switch (board.getPiece(startPosition).getPieceType()) {
-            case PAWN -> {
-                validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
-            }
-//            case ROOK -> {
-//                validMoves = rookMoves(startPosition);
-                // FIXME add Rook
-//            }
-//            case BISHOP -> {
-//                validMoves = bishopMoves(startPosition);
-                // FIXME add Bishop
-//            }
-//            case KNIGHT -> {
-//                validMoves = knightMoves(startPosition);
-                // FIXME add Knight
-//            }
-//            case KING -> {
-//                validMoves = kingMoves(startPosition);
-                // FIXME add King
-//            }
-//            case QUEEN -> {
-//                validMoves = queenMoves(startPosition);
-                // FIXME add Queen
-//            }
-            default -> {
-                validMoves = null;
-            }
-        }
-
-        return validMoves;
+        return board.getPiece(startPosition).pieceMoves(board, startPosition);
     }
 
     @Override

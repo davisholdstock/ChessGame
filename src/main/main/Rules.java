@@ -1,9 +1,6 @@
 package main;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
+import chess.*;
 
 import java.util.ArrayList;
 
@@ -15,29 +12,25 @@ public class Rules extends Game{
     public ArrayList<ChessMove> pawnMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
 
-        if (isOnBoard(startPosition)) { // Move two squares at fist
-            if (PawnOnStartingSquare(startPosition, board.getPiece(startPosition).getTeamColor())) {
+        if (isOnBoard(startPosition)) {
+            if (PawnOnStartingSquare(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move two squares at fist
                 for (int i = 1; i <= 2; ++i) {
                     if (moveForward(i, startPosition, board) != null)
                         moves.add(moveForward(i, startPosition, board));
                     else break;
                 }
-            }
-            else { // Move One square
-//                if (board.getPiece(startPosition).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
-//                    if (board.getPiece(new Position((startPosition.getRow() + 1), startPosition.getColumn())) == null)
-//                        moves.add(new Move(startPosition, new Position((startPosition.getRow() + 1), startPosition.getColumn()), null));
-//                }
-//                else {
-//                    if (board.getPiece(new Position((startPosition.getRow() - 1), startPosition.getColumn())) == null)
-//                        moves.add(new Move(startPosition, new Position((startPosition.getRow() - 1), startPosition.getColumn()), null));
-//                }
+            } else if (pawnCanPromote(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move one square and Promote
+                for (var type: ChessPiece.PieceType.values()) {
+                        if (moveForwardAndPromote(1, startPosition, board, type) != null && type != ChessPiece.PieceType.PAWN && type != ChessPiece.PieceType.KING)
+                            moves.add(moveForwardAndPromote(1, startPosition, board, type));
+                }
+            } else { // Move One square
                 if (moveForward(1, startPosition, board) != null)
                     moves.add(moveForward(1, startPosition, board));
             }
         }
 
-        // FIXME can't en passant, promote, or capture
+        // FIXME can't en passant, or capture
 
         return moves;
     }
@@ -54,6 +47,54 @@ public class Rules extends Game{
             return null;
     }
 
+    private ChessMove moveForwardAndPromote(int numSquares, ChessPosition position, ChessBoard board, ChessPiece.PieceType promotionPiece) {
+        if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            if (board.getPiece(new Position((position.getRow() + numSquares), position.getColumn())) == null)
+                return (new Move(position, new Position((position.getRow() + numSquares), position.getColumn()), promotionPiece));
+        }
+        else {
+            if (board.getPiece(new Position((position.getRow() - numSquares), position.getColumn())) == null)
+                return (new Move(position, new Position((position.getRow() - numSquares), position.getColumn()), promotionPiece));
+        }
+        return null;
+    }
+
+    private ChessMove moveBackward(int numSquares, ChessPosition position, ChessBoard board) {
+        if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            if (board.getPiece(new Position((position.getRow() - numSquares), position.getColumn())) == null)
+                return (new Move(position, new Position((position.getRow() - numSquares), position.getColumn()), null));
+        }
+        else {
+            if (board.getPiece(new Position((position.getRow() + numSquares), position.getColumn())) == null)
+                return (new Move(position, new Position((position.getRow() + numSquares), position.getColumn()), null));
+        }
+        return null;
+    }
+
+    private ChessMove moveRight(int numSquares, ChessPosition position, ChessBoard board) {
+        if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            if (board.getPiece(new Position(position.getRow(), (position.getColumn() + numSquares))) == null)
+                return (new Move(position, new Position(position.getRow(), (position.getColumn() + numSquares)), null));
+        }
+        else {
+            if (board.getPiece(new Position(position.getRow(), (position.getColumn() - numSquares))) == null)
+                return (new Move(position, new Position(position.getRow(), (position.getColumn() - numSquares)), null));
+        }
+        return null;
+    }
+
+    private ChessMove moveLeft(int numSquares, ChessPosition position, ChessBoard board) {
+        if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            if (board.getPiece(new Position(position.getRow(), (position.getColumn() - numSquares))) == null)
+                return (new Move(position, new Position(position.getRow(), (position.getColumn() - numSquares)), null));
+        }
+        else {
+            if (board.getPiece(new Position(position.getRow(), (position.getColumn() + numSquares))) == null)
+                return (new Move(position, new Position(position.getRow(), (position.getColumn() + numSquares)), null));
+        }
+        return null;
+    }
+
     private boolean isOnBoard (ChessPosition position) {
         return (position.getRow() >= 1
                 && position.getRow() <= getGame().getBoard().getRows()
@@ -67,6 +108,11 @@ public class Rules extends Game{
         return (position.getRow() == 6);
     }
 
+    public boolean pawnCanPromote(ChessPosition position, TeamColor color) {
+        if (color.equals(TeamColor.WHITE))
+            return (position.getRow() == 6);
+        return (position.getRow() == 1);
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
