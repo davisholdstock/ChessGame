@@ -57,6 +57,43 @@ public class Rules extends Game{
             moves.add(moveBackwardRight(1, startPosition, board));
         if (moveBackwardLeft(1, startPosition, board) != null)
             moves.add(moveBackwardLeft(1, startPosition, board));
+
+        // FIXME can't castle
+
+        return moves;
+    }
+
+    public ArrayList<ChessMove> rookMoves(ChessBoard board, ChessPosition startPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        int spacesForward = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? board.getRows() - startPosition.getRow() : startPosition.getRow());
+        int spacesRight = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? board.getColumns() - startPosition.getColumn() : startPosition.getColumn());
+        int spacesBackward = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? startPosition.getRow() : board.getRows() - startPosition.getRow());
+        int spacesLeft = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? startPosition.getColumn() : board.getColumns() - startPosition.getColumn());
+
+        for (int i = 1; i <= spacesForward; ++i) {
+            if (moveForward(i, startPosition, board) != null)
+                moves.add(moveForward(i, startPosition, board));
+            else break;
+        }
+
+        for (int i = 1; i <= spacesBackward; ++i) {
+            if (moveBackward(i, startPosition, board) != null)
+                moves.add(moveBackward(i, startPosition, board));
+            else break;
+        }
+
+        for (int i = 1; i <= spacesRight; ++i) {
+            if (moveRight(i, startPosition, board) != null)
+                moves.add(moveRight(i, startPosition, board));
+            else break;
+        }
+
+        for (int i = 1; i <= spacesLeft; ++i) {
+            if (moveLeft(i, startPosition, board) != null)
+                moves.add(moveLeft(i, startPosition, board));
+            else break;
+        }
+
         return moves;
     }
 
@@ -64,16 +101,16 @@ public class Rules extends Game{
             if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
                 if (isOnBoard(new Position((position.getRow() + numSquares), position.getColumn()))
                         && (board.getPiece(new Position((position.getRow() + numSquares), position.getColumn())) == null
-                        || (board.getPiece(new Position((position.getRow() + numSquares), position.getColumn())).getTeamColor() == TeamColor.BLACK
-                        && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN)))
+                        || (board.getPiece(new Position((position.getRow() + numSquares), position.getColumn())).getTeamColor() == TeamColor.BLACK  // Can Capture opposite color
+                        && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN))) // Can't capture forward if it is a pawn
                     return (new Move(position, new Position((position.getRow() + numSquares), position.getColumn()), null));
                 return null;
             }
             else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
                 if (isOnBoard(new Position((position.getRow() - numSquares), position.getColumn()))
                         && (board.getPiece(new Position((position.getRow() - numSquares), position.getColumn())) == null
-                        || (board.getPiece(new Position((position.getRow() - numSquares), position.getColumn())).getTeamColor() == TeamColor.WHITE
-                        && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN)))
+                        || (board.getPiece(new Position((position.getRow() - numSquares), position.getColumn())).getTeamColor() == TeamColor.WHITE // Can Capture opposite color
+                        && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN))) // Can't capture forward if it is a pawn
                     return (new Move(position, new Position((position.getRow() - numSquares), position.getColumn()), null));
                 return null;
             }
@@ -136,14 +173,14 @@ public class Rules extends Game{
         if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
             if (isOnBoard(new Position(position.getRow(), (position.getColumn() - numSquares)))
                     && (board.getPiece(new Position(position.getRow(), (position.getColumn() - numSquares))) == null
-                    || board.getPiece(new Position(position.getRow(), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK))
+                    || board.getPiece(new Position(position.getRow(), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK)) // Can Capture opposite color
                 return (new Move(position, new Position(position.getRow(), (position.getColumn() - numSquares)), null));
             return null;
         }
         else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
             if (isOnBoard(new Position(position.getRow(), (position.getColumn() + numSquares)))
                     && (board.getPiece(new Position(position.getRow(), (position.getColumn() + numSquares))) == null
-                    || board.getPiece(new Position(position.getRow(), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE))
+                    || board.getPiece(new Position(position.getRow(), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position(position.getRow(), (position.getColumn() + numSquares)), null));
             return null;
         }
@@ -154,14 +191,14 @@ public class Rules extends Game{
         if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
             if (isOnBoard(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares)))
                     && (board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.BLACK))
+                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.BLACK)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() + numSquares), (position.getColumn() + numSquares)), null));
             return null;
         }
         else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
             if (isOnBoard(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares)))
                     && (board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.WHITE))
+                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() - numSquares), (position.getColumn() - numSquares)), null));
             return null;
         }
@@ -172,14 +209,14 @@ public class Rules extends Game{
         if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
             if (isOnBoard(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares)))
                     && (board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK))
+                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() + numSquares), (position.getColumn() - numSquares)), null));
             return null;
         }
         else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
             if (isOnBoard(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares)))
                     && (board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE))
+                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() - numSquares), (position.getColumn() + numSquares)), null));
             return null;
         }
@@ -190,14 +227,14 @@ public class Rules extends Game{
         if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
             if (isOnBoard(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares)))
                     && (board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.BLACK))
+                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.BLACK)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() - numSquares), (position.getColumn() + numSquares)), null));
             return null;
         }
         else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
             if (isOnBoard(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares)))
                     && (board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.WHITE))
+                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() + numSquares), (position.getColumn() - numSquares)), null));
             return null;
         }
@@ -208,14 +245,14 @@ public class Rules extends Game{
         if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
             if (isOnBoard(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares)))
                     && (board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK))
+                    || board.getPiece(new Position((position.getRow() - numSquares), (position.getColumn() - numSquares))).getTeamColor() == TeamColor.BLACK)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() - numSquares), (position.getColumn() - numSquares)), null));
             return null;
         }
         else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
             if (isOnBoard(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares)))
                     && (board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))) == null
-                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE))
+                    || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() + numSquares), (position.getColumn() + numSquares)), null));
             return null;
         }

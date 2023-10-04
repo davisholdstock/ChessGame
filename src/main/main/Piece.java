@@ -35,10 +35,10 @@ public class Piece implements ChessPiece {
             case PAWN -> {
                 return rules.pawnMoves(board, myPosition);
             }
-////            case ROOK -> {
-////                validMoves = rookMoves(startPosition);
-//            // FIXME add Rook
-////            }
+            case ROOK -> {
+                return rules.rookMoves(board, myPosition);
+            // FIXME add Rook
+            }
 ////            case BISHOP -> {
 ////                validMoves = bishopMoves(startPosition);
 //            // FIXME add Bishop
