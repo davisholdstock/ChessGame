@@ -47,10 +47,10 @@ public class Piece implements ChessPiece {
 ////                validMoves = knightMoves(startPosition);
 //            // FIXME add Knight
 ////            }
-////            case KING -> {
-////                validMoves = kingMoves(startPosition);
+            case KING -> {
+                return rules.kingMoves(board, myPosition);
 //            // FIXME add King
-////            }
+            }
 ////            case QUEEN -> {
 ////                validMoves = queenMoves(startPosition);
 //            // FIXME add Queen
