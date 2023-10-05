@@ -37,24 +37,20 @@ public class Piece implements ChessPiece {
             }
             case ROOK -> {
                 return rules.rookMoves(board, myPosition);
-            // FIXME add Rook
             }
-////            case BISHOP -> {
-////                validMoves = bishopMoves(startPosition);
-//            // FIXME add Bishop
-////            }
+            case BISHOP -> {
+                return rules.bishopMoves(board, myPosition);
+            }
 ////            case KNIGHT -> {
 ////                validMoves = knightMoves(startPosition);
 //            // FIXME add Knight
 ////            }
             case KING -> {
                 return rules.kingMoves(board, myPosition);
-//            // FIXME add King
             }
-////            case QUEEN -> {
-////                validMoves = queenMoves(startPosition);
-//            // FIXME add Queen
-////            }
+            case QUEEN -> {
+                return rules.queenMoves(board, myPosition);
+            }
             default -> {
                 return null;
             }
