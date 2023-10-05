@@ -71,26 +71,87 @@ public class Rules extends Game{
         int spacesLeft = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? startPosition.getColumn() : board.getColumns() - startPosition.getColumn());
 
         for (int i = 1; i <= spacesForward; ++i) {
-            if (moveForward(i, startPosition, board) != null)
+            if (moveForward(i, startPosition, board) != null) {
                 moves.add(moveForward(i, startPosition, board));
+                if (board.getPiece(moveForward(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
             else break;
         }
 
         for (int i = 1; i <= spacesBackward; ++i) {
-            if (moveBackward(i, startPosition, board) != null)
+            if (moveBackward(i, startPosition, board) != null) {
                 moves.add(moveBackward(i, startPosition, board));
+                if (board.getPiece(moveBackward(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
             else break;
         }
 
         for (int i = 1; i <= spacesRight; ++i) {
-            if (moveRight(i, startPosition, board) != null)
+            if (moveRight(i, startPosition, board) != null) {
                 moves.add(moveRight(i, startPosition, board));
+                if (board.getPiece(moveRight(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
             else break;
         }
 
         for (int i = 1; i <= spacesLeft; ++i) {
-            if (moveLeft(i, startPosition, board) != null)
+            if (moveLeft(i, startPosition, board) != null) {
                 moves.add(moveLeft(i, startPosition, board));
+                if (board.getPiece(moveLeft(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
+            else break;
+        }
+
+        return moves;
+    }
+
+    public ArrayList<ChessMove> bishopMoves(ChessBoard board, ChessPosition startPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        // FIXME variables
+        int spacesForwardRight = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? board.getColumns() - startPosition.getColumn() : startPosition.getColumn());
+        int spacesForwardLeft = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? board.getRows() - startPosition.getRow() : startPosition.getRow());
+        int spacesBackwardRight = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? startPosition.getRow() : board.getRows() - startPosition.getRow());
+        int spacesBackwardLeft = ((board.getPiece(startPosition).getTeamColor() == TeamColor.WHITE)? startPosition.getColumn() : board.getColumns() - startPosition.getColumn());
+
+        // FIXME move functions
+        for (int i = 1; i <= spacesForwardRight; ++i) {
+            if (moveForward(i, startPosition, board) != null) {
+                moves.add(moveForward(i, startPosition, board));
+                if (board.getPiece(moveForward(i, startPosition, board).getEndPosition()) != null) {
+                    break;
+                }
+            }
+            else break;
+        }
+
+        for (int i = 1; i <= spacesForwardLeft; ++i) {
+            if (moveBackward(i, startPosition, board) != null) {
+                moves.add(moveBackward(i, startPosition, board));
+                if (board.getPiece(moveBackward(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
+            else break;
+        }
+
+        for (int i = 1; i <= spacesBackwardRight; ++i) {
+            if (moveRight(i, startPosition, board) != null) {
+                moves.add(moveRight(i, startPosition, board));
+                if (board.getPiece(moveRight(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
+            else break;
+        }
+
+        for (int i = 1; i <= spacesBackwardLeft; ++i) {
+            if (moveLeft(i, startPosition, board) != null) {
+                moves.add(moveLeft(i, startPosition, board));
+                if (board.getPiece(moveLeft(i, startPosition, board).getEndPosition()) != null)
+                    break;
+            }
             else break;
         }
 
