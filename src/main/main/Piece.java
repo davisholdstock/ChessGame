@@ -41,10 +41,10 @@ public class Piece implements ChessPiece {
             case BISHOP -> {
                 return rules.bishopMoves(board, myPosition);
             }
-////            case KNIGHT -> {
-////                validMoves = knightMoves(startPosition);
-//            // FIXME add Knight
-////            }
+            case KNIGHT -> {
+                return null;
+            // FIXME add Knight
+            }
             case KING -> {
                 return rules.kingMoves(board, myPosition);
             }
