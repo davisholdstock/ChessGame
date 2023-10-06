@@ -55,4 +55,31 @@ public class Piece implements ChessPiece {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        switch (getPieceType()) {
+            case PAWN -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "P" : "p";
+            }
+            case ROOK -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "R" : "r";
+            }
+            case BISHOP -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "B" : "b";
+            }
+            case KNIGHT -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "N" : "n";
+            }
+            case KING -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "K" : "k";
+            }
+            case QUEEN -> {
+                return (color == ChessGame.TeamColor.WHITE) ? "Q" : "q";
+            }
+            default -> {
+                return "?";
+            }
+        }
+    }
 }

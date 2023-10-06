@@ -24,7 +24,6 @@ public class TestFactory {
     }
 
     public static ChessPosition getNewPosition(Integer row, Integer col){
-        // FIXME
 		return new Position(row - 1, col - 1);
     }
 
