@@ -165,6 +165,35 @@ public class Rules extends Game{
         return moves;
     }
 
+    public ArrayList<ChessMove> knightMoves(ChessBoard board, ChessPosition startPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        if (moveLikeAKnight(2, 1, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(2, 1, startPosition, board));
+        }
+        if (moveLikeAKnight(2, -1, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(2, -1, startPosition, board));
+        }
+        if (moveLikeAKnight(-2, 1, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(-2, 1, startPosition, board));
+        }
+        if (moveLikeAKnight(-2, -1, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(-2, -1, startPosition, board));
+        }
+        if (moveLikeAKnight(1, 2, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(1, 2, startPosition, board));
+        }
+        if (moveLikeAKnight(-1, 2, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(-1, 2, startPosition, board));
+        }
+        if (moveLikeAKnight(1, -2, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(1, -2, startPosition, board));
+        }
+        if (moveLikeAKnight(-1, -2, startPosition, board) != null) {
+            moves.add(moveLikeAKnight(-1, -2, startPosition, board));
+        }
+        return moves;
+    }
+
     private ChessMove moveForward(int numSquares, ChessPosition position, ChessBoard board) {
             if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
                 if (isOnBoard(new Position((position.getRow() + numSquares), position.getColumn()))
@@ -322,6 +351,26 @@ public class Rules extends Game{
                     && (board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))) == null
                     || board.getPiece(new Position((position.getRow() + numSquares), (position.getColumn() + numSquares))).getTeamColor() == TeamColor.WHITE)) // Can Capture opposite color
                 return (new Move(position, new Position((position.getRow() + numSquares), (position.getColumn() + numSquares)), null));
+            return null;
+        }
+        return null;
+    }
+
+    private ChessMove moveLikeAKnight(int numSquaresForward, int numSquaresRight, ChessPosition position, ChessBoard board) {
+        if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            if (isOnBoard(new Position((position.getRow() + numSquaresForward), (position.getColumn() + numSquaresRight)))
+                    && (board.getPiece(new Position((position.getRow() + numSquaresForward), (position.getColumn() + numSquaresRight))) == null
+                    || (board.getPiece(new Position((position.getRow() + numSquaresForward), (position.getColumn() + numSquaresRight))).getTeamColor() == TeamColor.BLACK  // Can Capture opposite color
+                    && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN))) // Can't capture forward if it is a pawn
+                return (new Move(position, new Position((position.getRow() + numSquaresForward), (position.getColumn() + numSquaresRight)), null));
+            return null;
+        }
+        else if (board.getPiece(position).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
+            if (isOnBoard(new Position((position.getRow() - numSquaresForward), (position.getColumn() - numSquaresRight)))
+                    && (board.getPiece(new Position((position.getRow() - numSquaresForward), (position.getColumn() - numSquaresRight))) == null
+                    || (board.getPiece(new Position((position.getRow() - numSquaresForward), (position.getColumn() - numSquaresRight))).getTeamColor() == TeamColor.WHITE // Can Capture opposite color
+                    && board.getPiece(position).getPieceType() != ChessPiece.PieceType.PAWN))) // Can't capture forward if it is a pawn
+                return (new Move(position, new Position((position.getRow() - numSquaresForward), (position.getColumn() - numSquaresRight)), null));
             return null;
         }
         return null;

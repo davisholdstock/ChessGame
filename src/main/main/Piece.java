@@ -42,8 +42,7 @@ public class Piece implements ChessPiece {
                 return rules.bishopMoves(board, myPosition);
             }
             case KNIGHT -> {
-                return null;
-            // FIXME add Knight
+                return rules.knightMoves(board, myPosition);
             }
             case KING -> {
                 return rules.kingMoves(board, myPosition);
