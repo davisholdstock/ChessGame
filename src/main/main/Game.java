@@ -34,11 +34,15 @@ public class Game implements ChessGame {
 
     @Override
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        Collection<ChessMove> moves = validMoves(move.getStartPosition());
-        for (ChessMove move1: moves) {
-            if (move1.equals(move)) {
-                board.movePiece(move.getStartPosition(), move.getEndPosition());
-                return;
+        Collection<ChessMove> moves;
+        if (board.getPiece(move.getStartPosition()) != null) {
+            moves = validMoves(move.getStartPosition());
+
+            for (ChessMove move1 : moves) {
+                if (move1.equals(move)) {
+                    board.movePiece(move.getStartPosition(), move.getEndPosition());
+                    return;
+                }
             }
         }
     }

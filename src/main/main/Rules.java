@@ -397,24 +397,28 @@ public class Rules extends Game{
 
     public ArrayList<ChessMove> checkForPawnCapture(ChessBoard board, ChessPosition position, ArrayList<ChessMove> moves, ChessPiece.PieceType promotionPiece) {
         if (board.getPiece(position).getTeamColor() == TeamColor.WHITE) {
-            if (board.getPiece(new Position((position.getRow() + 1), (position.getColumn() + 1))) != null){
+            if (isOnBoard(new Position((position.getRow() + 1), (position.getColumn() + 1)))
+                && board.getPiece(new Position((position.getRow() + 1), (position.getColumn() + 1))) != null){
                 if (board.getPiece(new Position((position.getRow() + 1), (position.getColumn() + 1))).getTeamColor() == TeamColor.BLACK) {
                     moves.add(new Move(position, new Position((position.getRow() + 1), (position.getColumn() + 1)), promotionPiece));
                 }
             }
-            if (board.getPiece(new Position((position.getRow() + 1), (position.getColumn() - 1))) != null){
+            if (isOnBoard(new Position((position.getRow() + 1), (position.getColumn() - 1)))
+                    && board.getPiece(new Position((position.getRow() + 1), (position.getColumn() - 1))) != null){
                 if (board.getPiece(new Position((position.getRow() + 1), (position.getColumn() - 1))).getTeamColor() == TeamColor.BLACK) {
                     moves.add(new Move(position, new Position((position.getRow() + 1), (position.getColumn() - 1)), promotionPiece));
                 }
             }
         }
         else if (board.getPiece(position).getTeamColor() == TeamColor.BLACK) {
-            if (board.getPiece(new Position((position.getRow() - 1), (position.getColumn() - 1))) != null){
+            if (isOnBoard(new Position((position.getRow() - 1), (position.getColumn() - 1)))
+                    && board.getPiece(new Position((position.getRow() - 1), (position.getColumn() - 1))) != null){
                 if (board.getPiece(new Position((position.getRow() - 1), (position.getColumn() - 1))).getTeamColor() == TeamColor.WHITE) {
                     moves.add(new Move(position, new Position((position.getRow() - 1), (position.getColumn() - 1)), promotionPiece));
                 }
             }
-            if (board.getPiece(new Position((position.getRow() - 1), (position.getColumn() + 1))) != null){
+            if (isOnBoard(new Position((position.getRow() - 1), (position.getColumn() + 1)))
+                    && board.getPiece(new Position((position.getRow() - 1), (position.getColumn() + 1))) != null){
                 if (board.getPiece(new Position((position.getRow() - 1), (position.getColumn() + 1))).getTeamColor() == TeamColor.WHITE) {
                     moves.add(new Move(position, new Position((position.getRow() - 1), (position.getColumn() + 1)), promotionPiece));
                 }
