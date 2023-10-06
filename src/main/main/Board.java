@@ -80,7 +80,7 @@ public class Board implements ChessBoard {
                 if (getPiece(new Position(i, y)) != null)
                     chessBoard.append(getPiece(new Position(i, y)).toString());
                 else
-                    chessBoard.append(".");
+                    chessBoard.append("-");
                 chessBoard.append(" | ");
             }
             chessBoard.append("\n");

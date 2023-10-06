@@ -214,7 +214,6 @@ public class ChessGameTests {
         board.resetBoard();
         game.setBoard(board);
         game.setTeamTurn(ChessGame.TeamColor.WHITE);
-        System.out.println(game.toString());
         /*
         |r|n|b|q|k|b|n|r|
 		|p|p|p|p|p|p|p|p|
