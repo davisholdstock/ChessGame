@@ -13,14 +13,17 @@ public class Main {
         game.getBoard().resetBoard();
         System.out.println(game.toString());
 
-        game.makeMove(new Move(new Position(1, 0), new Position(3, 0), null));
+        game.makeMove(new Move(new Position(1, 4), new Position(3, 4), null));
         System.out.println(game.toString());
 
-        game.makeMove(new Move(new Position(6, 0), new Position(4, 0), null));
+        game.makeMove(new Move(new Position(6, 5), new Position(4, 5), null));
         System.out.println(game.toString());
 
-        game.makeMove(new Move(new Position(3, 0), new Position(4, 0), null));
+        game.makeMove(new Move(new Position(0, 3), new Position(4, 7), null));
         System.out.println(game.toString());
+
+        if (game.isInCheck(ChessGame.TeamColor.BLACK))
+            System.out.println("TRUE");
 
     }
 }

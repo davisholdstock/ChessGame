@@ -14,6 +14,25 @@ public class Board implements ChessBoard {
         chessBoard = new ChessPiece[rows][columns];
     }
 
+    // Copy constructor
+    public Board(ChessBoard otherBoard) {
+        // Initialize the new chess board
+        this.chessBoard = new ChessPiece[rows][columns];
+
+        // Copy the pieces from the other board
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                ChessPosition position = new Position(i, j);
+                ChessPiece piece = otherBoard.getPiece(position);
+                if (piece != null) {
+                    this.chessBoard[i][j] = new Piece(piece.getTeamColor(), piece.getPieceType());
+                } else {
+                    this.chessBoard[i][j] = null;
+                }
+            }
+        }
+    }
+
     public int getRows() {
         return rows;
     }
@@ -43,9 +62,11 @@ public class Board implements ChessBoard {
     }
 
     public ChessPosition findKing(ChessGame.TeamColor color) {
-        for (int i = 1; i <= rows; ++i) {
-            for (int j = 1; j <= columns; ++j) {
-                if (getPiece(new Position(i, j)).getPieceType() == ChessPiece.PieceType.KING && getPiece(new Position(i, j)).getTeamColor() == color) {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                if (getPiece(new Position(i, j)) != null
+                        && getPiece(new Position(i, j)).getPieceType() == ChessPiece.PieceType.KING
+                        && getPiece(new Position(i, j)).getTeamColor() == color) {
                     return new Position(i,j);
                 }
             }
