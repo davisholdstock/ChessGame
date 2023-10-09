@@ -16,12 +16,15 @@ public class Rules extends Game {
         if (isOnBoard(startPosition)) {
 //            checkForPawnCapture(board, startPosition, moves);
             if (PawnOnStartingSquare(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move two squares at fist
+                checkForPawnCapture(board, startPosition, moves, null); // Capturing
                 for (int i = 1; i <= 2; ++i) {
-                    if (moveForward(i, startPosition, board) != null)
-                        moves.add(moveForward(i, startPosition, board));
+                    if (moveForward(i, startPosition, board) != null) {
+                            moves.add(moveForward(i, startPosition, board));
+                    }
                     else break;
                 }
             } else if (pawnCanPromote(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move one square and Promote
+                //checkForPawnCapture(board, startPosition, moves, null); // Capturing
                 for (var type : ChessPiece.PieceType.values()) {
                     if (type != ChessPiece.PieceType.PAWN && type != ChessPiece.PieceType.KING)
                         checkForPawnCapture(board, startPosition, moves, type); // Capturing and Promotion
@@ -42,22 +45,30 @@ public class Rules extends Game {
 
     public ArrayList<ChessMove> kingMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        if (moveForward(1, startPosition, board) != null)
-            moves.add(moveForward(1, startPosition, board));
-        if (moveBackward(1, startPosition, board) != null)
-            moves.add(moveBackward(1, startPosition, board));
-        if (moveLeft(1, startPosition, board) != null)
-            moves.add(moveLeft(1, startPosition, board));
-        if (moveRight(1, startPosition, board) != null)
-            moves.add(moveRight(1, startPosition, board));
-        if (moveForwardRight(1, startPosition, board) != null)
-            moves.add(moveForwardRight(1, startPosition, board));
-        if (moveForwardLeft(1, startPosition, board) != null)
-            moves.add(moveForwardLeft(1, startPosition, board));
-        if (moveBackwardRight(1, startPosition, board) != null)
-            moves.add(moveBackwardRight(1, startPosition, board));
-        if (moveBackwardLeft(1, startPosition, board) != null)
-            moves.add(moveBackwardLeft(1, startPosition, board));
+        if (moveForward(1, startPosition, board) != null) {
+                moves.add(moveForward(1, startPosition, board));
+        }
+        if (moveBackward(1, startPosition, board) != null) {
+                moves.add(moveBackward(1, startPosition, board));
+        }
+        if (moveLeft(1, startPosition, board) != null) {
+                moves.add(moveLeft(1, startPosition, board));
+        }
+        if (moveRight(1, startPosition, board) != null) {
+                moves.add(moveRight(1, startPosition, board));
+        }
+        if (moveForwardRight(1, startPosition, board) != null) {
+                moves.add(moveForwardRight(1, startPosition, board));
+        }
+        if (moveForwardLeft(1, startPosition, board) != null) {
+                moves.add(moveForwardLeft(1, startPosition, board));
+        }
+        if (moveBackwardRight(1, startPosition, board) != null) {
+                moves.add(moveBackwardRight(1, startPosition, board));
+        }
+        if (moveBackwardLeft(1, startPosition, board) != null) {
+                moves.add(moveBackwardLeft(1, startPosition, board));
+        }
 
         // FIXME can't castle
 
@@ -161,28 +172,28 @@ public class Rules extends Game {
     public ArrayList<ChessMove> knightMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
         if (moveLikeAKnight(2, 1, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(2, 1, startPosition, board));
+                moves.add(moveLikeAKnight(2, 1, startPosition, board));
         }
         if (moveLikeAKnight(2, -1, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(2, -1, startPosition, board));
+                moves.add(moveLikeAKnight(2, -1, startPosition, board));
         }
         if (moveLikeAKnight(-2, 1, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(-2, 1, startPosition, board));
+                moves.add(moveLikeAKnight(-2, 1, startPosition, board));
         }
         if (moveLikeAKnight(-2, -1, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(-2, -1, startPosition, board));
+                moves.add(moveLikeAKnight(-2, -1, startPosition, board));
         }
         if (moveLikeAKnight(1, 2, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(1, 2, startPosition, board));
+                moves.add(moveLikeAKnight(1, 2, startPosition, board));
         }
         if (moveLikeAKnight(-1, 2, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(-1, 2, startPosition, board));
+                moves.add(moveLikeAKnight(-1, 2, startPosition, board));
         }
         if (moveLikeAKnight(1, -2, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(1, -2, startPosition, board));
+                moves.add(moveLikeAKnight(1, -2, startPosition, board));
         }
         if (moveLikeAKnight(-1, -2, startPosition, board) != null) {
-            moves.add(moveLikeAKnight(-1, -2, startPosition, board));
+                moves.add(moveLikeAKnight(-1, -2, startPosition, board));
         }
         return moves;
     }

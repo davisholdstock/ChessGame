@@ -1,9 +1,8 @@
 package main;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
+
+import java.util.ArrayList;
 
 public class Board implements ChessBoard {
     final int rows = 8;
@@ -53,6 +52,11 @@ public class Board implements ChessBoard {
     @Override
     public void movePiece(ChessPosition start, ChessPosition end) {
         addPiece(end, getPiece(start));
+        deletePiece(start);
+    }
+
+    public void movePieceAndPromote(ChessPosition start, ChessPosition end, ChessPiece.PieceType promotionPiece) {
+        addPiece(end, new Piece(getPiece(start).getTeamColor(), promotionPiece));
         deletePiece(start);
     }
 
@@ -107,5 +111,22 @@ public class Board implements ChessBoard {
             chessBoard.append("\n");
         }
         return chessBoard.toString();
+    }
+
+    public boolean isInCheck(ChessGame.TeamColor teamColor) {
+        ArrayList<ChessMove> otherPieceMoves = new ArrayList<ChessMove>();
+        for (int i = 0; i < getRows(); ++i) {
+            for (int j = 0; j < getColumns(); ++j) {
+                if (getPiece(new Position(i, j)) != null
+                        && getPiece(new Position(i, j)).getTeamColor() != teamColor) {
+                    otherPieceMoves.addAll(getPiece(new Position(i, j)).pieceMoves(this, new Position(i, j)));
+                }
+            }
+        }
+        for (ChessMove otherPieceMove : otherPieceMoves) {
+            if (otherPieceMove.getEndPosition().equals(findKing(teamColor)))
+                return true;
+        }
+        return false;
     }
 }

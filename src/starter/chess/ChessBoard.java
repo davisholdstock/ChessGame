@@ -39,4 +39,8 @@ public interface ChessBoard {
     ChessPosition findKing(ChessGame.TeamColor teamColor);
 
     void movePiece(ChessPosition start, ChessPosition end);
+
+    boolean isInCheck(ChessGame.TeamColor teamColor);
+
+    void movePieceAndPromote(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece);
 }
