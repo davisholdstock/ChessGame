@@ -35,7 +35,18 @@ public class Game implements ChessGame {
 
     @Override
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        return board.getPiece(startPosition).pieceMoves(board, startPosition);
+        Collection<ChessMove> moves = new ArrayList<>();
+        Collection<ChessMove> movesReturned = board.getPiece(startPosition).pieceMoves(board, startPosition);
+
+        for (ChessMove move : movesReturned) {
+            ChessBoard tempBoard = new Board(getBoard());
+            tempBoard.movePiece(move.getStartPosition(), move.getEndPosition());
+            if (!tempBoard.isInCheck(board.getPiece(startPosition).getTeamColor())) {
+                moves.add(move);
+            }
+        }
+        return moves;
+
     }
 
     @Override
