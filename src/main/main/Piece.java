@@ -7,7 +7,7 @@ import java.util.Collection;
 public class Piece implements ChessPiece {
     public ChessGame.TeamColor color;
     public PieceType type;
-    private Rules rules;
+    private final Rules rules;
 
     public Piece(ChessGame.TeamColor color, PieceType type) {
         this.color = color;
@@ -23,10 +23,6 @@ public class Piece implements ChessPiece {
     @Override
     public PieceType getPieceType() {
         return type;
-    }
-
-    public void setPieceType(PieceType type) {
-        this.type = type;
     }
 
     @Override
