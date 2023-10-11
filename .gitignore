@@ -1,4 +1,5 @@
 ### IntelliJ IDEA ###
+docs/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
