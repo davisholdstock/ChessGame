@@ -6,23 +6,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class ChessGUI extends JFrame implements MouseListener {
+    private int windowHeight = 500;
+    private int windowWidth = 475;
     private JPanel[][] chessGameBoard = new JPanel[8][8];
-
     private JPanel pnlMain = new JPanel(new GridLayout(8, 8));
-
     private String[][] strChessBoard = new String[][]{{"RB", "NB", "BB", "QB", "KB", "BB", "NB", "RB"}, {"PB", "PB", "PB", "PB", "PB", "PB", "PB", "PB"}, {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}, {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}, {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}, {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}, {"PW", "PW", "PW", "PW", "PW", "PW", "PW", "PW"}, {"RW", "NW", "BW", "QW", "KW", "BW", "NW", "RW"}};
-    private ImageIcon rookBlack = new ImageIcon(System.getProperty("user.dir") + "/images/RookBlack.png");
-    private ImageIcon rookWhite = new ImageIcon(System.getProperty("user.dir") + "/images/RookWhite.png");
-    private ImageIcon bishopBlack = new ImageIcon(System.getProperty("user.dir") + "/images/BishopBlack.png");
-    private ImageIcon bishopWhite = new ImageIcon(System.getProperty("user.dir") + "/images/BishopWhite.png");
-    private ImageIcon knightBlack = new ImageIcon(System.getProperty("user.dir") + "/images/KnightBlack.png");
-    private ImageIcon knightWhite = new ImageIcon(System.getProperty("user.dir") + "/images/KnightWhite.png");
-    private ImageIcon kingBlack = new ImageIcon(System.getProperty("user.dir") + "/images/KingBlack.png");
-    private ImageIcon kingWhite = new ImageIcon(System.getProperty("user.dir") + "/images/KingWhite.png");
-    private ImageIcon queenBlack = new ImageIcon(System.getProperty("user.dir") + "/images/QueenBlack.png");
-    private ImageIcon queenWhite = new ImageIcon(System.getProperty("user.dir") + "/images/QueenWhite.png");
-    private ImageIcon pawnBlack = new ImageIcon(System.getProperty("user.dir") + "/images/PawnBlack.png");
-    private ImageIcon pawnWhite = new ImageIcon(System.getProperty("user.dir") + "/images/PawnWhite.png");
+    private ImageIcon rookBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_rook.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon rookWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_rook.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon bishopBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_bishop.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon bishopWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_bishop.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon knightBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_knight.png").getImage().getScaledInstance(windowWidth / 12, windowHeight / 12, Image.SCALE_SMOOTH));
+    private ImageIcon knightWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_knight.png").getImage().getScaledInstance(windowWidth / 12, windowHeight / 12, Image.SCALE_SMOOTH));
+    private ImageIcon kingBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_king.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon kingWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_king.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon queenBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_queen.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon queenWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_queen.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon pawnBlack = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/b_pawn.png").getImage().getScaledInstance(windowWidth / 9, windowHeight / 9, Image.SCALE_SMOOTH));
+    private ImageIcon pawnWhite = new ImageIcon(new ImageIcon("C:/Users/davis/IdeaProjects/ChessGamePhase1/src/main/main/images/w_pawn.png").getImage().getScaledInstance(windowWidth / 13, windowHeight / 13, Image.SCALE_SMOOTH));
     private boolean boolMoveSelection = false, bWhite = true, bMyTurn = true;
     private Point pntMoveFrom, pntMoveTo;
     private Container c;
@@ -33,7 +33,7 @@ public class ChessGUI extends JFrame implements MouseListener {
 
         c = getContentPane();
 
-        setBounds(100, 100, 470, 495);
+        setBounds(100, 100, windowWidth, windowHeight);
 
         setBackground(new Color(204, 204, 204));
 
@@ -45,7 +45,7 @@ public class ChessGUI extends JFrame implements MouseListener {
 
         c.setLayout(null);
 
-        pnlMain.setBounds(3, 3, 460, 460);
+        pnlMain.setBounds(0, 0, windowWidth - 15, windowHeight - 40);
 
         pnlMain.setBackground(new Color(255, 255, 255));
 
