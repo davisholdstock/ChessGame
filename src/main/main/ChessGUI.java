@@ -2,6 +2,7 @@ package main;
 
 import chess.ChessGame;
 import chess.ChessPiece;
+import chess.InvalidMoveException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +47,7 @@ public class ChessGUI extends JFrame implements MouseListener {
         pnlMain.setBackground(new Color(255, 255, 255));
         c.add(pnlMain);
         this.drawChessBoard();
+        System.out.println(game.toString());
         this.arrangeChessPieces();
         show();
 
@@ -133,6 +135,12 @@ public class ChessGUI extends JFrame implements MouseListener {
                 this.chessGameBoard[this.pntMoveFrom.y][this.pntMoveFrom.x].remove(z);
                 this.chessGameBoard[this.pntMoveFrom.y][this.pntMoveFrom.x].repaint();
             }
+        try {
+            game.makeMove(new Move(new Position(pntMoveFrom.y, pntMoveFrom.x), new Position(pntMoveTo.y, pntMoveTo.x), null));
+            System.out.println(game.toString());
+        } catch (InvalidMoveException e) {
+            throw new RuntimeException(e);
+        }
         this.chessGameBoard[this.pntMoveTo.y][this.pntMoveTo.x].add(this.getPieceObject(game.getBoard().getPiece(new Position(this.pntMoveTo.y, this.pntMoveTo.x))), BorderLayout.CENTER);
         this.chessGameBoard[this.pntMoveTo.y][this.pntMoveTo.x].validate();
     }
