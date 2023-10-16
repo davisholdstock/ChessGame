@@ -1,6 +1,7 @@
 package main;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPiece;
 import chess.InvalidMoveException;
 
@@ -8,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 
 public class ChessGUI extends JFrame implements MouseListener {
     private int windowHeight = 500;
@@ -84,10 +86,14 @@ public class ChessGUI extends JFrame implements MouseListener {
                 this.pntMoveTo = new Point(intX, intY);
                 if (!this.pntMoveFrom.equals(this.pntMoveTo)) {
                     if (this.strChessBoard[this.pntMoveFrom.y][this.pntMoveFrom.x].toString().trim() != "")
-                        if (this.isMoveValid()) {
+                        if (this.isMoveValid(pntMoveFrom.x, pntMoveFrom.y)) {
+                            try {
+                                this.moveChessPiece();
+                            } catch (RuntimeException exception) {
+                                throw new RuntimeException(exception);
+                            }
                             this.strChessBoard[this.pntMoveTo.y][this.pntMoveTo.x] = this.strChessBoard[this.pntMoveFrom.y][this.pntMoveFrom.x].toString();
                             this.strChessBoard[this.pntMoveFrom.y][this.pntMoveFrom.x] = "  ";
-                            this.moveChessPiece();
                         } else {
                             JOptionPane.showMessageDialog(this, "Invalid Move Request.", "Warning", JOptionPane.ERROR_MESSAGE);
                             this.makeChessPieceDifferent(false);
@@ -101,8 +107,12 @@ public class ChessGUI extends JFrame implements MouseListener {
     /**
      * This method checks if attempted move is valid or not
      */
-    private boolean isMoveValid() {
+    private boolean isMoveValid(int x, int y) {
         boolean isMoveValid = true;
+        Collection<ChessMove> moves = game.validMoves(new Position(y, x));
+        for (ChessMove move1 : moves) {
+        }
+        //game.makeMove(new Move(new Position(pntMoveFrom.y, pntMoveFrom.x), new Position(pntMoveTo.y, pntMoveTo.x), null));
         return isMoveValid;
     }
 
