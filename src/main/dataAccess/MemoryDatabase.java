@@ -1,6 +1,6 @@
 package dataAccess;
 
-import model.Authtoken;
+import model.AuthToken;
 import model.Game;
 import model.User;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class MemoryDatabase implements DataAccess {
     private final Map<String, User> users = new HashMap<>();
-    private final Map<String, Authtoken> auths = new HashMap<>();
+    private final Map<String, AuthToken> auths = new HashMap<>();
     private final Map<Integer, Game> games = new HashMap<>();
 
     @Override
@@ -76,7 +76,7 @@ public class MemoryDatabase implements DataAccess {
     public Game updateGame(int gameID, String newName) throws DataAccessException {
         if (games.get(gameID) != null) {
             Game oldGame = games.get(gameID);
-            Game updatedGame = new Game(newName, oldGame.game(), oldGame.whiteusername(), oldGame.blackUsername(), oldGame.gameID());
+            Game updatedGame = new Game(newName, oldGame.game(), oldGame.whiteUsername(), oldGame.blackUsername(), oldGame.gameID());
             removeGame(gameID);
             writeGame(updatedGame);
             return updatedGame;
@@ -91,7 +91,7 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public Authtoken writeAuth(Authtoken authtoken) throws DataAccessException {
+    public AuthToken writeAuth(AuthToken authtoken) throws DataAccessException {
         if (auths.get(authtoken.username()) == null) {
             auths.put(authtoken.username(), authtoken);
             return authtoken;
@@ -100,7 +100,7 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public Authtoken readAuth(Authtoken authtoken) throws DataAccessException {
+    public AuthToken readAuth(AuthToken authtoken) throws DataAccessException {
         if (auths.get(authtoken.username()) != null) {
             return authtoken;
         }
@@ -108,7 +108,7 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public void removeAuth(Authtoken authtoken) {
+    public void removeAuth(AuthToken authtoken) {
         if (auths.get(authtoken.username()) != null)
             auths.remove(authtoken.username(), authtoken);
     }

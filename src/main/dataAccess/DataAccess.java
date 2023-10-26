@@ -1,6 +1,6 @@
 package dataAccess;
 
-import model.Authtoken;
+import model.AuthToken;
 import model.Game;
 import model.User;
 
@@ -76,9 +76,9 @@ public interface DataAccess {
      */
     void removeGame(int gameID);
 
-    Authtoken writeAuth(Authtoken authtoken) throws DataAccessException;
+    AuthToken writeAuth(AuthToken authtoken) throws DataAccessException;
 
-    Authtoken readAuth(Authtoken authtoken) throws DataAccessException;
+    AuthToken readAuth(AuthToken authtoken) throws DataAccessException;
 
-    void removeAuth(Authtoken authtoken);
+    void removeAuth(AuthToken authtoken);
 }

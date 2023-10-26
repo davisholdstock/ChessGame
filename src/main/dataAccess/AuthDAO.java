@@ -1,6 +1,6 @@
 package dataAccess;
 
-import model.Authtoken;
+import model.AuthToken;
 
 public interface AuthDAO {
     /**
@@ -17,7 +17,7 @@ public interface AuthDAO {
      * @return
      * @throws DataAccessException
      */
-    Authtoken writeAuth(Authtoken authtoken) throws DataAccessException;
+    AuthToken writeAuth(AuthToken authtoken) throws DataAccessException;
 
     /**
      * Find an Auth token out of the saved tokens
@@ -26,12 +26,12 @@ public interface AuthDAO {
      * @return
      * @throws DataAccessException
      */
-    Authtoken readAuth(Authtoken authtoken) throws DataAccessException;
+    AuthToken readAuth(AuthToken authtoken) throws DataAccessException;
 
     /**
      * Remove an Auth token
      *
      * @param authtoken
      */
-    void removeAuth(Authtoken authtoken);
+    void removeAuth(AuthToken authtoken);
 }

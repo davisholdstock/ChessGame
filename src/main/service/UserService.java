@@ -3,7 +3,7 @@ package service;
 import dataAccess.DataAccess;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryDatabase;
-import model.Authtoken;
+import model.AuthToken;
 import model.User;
 
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class UserService {
         String authtoken = UUID.randomUUID().toString();
         try {
             db.writeUser(user);
-            db.writeAuth(new Authtoken(authtoken, request.username()));
+            db.writeAuth(new AuthToken(authtoken, request.username()));
             return new RegisterResponse(request.username(), authtoken);
         } catch (Exception e) {
             e.printStackTrace();

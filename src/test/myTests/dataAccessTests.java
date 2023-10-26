@@ -3,7 +3,7 @@ package myTests;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryDatabase;
-import model.Authtoken;
+import model.AuthToken;
 import model.Game;
 import model.User;
 import org.junit.jupiter.api.Assertions;
@@ -49,10 +49,10 @@ public class dataAccessTests {
     @Test
     @DisplayName("Add and Get Auth")
     public void getAddAuth() throws DataAccessException {
-        Authtoken authtoken = new Authtoken("yes", "user");
+        AuthToken authtoken = new AuthToken("yes", "user");
         db.writeAuth(authtoken);
 
-        Authtoken foundAuth = db.readAuth(authtoken);
+        AuthToken foundAuth = db.readAuth(authtoken);
 
         Assertions.assertNotNull(db);
         Assertions.assertEquals(authtoken, foundAuth,
