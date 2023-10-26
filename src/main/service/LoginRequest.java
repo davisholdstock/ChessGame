@@ -5,6 +5,7 @@ package service;
  *
  * @param username of the user
  * @param password of the user
+ * @param email    of the user
  */
-public record LoginRequest(String username, String password) {
+public record LoginRequest(String username, String password, String email) {
 }

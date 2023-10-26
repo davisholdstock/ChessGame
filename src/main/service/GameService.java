@@ -1,11 +1,16 @@
 package service;
 
+import dataAccess.DataAccess;
+import dataAccess.MemoryDatabase;
+
 /**
  * Defines services that can be preformed on a Game object
  */
 public class GameService {
+    public DataAccess db;
 
     public GameService() {
+        db = new MemoryDatabase();
     }
 
     /**

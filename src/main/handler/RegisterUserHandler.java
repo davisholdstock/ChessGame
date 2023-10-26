@@ -12,10 +12,10 @@ import spark.Route;
 /**
  * Handles the User service
  */
-public class UserHandler implements Route {
+public class RegisterUserHandler implements Route {
     Gson gson;
 
-    public UserHandler() {
+    public RegisterUserHandler() {
         gson = new Gson();
     }
 

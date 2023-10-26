@@ -9,10 +9,10 @@ import spark.Route;
 /**
  * Handles the Testing services
  */
-public class TestingHandler implements Route {
+public class ClearDBHandler implements Route {
     Gson gson;
 
-    public TestingHandler() {
+    public ClearDBHandler() {
         gson = new Gson();
     }
 

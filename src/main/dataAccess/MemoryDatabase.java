@@ -31,9 +31,9 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public User readUser(User user) throws DataAccessException {
-        if (users.get(user.username()) != null) {
-            return user;
+    public User readUser(String username) throws DataAccessException {
+        if (users.get(username) != null) {
+            return users.get(username);
         }
         throw new DataAccessException("No User Found");
     }

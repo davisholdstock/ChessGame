@@ -1,9 +1,6 @@
 package server;
 
-import handler.AuthHandler;
-import handler.GameHandler;
-import handler.TestingHandler;
-import handler.UserHandler;
+import handler.*;
 import spark.Spark;
 
 /**
@@ -23,18 +20,18 @@ public class server {
 
         Spark.get("/hello", (req, res) -> "Hello!"); /* this is for testing */
 
-        Spark.delete("/db", (req, res) -> (new TestingHandler()).handle(req, res));
+        Spark.delete("/db", (req, res) -> (new ClearDBHandler()).handle(req, res));
 
-        Spark.post("/user", (req, res) -> (new UserHandler()).handle(req, res));
+        Spark.post("/user", (req, res) -> (new RegisterUserHandler()).handle(req, res));
 
-        Spark.post("/session", (req, res) -> (new AuthHandler()).Login(req, res));
+        Spark.post("/session", (req, res) -> (new LoginHandler()).handle(req, res));
 
-        Spark.delete("/session", (req, res) -> (new AuthHandler()).Logout(req, res));
+        Spark.delete("/session", (req, res) -> (new LogoutHandler()).handle(req, res));
 
-        Spark.get("/game", (req, res) -> (new GameHandler()).listGames(req, res));
+        Spark.get("/game", (req, res) -> (new ListGamesHandler()).handle(req, res));
 
-        Spark.post("/game", (req, res) -> (new GameHandler()).newGame(req, res));
+        Spark.post("/game", (req, res) -> (new NewGameHandler()).handle(req, res));
 
-        Spark.put("/game", (req, res) -> (new GameHandler()).joinGame(req, res));
+        Spark.put("/game", (req, res) -> (new JoinGameHandler()).handle(req, res));
     }
 }

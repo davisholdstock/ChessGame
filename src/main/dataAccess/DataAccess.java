@@ -29,11 +29,11 @@ public interface DataAccess {
     /**
      * Read a previously stored user
      *
-     * @param user (with both a username and an ID)
+     * @param username of the user to look for
      * @return return the stored data for the user
      * @throws DataAccessException for database (ex no user) or sql query violations
      */
-    User readUser(User user) throws DataAccessException;
+    User readUser(String username) throws DataAccessException;
 
     void removeUser(User user);
 

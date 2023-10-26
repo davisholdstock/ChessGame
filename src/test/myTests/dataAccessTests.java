@@ -25,7 +25,7 @@ public class dataAccessTests {
         User user = new User("user", "password", "user.password@gmail.com");
         db.writeUser(user);
 
-        User founduser = db.readUser(user);
+        User founduser = db.readUser(user.username());
 
         Assertions.assertNotNull(db);
         Assertions.assertEquals(user.toString(), founduser.toString(),
