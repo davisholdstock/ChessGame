@@ -1,9 +1,5 @@
 package service;
 
-import chess.ChessGame;
-
-import java.util.ArrayList;
-
 /**
  * Defines services that can be preformed on a Game object
  */
@@ -15,25 +11,29 @@ public class GameService {
     /**
      * Creates a new Game
      *
-     * @param gameName of the game being created
+     * @param request of the game being created
+     * @return the attempted creating game response
      */
-    public void newGame(String gameName) {
+    public CreateGameResponse newGame(CreateGameRequest request) {
+        return null;
     }
 
     /**
      * Joins a User to a Game
      *
-     * @param gameID of the game to join
+     * @param request of the game to join
+     * @return the attempted joining game response
      */
-    public void joinGame(int gameID) {
+    public JoinGameResponse joinGame(JoinGameRequest request) {
+        return null;
     }
 
     /**
      * Lists all the saved games
      *
-     * @return an ArrayList of all the saved games
+     * @return the attempted listing games response
      */
-    public ArrayList<ChessGame> listGames() {
+    public ListGamesResponse listGames() {
         return null;
     }
 }

@@ -1,7 +1,5 @@
 package service;
 
-import model.Authtoken;
-
 /**
  * Defines what services can be preformed on a session object
  */
@@ -10,13 +8,12 @@ public class AuthService {
     }
 
     /**
-     * Logs in a user
+     * Logs a user in
      *
-     * @param username of the User trying to log in
-     * @param password of the User trying to log in
-     * @return an AuthToken if the User successfully logs in
+     * @param request for the login
+     * @return the attempted login response
      */
-    public Authtoken Login(String username, String password) {
+    public LoginResponse Login(LoginRequest request) {
         return null;
     }
 
@@ -24,7 +21,9 @@ public class AuthService {
      * Logs a User out of the system
      *
      * @param username of the User to be logged out
+     * @return the attempted Logout response
      */
-    public void Logout(String username) {
+    public LogoutResponse Logout(String username) {
+        return null;
     }
 }
