@@ -47,7 +47,7 @@ public class ListGamesResponse {
     public String toString() {
         return "ListGamesResponse{" +
                 "message='" + message + '\'' +
-                ", gameList=" + gameList +
+                ", gameList: " + ((gameList == null) ? "[]" : gameList.toString()) +
                 '}';
     }
 }

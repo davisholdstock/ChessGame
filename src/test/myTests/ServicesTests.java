@@ -1,6 +1,8 @@
 package myTests;
 
+import chess.ChessGame;
 import dataAccess.DataAccessException;
+import model.Game;
 import model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,7 @@ public class ServicesTests {
     private AuthService authService = new AuthService();
     private TestingService testingService = new TestingService();
     private UserService userService = new UserService();
+    private GameService gameService = new GameService();
 
     @BeforeEach
     public void setup() throws DataAccessException {
@@ -85,5 +88,23 @@ public class ServicesTests {
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
 
+    }
+
+    @Test
+    @DisplayName("List All Games")
+    public void listGamesSuccess() throws DataAccessException {
+        ChessGame boardGame = new main.Game();
+        Game game = new Game("game", boardGame, "white", "black", 1);
+        Game game1 = new Game("game", boardGame, "white", "black", 12);
+        Game game2 = new Game("game", boardGame, "white", "black", 123);
+        Game game3 = new Game("game", boardGame, "white", "black", 1234);
+        server.db.writeGame(game);
+        server.db.writeGame(game1);
+        server.db.writeGame(game2);
+        server.db.writeGame(game3);
+
+        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals((new ListGamesResponse("Error: description")).toString(),
+                (gameService.listGames()).toString());
     }
 }
