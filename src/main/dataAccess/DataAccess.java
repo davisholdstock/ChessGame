@@ -79,13 +79,13 @@ public interface DataAccess {
 
     AuthToken writeAuth(AuthToken authtoken) throws DataAccessException;
 
-    AuthToken readAuth(AuthToken authtoken) throws DataAccessException;
+    AuthToken readAuth(String username) throws DataAccessException;
 
     void removeAuth(AuthToken authtoken);
 
     Map<String, User> getUsers();
 
-    Map<String, AuthToken> getAuths();
+    Map<String, String> getAuths();
 
     Map<Integer, Game> getGames();
 }

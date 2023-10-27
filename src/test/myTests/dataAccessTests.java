@@ -84,7 +84,7 @@ public class dataAccessTests {
         AuthToken authtoken = new AuthToken("yes", "user");
         db.writeAuth(authtoken);
 
-        AuthToken foundAuth = db.readAuth(authtoken);
+        AuthToken foundAuth = db.readAuth(authtoken.username());
 
         Assertions.assertNotEquals(new HashMap<>(), db.getAuths());
         Assertions.assertEquals(authtoken, foundAuth,

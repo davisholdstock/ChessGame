@@ -21,6 +21,7 @@ public class LogoutResponse {
      */
     public LogoutResponse(String message, int STATUS_CODE) {
         this.message = message;
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     public String getMessage() {

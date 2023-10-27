@@ -66,19 +66,19 @@ public class AuthService {
     /**
      * Logs a User out of the system
      *
-     * @param username of the User to be logged out
+     * @param authToken of the User to be logged out
      * @return the attempted Logout response
      */
-    public LogoutResponse Logout(String username) {
-        if (username.isEmpty())
+    public LogoutResponse Logout(String authToken) {
+        if (authToken.isEmpty())
             return new LogoutResponse("Error: unauthorized", 401);
 
         try {
-            server.db.removeUser(server.db.readUser(username));
+            server.db.removeAuth(server.db.readAuth(authToken));
             return new LogoutResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return new LogoutResponse("Error: description", 500);
+            return new LogoutResponse("Error: unauthorized", 401);
         }
     }
 }

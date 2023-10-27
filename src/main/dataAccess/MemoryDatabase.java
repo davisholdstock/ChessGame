@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class MemoryDatabase implements DataAccess {
     private final Map<String, User> users = new HashMap<>();
-    private final Map<String, AuthToken> auths = new HashMap<>();
+    private final Map<String, String> auths = new HashMap<>();
     private final Map<Integer, Game> games = new HashMap<>();
 
     @Override
@@ -92,16 +92,21 @@ public class MemoryDatabase implements DataAccess {
     @Override
     public AuthToken writeAuth(AuthToken authtoken) throws DataAccessException {
         if (users.get(authtoken.username()) != null) {
-            auths.put(authtoken.username(), authtoken);
+            auths.put(authtoken.username(), authtoken.authToken());
             return authtoken;
         }
         throw new DataAccessException("User does not exist");
     }
 
     @Override
-    public AuthToken readAuth(AuthToken authtoken) throws DataAccessException {
-        if (auths.get(authtoken.username()) != null) {
-            return authtoken;
+    public AuthToken readAuth(String auth) throws DataAccessException {
+        if (auths.containsValue(auth)) {
+            Iterator authIterator = auths.entrySet().iterator();
+            while (authIterator.hasNext()) {
+                Map.Entry mapElement = (Map.Entry) authIterator.next();
+                if (mapElement.getValue().equals(auth))
+                    return new AuthToken(mapElement.getValue().toString(), mapElement.getKey().toString());
+            }
         }
         throw new DataAccessException("No Authorization Found");
     }
@@ -109,14 +114,14 @@ public class MemoryDatabase implements DataAccess {
     @Override
     public void removeAuth(AuthToken authtoken) {
         if (auths.get(authtoken.username()) != null)
-            auths.remove(authtoken.username(), authtoken);
+            auths.remove(authtoken.username(), authtoken.authToken());
     }
 
     public Map<String, User> getUsers() {
         return users;
     }
 
-    public Map<String, AuthToken> getAuths() {
+    public Map<String, String> getAuths() {
         return auths;
     }
 
