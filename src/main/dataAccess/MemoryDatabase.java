@@ -73,10 +73,9 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public Game updateGame(int gameID, String newName) throws DataAccessException {
+    public Game updateGame(int gameID, Game newGame) throws DataAccessException {
         if (games.get(gameID) != null) {
-            Game oldGame = games.get(gameID);
-            Game updatedGame = new Game(newName, oldGame.game(), oldGame.whiteUsername(), oldGame.blackUsername(), oldGame.gameID());
+            Game updatedGame = new Game(newGame.gameName(), newGame.game(), newGame.whiteUsername(), newGame.blackUsername(), newGame.gameID());
             removeGame(gameID);
             writeGame(updatedGame);
             return updatedGame;

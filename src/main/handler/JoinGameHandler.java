@@ -1,7 +1,10 @@
 package handler;
 
 import com.google.gson.Gson;
-import service.*;
+import service.CreateGameResponse;
+import service.GameService;
+import service.JoinGameRequest;
+import service.JoinGameResponse;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -21,7 +24,10 @@ public class JoinGameHandler implements Route {
      * @return
      */
     public Object handle(Request request, Response response) throws Exception {
+        if (request.body().isEmpty())
+            return gson.toJson(new CreateGameResponse("Error: bad request"));
         JoinGameRequest req = (JoinGameRequest) gson.fromJson(request.body(), JoinGameRequest.class);
+        //req.setAuthToken((AuthToken) gson.fromJson(request.headers(), AuthToken.class));
         GameService service = new GameService();
         JoinGameResponse res = service.joinGame(req);
         return gson.toJson(res);

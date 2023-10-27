@@ -17,7 +17,6 @@ public record Game(String gameName, ChessGame game, String whiteUsername, String
         return "Game: " + gameName + "(" + gameID + ")"
                 + "\nPlayers:"
                 + "\nWhite: " + whiteUsername
-                + "\nBlack: " + blackUsername
-                + game.toString();
+                + "\nBlack: " + blackUsername;
     }
 }

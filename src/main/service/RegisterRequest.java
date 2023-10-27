@@ -1,9 +1,9 @@
 package service;
 
 public class RegisterRequest {
-    String username;
-    String password;
-    String email;
+    private String username;
+    private String password;
+    private String email;
 
     /**
      * Requests registration of a user from the server

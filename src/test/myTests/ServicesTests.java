@@ -2,6 +2,7 @@ package myTests;
 
 import chess.ChessGame;
 import dataAccess.DataAccessException;
+import model.AuthToken;
 import model.Game;
 import model.User;
 import org.junit.jupiter.api.Assertions;
@@ -106,5 +107,32 @@ public class ServicesTests {
         Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
         Assertions.assertNotEquals((new ListGamesResponse("Error: description")).toString(),
                 (gameService.listGames()).toString());
+    }
+
+    @Test
+    @DisplayName("Create Game")
+    public void createGameSuccess() throws DataAccessException {
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description")).toString(),
+                (gameService.testNewGame(new CreateGameRequest("game"), 123)).toString());
+        Game game = new Game("game", new main.Game(), "", "", 123);
+
+        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Game foundGame = server.db.readGame(game.gameID());
+        Assertions.assertEquals(game.toString(), foundGame.toString(),
+                "Wrong Game Found");
+
+    }
+
+    @Test
+    @DisplayName("Join Game")
+    public void joinGameSuccess() throws DataAccessException {
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description")).toString(),
+                (gameService.testNewGame(new CreateGameRequest("game"), 123)).toString());
+
+        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+
+        Assertions.assertNotEquals((new JoinGameResponse("Error: description")).toString(),
+                (gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE, 123, new AuthToken("auth", "Davis")))).toString());
+
     }
 }

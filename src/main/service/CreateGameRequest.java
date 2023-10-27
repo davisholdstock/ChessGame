@@ -1,7 +1,11 @@
 package service;
 
+import model.AuthToken;
+
 public class CreateGameRequest {
-    String gameName;
+    private String gameName;
+    private AuthToken authToken;
+
 
     /**
      * Requests a new Game to be created from the server

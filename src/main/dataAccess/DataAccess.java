@@ -65,10 +65,10 @@ public interface DataAccess {
      * Updates the string name of a game
      *
      * @param gameID  of the game you want to change the name of
-     * @param newName of the desired game
+     * @param newGame the desired updated game
      * @return the game being searched, showing the updated name
      */
-    Game updateGame(int gameID, String newName) throws DataAccessException;
+    Game updateGame(int gameID, Game newGame) throws DataAccessException;
 
     /**
      * Removes a single game from where it is saved

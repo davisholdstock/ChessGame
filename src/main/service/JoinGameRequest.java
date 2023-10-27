@@ -1,10 +1,12 @@
 package service;
 
 import chess.ChessGame;
+import model.AuthToken;
 
 public class JoinGameRequest {
-    ChessGame.TeamColor playerColor;
-    int gameID;
+    private ChessGame.TeamColor playerColor;
+    private int gameID;
+    private AuthToken authToken;
 
     /**
      * Requests to join a Game from the server
@@ -12,9 +14,10 @@ public class JoinGameRequest {
      * @param playerColor color of the user trying to join a Game
      * @param gameID      of the Game trying to be joined
      */
-    public JoinGameRequest(ChessGame.TeamColor playerColor, int gameID) {
+    public JoinGameRequest(ChessGame.TeamColor playerColor, int gameID, AuthToken authToken) {
         this.gameID = gameID;
         this.playerColor = playerColor;
+        this.authToken = authToken;
     }
 
     public ChessGame.TeamColor getPlayerColor() {
@@ -31,6 +34,14 @@ public class JoinGameRequest {
 
     public void setGameID(int gameID) {
         this.gameID = gameID;
+    }
+
+    public AuthToken getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(AuthToken authToken) {
+        this.authToken = authToken;
     }
 
     @Override

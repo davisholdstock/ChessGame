@@ -1,9 +1,9 @@
 package service;
 
 public class LoginRequest {
-    String username;
-    String password;
-    String email;
+    private String username;
+    private String password;
+    private String email;
 
     /**
      * Requests login of a user from the server
