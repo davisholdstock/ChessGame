@@ -29,8 +29,7 @@ public class GameService {
             return new CreateGameResponse(game.gameID());
         } catch (Exception e) {
             e.printStackTrace();
-            String message = "Error: description";
-            return new CreateGameResponse(message);
+            return new CreateGameResponse("Error: description", 500);
         }
     }
 
@@ -48,8 +47,7 @@ public class GameService {
             return new CreateGameResponse(game.gameID());
         } catch (Exception e) {
             e.printStackTrace();
-            String message = "Error: description";
-            return new CreateGameResponse(message);
+            return new CreateGameResponse("Error: description", 500);
         }
     }
 
@@ -62,19 +60,22 @@ public class GameService {
     public JoinGameResponse joinGame(JoinGameRequest request) throws DataAccessException {
         Game game = server.db.readGame(request.getGameID());
         try {
-            if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
+            if (request.getPlayerColor() == null) {
+                // Join as an observer
+
+            } else if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
                 if (!game.whiteUsername().isEmpty())
-                    return new JoinGameResponse("Error: already taken");
+                    return new JoinGameResponse("Error: already taken", 403);
                 server.db.updateGame(request.getGameID(), new Game(game.gameName(), game.game(), request.getAuthToken().username(), game.blackUsername(), game.gameID()));
             } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
                 if (!game.blackUsername().isEmpty())
-                    return new JoinGameResponse("Error: already taken");
+                    return new JoinGameResponse("Error: already taken", 403);
                 server.db.updateGame(request.getGameID(), new Game(game.gameName(), game.game(), game.whiteUsername(), request.getAuthToken().username(), game.gameID()));
             }
             return new JoinGameResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return new JoinGameResponse("Error: description");
+            return new JoinGameResponse("Error: description", 500);
         }
     }///
 
@@ -89,7 +90,7 @@ public class GameService {
             return new ListGamesResponse(games);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ListGamesResponse("Error: description");
+            return new ListGamesResponse("Error: description", 500);
         }
     }
 }

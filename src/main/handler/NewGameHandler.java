@@ -24,10 +24,11 @@ public class NewGameHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         //if (request.headers().toString())
         if (request.body().isEmpty())
-            return gson.toJson(new CreateGameResponse("Error: bad request"));
+            return gson.toJson(new CreateGameResponse("Error: bad request", 400));
         CreateGameRequest req = (CreateGameRequest) gson.fromJson(request.body(), CreateGameRequest.class);
         GameService service = new GameService();
         CreateGameResponse res = service.newGame(req);
+        response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }
 }

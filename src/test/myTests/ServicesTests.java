@@ -39,7 +39,7 @@ public class ServicesTests {
         server.db.writeUser(user3);
 
         Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
-        Assertions.assertNotEquals((new LogoutResponse("Error: description")).toString(), (testingService.clearData()).toString());
+        Assertions.assertNotEquals((new LogoutResponse("Error: description", 500)).toString(), (testingService.clearData()).toString());
         Assertions.assertEquals(new HashMap<>(), server.db.getUsers());
     }
 
@@ -72,14 +72,14 @@ public class ServicesTests {
         Assertions.assertEquals((new LoginResponse("user", "12")).toString(),
                 (authService.TestLogin(new LoginRequest("user", "password", "user.password@gmail.com"), "12")).toString());
 
-        Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized")).toString(), (authService.Logout("user")).toString());
+        Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (authService.Logout("user")).toString());
         Assertions.assertEquals(new HashMap<>(), server.db.getUsers());
     }
 
     @Test
     @DisplayName("Register User")
     public void registerUserSuccess() throws DataAccessException {
-        Assertions.assertNotEquals((new RegisterResponse("Error: Unable to Register user")).toString(),
+        Assertions.assertNotEquals((new RegisterResponse("Error: description", 500)).toString(),
                 (userService.registerUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
         User user = new User("user", "password", "user.password@gmail.com");
         //server.db.writeUser(user);
@@ -105,14 +105,14 @@ public class ServicesTests {
         server.db.writeGame(game3);
 
         Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
-        Assertions.assertNotEquals((new ListGamesResponse("Error: description")).toString(),
+        Assertions.assertNotEquals((new ListGamesResponse("Error: description", 500)).toString(),
                 (gameService.listGames()).toString());
     }
 
     @Test
     @DisplayName("Create Game")
     public void createGameSuccess() throws DataAccessException {
-        Assertions.assertNotEquals((new CreateGameResponse("Error: description")).toString(),
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
                 (gameService.testNewGame(new CreateGameRequest("game"), 123)).toString());
         Game game = new Game("game", new main.Game(), "", "", 123);
 
@@ -126,12 +126,12 @@ public class ServicesTests {
     @Test
     @DisplayName("Join Game")
     public void joinGameSuccess() throws DataAccessException {
-        Assertions.assertNotEquals((new CreateGameResponse("Error: description")).toString(),
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
                 (gameService.testNewGame(new CreateGameRequest("game"), 123)).toString());
 
         Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
 
-        Assertions.assertNotEquals((new JoinGameResponse("Error: description")).toString(),
+        Assertions.assertNotEquals((new JoinGameResponse("Error: description", 500)).toString(),
                 (gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE, 123, new AuthToken("auth", "Davis")))).toString());
 
     }

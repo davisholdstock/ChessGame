@@ -24,7 +24,7 @@ public class AuthService {
     public LoginResponse Login(LoginRequest request) throws DataAccessException {
         User user = server.db.readUser(request.getUsername());
         if (!user.password().equals(request.getPassword()))
-            return new LoginResponse("Error: unauthorized");
+            return new LoginResponse("Error: unauthorized", 401);
 
         String authToken = UUID.randomUUID().toString();
 
@@ -33,7 +33,7 @@ public class AuthService {
             return new LoginResponse(request.getUsername(), authToken);
         } catch (Exception e) {
             e.printStackTrace();
-            return new LoginResponse("Error: description");
+            return new LoginResponse("Error: description", 500);
         }
     }
 
@@ -46,14 +46,14 @@ public class AuthService {
     public LoginResponse TestLogin(LoginRequest request, String authToken) throws DataAccessException {
         User user = server.db.readUser(request.getUsername());
         if (!user.password().equals(request.getPassword()))
-            return new LoginResponse("Error: unauthorized");
+            return new LoginResponse("Error: unauthorized", 401);
 
         try {
             server.db.writeAuth(new AuthToken(authToken, request.getUsername()));
             return new LoginResponse(request.getUsername(), authToken);
         } catch (Exception e) {
             e.printStackTrace();
-            return new LoginResponse("Error: description");
+            return new LoginResponse("Error: description", 500);
         }
     }
 
@@ -65,14 +65,14 @@ public class AuthService {
      */
     public LogoutResponse Logout(String username) {
         if (username.isEmpty())
-            return new LogoutResponse("Error: unauthorized");
+            return new LogoutResponse("Error: unauthorized", 401);
 
         try {
             server.db.removeUser(server.db.readUser(username));
             return new LogoutResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return new LogoutResponse("Error: description");
+            return new LogoutResponse("Error: description", 500);
         }
     }
 }

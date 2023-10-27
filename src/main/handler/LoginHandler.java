@@ -27,6 +27,7 @@ public class LoginHandler implements Route {
         LoginRequest req = (LoginRequest) gson.fromJson(request.body(), LoginRequest.class);
         AuthService service = new AuthService();
         LoginResponse res = service.Login(req);
+        response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }
 }

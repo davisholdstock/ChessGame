@@ -28,9 +28,12 @@ public class RegisterUserHandler implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        if (request.body().isEmpty())
+            return gson.toJson(new RegisterResponse("Error: bad request", 400));
         RegisterRequest req = (RegisterRequest) gson.fromJson(request.body(), RegisterRequest.class);
         UserService service = new UserService();
         RegisterResponse res = service.registerUser(req);
+        response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }
 }

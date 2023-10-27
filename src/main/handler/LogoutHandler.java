@@ -27,7 +27,8 @@ public class LogoutHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         AuthService service = new AuthService();
-        LogoutResponse result = service.Logout(request.headers().toString());
-        return gson.toJson(result);
+        LogoutResponse res = service.Logout(request.headers().toString());
+        response.status(res.getSTATUS_CODE());
+        return gson.toJson(res);
     }
 }

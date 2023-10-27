@@ -25,6 +25,7 @@ public class ClearDBHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         TestingService service = new TestingService();
         ClearResponse res = service.clearData();
+        response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }
 }

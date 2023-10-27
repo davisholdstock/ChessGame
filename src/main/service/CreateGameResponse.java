@@ -6,6 +6,7 @@ package service;
 public class CreateGameResponse {
     String message;
     int gameID;
+    int STATUS_CODE;
 
     /**
      * Creates a valid create game response
@@ -14,6 +15,7 @@ public class CreateGameResponse {
      */
     public CreateGameResponse(int gameID) {
         this.gameID = gameID;
+        this.STATUS_CODE = 200;
     }
 
     /**
@@ -21,8 +23,9 @@ public class CreateGameResponse {
      *
      * @param message from the server
      */
-    public CreateGameResponse(String message) {
+    public CreateGameResponse(String message, int STATUS_CODE) {
         this.message = message;
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     public String getMessage() {
@@ -47,5 +50,13 @@ public class CreateGameResponse {
                 "message='" + message + '\'' +
                 ", gameID=" + gameID +
                 '}';
+    }
+
+    public int getSTATUS_CODE() {
+        return STATUS_CODE;
+    }
+
+    public void setSTATUS_CODE(int STATUS_CODE) {
+        this.STATUS_CODE = STATUS_CODE;
     }
 }

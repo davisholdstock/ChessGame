@@ -25,11 +25,12 @@ public class JoinGameHandler implements Route {
      */
     public Object handle(Request request, Response response) throws Exception {
         if (request.body().isEmpty())
-            return gson.toJson(new CreateGameResponse("Error: bad request"));
+            return gson.toJson(new CreateGameResponse("Error: bad request", 400));
         JoinGameRequest req = (JoinGameRequest) gson.fromJson(request.body(), JoinGameRequest.class);
         //req.setAuthToken((AuthToken) gson.fromJson(request.headers(), AuthToken.class));
         GameService service = new GameService();
         JoinGameResponse res = service.joinGame(req);
+        response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }
 }

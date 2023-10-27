@@ -32,8 +32,11 @@ public class UserService {
             return new RegisterResponse(request.getUsername(), authtoken);
         } catch (Exception e) {
             e.printStackTrace();
-            String message = "Error: Unable to Register user";
-            return new RegisterResponse(message);
+            if (server.db.readUser(request.getUsername()) != null) {
+                return new RegisterResponse("Error: already taken", 403);
+            }
+            String message = "Error: description";
+            return new RegisterResponse(message, 500);
         }
     }
 }

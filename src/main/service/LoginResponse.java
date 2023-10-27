@@ -7,6 +7,7 @@ public class LoginResponse {
     String message;
     String authToken;
     String username;
+    int STATUS_CODE;
 
     /**
      * Creates a valid Login response
@@ -17,6 +18,7 @@ public class LoginResponse {
     public LoginResponse(String username, String authToken) {
         this.username = username;
         this.authToken = authToken;
+        this.STATUS_CODE = 200;
     }
 
     /**
@@ -24,8 +26,9 @@ public class LoginResponse {
      *
      * @param message from the server
      */
-    public LoginResponse(String message) {
+    public LoginResponse(String message, int STATUS_CODE) {
         this.message = message;
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     public String getMessage() {
@@ -59,5 +62,13 @@ public class LoginResponse {
                 ", authToken='" + authToken + '\'' +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    public int getSTATUS_CODE() {
+        return STATUS_CODE;
+    }
+
+    public void setSTATUS_CODE(int STATUS_CODE) {
+        this.STATUS_CODE = STATUS_CODE;
     }
 }

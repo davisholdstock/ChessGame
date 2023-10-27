@@ -7,6 +7,7 @@ public class RegisterResponse {
     String message;
     String username;
     String authToken;
+    int STATUS_CODE;
 
     /**
      * Creates a valid register response
@@ -16,6 +17,7 @@ public class RegisterResponse {
     public RegisterResponse(String username, String authToken) {
         this.username = username;
         this.authToken = authToken;
+        this.STATUS_CODE = 200;
     }
 
     /**
@@ -23,8 +25,9 @@ public class RegisterResponse {
      *
      * @param message from the server
      */
-    public RegisterResponse(String message) {
+    public RegisterResponse(String message, int STATUS_CODE) {
         this.message = message;
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     public String getMessage() {
@@ -49,6 +52,14 @@ public class RegisterResponse {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    public int getSTATUS_CODE() {
+        return STATUS_CODE;
+    }
+
+    public void setSTATUS_CODE(int STATUS_CODE) {
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     @Override

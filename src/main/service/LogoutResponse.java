@@ -5,11 +5,13 @@ package service;
  */
 public class LogoutResponse {
     String message;
+    int STATUS_CODE;
 
     /**
      * Creates a valid Logout response
      */
     public LogoutResponse() {
+        this.STATUS_CODE = 200;
     }
 
     /**
@@ -17,7 +19,7 @@ public class LogoutResponse {
      *
      * @param message from the server
      */
-    public LogoutResponse(String message) {
+    public LogoutResponse(String message, int STATUS_CODE) {
         this.message = message;
     }
 
@@ -34,5 +36,13 @@ public class LogoutResponse {
         return "LogoutResponse{" +
                 "message='" + message + '\'' +
                 '}';
+    }
+
+    public int getSTATUS_CODE() {
+        return STATUS_CODE;
+    }
+
+    public void setSTATUS_CODE(int STATUS_CODE) {
+        this.STATUS_CODE = STATUS_CODE;
     }
 }

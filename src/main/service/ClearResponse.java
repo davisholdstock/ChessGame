@@ -5,11 +5,13 @@ package service;
  */
 public class ClearResponse {
     String message;
+    int STATUS_CODE;
 
     /**
      * Creates a valid clear response
      */
     public ClearResponse() {
+        this.STATUS_CODE = 200;
     }
 
     /**
@@ -17,8 +19,9 @@ public class ClearResponse {
      *
      * @param message from the server
      */
-    public ClearResponse(String message) {
+    public ClearResponse(String message, int STATUS_CODE) {
         this.message = message;
+        this.STATUS_CODE = STATUS_CODE;
     }
 
     public String getMessage() {
@@ -34,5 +37,13 @@ public class ClearResponse {
         return "ClearResponse{" +
                 "message='" + message + '\'' +
                 '}';
+    }
+
+    public int getSTATUS_CODE() {
+        return STATUS_CODE;
+    }
+
+    public void setSTATUS_CODE(int STATUS_CODE) {
+        this.STATUS_CODE = STATUS_CODE;
     }
 }
