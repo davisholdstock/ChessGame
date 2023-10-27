@@ -1,7 +1,5 @@
 package service;
 
-import main.Game;
-
 import java.util.ArrayList;
 
 /**
@@ -9,14 +7,14 @@ import java.util.ArrayList;
  */
 public class ListGamesResponse {
     String message;
-    ArrayList<Game> gameList;
+    ArrayList<model.Game> gameList;
 
     /**
      * Creates a valid list games response
      *
      * @param gameList of the saved games
      */
-    public ListGamesResponse(ArrayList<Game> gameList) {
+    public ListGamesResponse(ArrayList<model.Game> gameList) {
         this.gameList = gameList;
     }
 
@@ -37,11 +35,11 @@ public class ListGamesResponse {
         this.message = message;
     }
 
-    public ArrayList<Game> getGameList() {
+    public ArrayList<model.Game> getGameList() {
         return gameList;
     }
 
-    public void setGameList(ArrayList<Game> gameList) {
+    public void setGameList(ArrayList<model.Game> gameList) {
         this.gameList = gameList;
     }
 }

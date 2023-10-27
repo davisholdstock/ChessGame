@@ -2,6 +2,9 @@ package service;
 
 import dataAccess.DataAccess;
 import dataAccess.MemoryDatabase;
+import model.Game;
+
+import java.util.ArrayList;
 
 /**
  * Defines services that can be preformed on a Game object
@@ -20,6 +23,13 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse newGame(CreateGameRequest request) {
+        //if ()
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CreateGameResponse("Error: description");
+        }
         return null;
     }
 
@@ -39,6 +49,12 @@ public class GameService {
      * @return the attempted listing games response
      */
     public ListGamesResponse listGames() {
-        return null;
+        try {
+            ArrayList<Game> games = new ArrayList<>();
+            return new ListGamesResponse(games);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ListGamesResponse("Error: description");
+        }
     }
 }

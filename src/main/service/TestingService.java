@@ -25,7 +25,7 @@ public class TestingService {
             return new ClearResponse();
         } catch (Exception e) {
             e.printStackTrace();
+            return new ClearResponse("Error: description");
         }
-        return null;
     }
 }

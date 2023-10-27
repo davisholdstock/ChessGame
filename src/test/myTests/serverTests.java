@@ -1,14 +1,15 @@
 package myTests;
 
-import org.junit.jupiter.api.Assertions;
+import dataAccess.DataAccess;
+import dataAccess.DataAccessException;
+import dataAccess.MemoryDatabase;
+import model.Game;
+import model.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import passoffTests.TestFactory;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;
-import passoffTests.testClasses.TestModels;
-
-
-import java.util.Locale;
 
 public class serverTests {
     private static final int HTTP_OK = 200;
@@ -16,20 +17,20 @@ public class serverTests {
     private static final int HTTP_UNAUTHORIZED = 401;
     private static final int HTTP_FORBIDDEN = 403;
     private static TestServerFacade serverFacade;
+    public DataAccess db;
+
+    @BeforeAll
+    public static void init() {
+        serverFacade = new TestServerFacade("localhost", TestFactory.getServerPort());
+    }
 
     @Test
-    @Order(1)
-    @DisplayName("Normal User Login")
-    public void successLogin() {
-        TestModels.TestLoginRequest loginRequest = new TestModels.TestLoginRequest();
-
-        TestModels.TestLoginRegisterResult loginResult = serverFacade.login(loginRequest);
-
-        Assertions.assertEquals(HTTP_OK, serverFacade.getStatusCode(), "Server response code was not 200 OK");
-        Assertions.assertTrue(loginResult.success, "Response returned not successful");
-        Assertions.assertFalse(
-                loginResult.message != null && loginResult.message.toLowerCase(Locale.ROOT).contains("error"),
-                "Response returned error message");
-        Assertions.assertNotNull(loginResult.authToken, "Response did not return authentication String");
+    @DisplayName("Clear DB")
+    public void successClearDB() throws DataAccessException {
+        db = new MemoryDatabase();
+        db.writeUser(new User("Davis", "password", "thisismyemail@gmail.com"));
+        db.writeGame(new Game("game", new main.Game(), "white", "black", 1));
+        //serverFacade.clear();
+        //Assertions.assertNotNull(loginResult.authToken, "Response did not return authentication String");
     }
 }
