@@ -15,6 +15,7 @@ public class ServicesTests {
     //private MemoryDatabase db = new MemoryDatabase();
     private AuthService authService = new AuthService();
     private TestingService testingService = new TestingService();
+    private UserService userService = new UserService();
 
     @BeforeEach
     public void setup() throws DataAccessException {
@@ -49,7 +50,8 @@ public class ServicesTests {
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
 
-        Assertions.assertEquals((new LoginResponse("user", "12")).toString(), (authService.TestLogin(new LoginRequest("user", "password", "user.password@gmail.com"), "12")).toString());
+        Assertions.assertEquals((new LoginResponse("user", "12")).toString(),
+                (authService.TestLogin(new LoginRequest("user", "password", "user.password@gmail.com"), "12")).toString());
     }
 
     @Test
@@ -63,9 +65,25 @@ public class ServicesTests {
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
 
-        Assertions.assertEquals((new LoginResponse("user", "12")).toString(), (authService.TestLogin(new LoginRequest("user", "password", "user.password@gmail.com"), "12")).toString());
+        Assertions.assertEquals((new LoginResponse("user", "12")).toString(),
+                (authService.TestLogin(new LoginRequest("user", "password", "user.password@gmail.com"), "12")).toString());
 
         Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized")).toString(), (authService.Logout("user")).toString());
         Assertions.assertEquals(new HashMap<>(), server.db.getUsers());
+    }
+
+    @Test
+    @DisplayName("Register User")
+    public void registerUserSuccess() throws DataAccessException {
+        Assertions.assertNotEquals((new RegisterResponse("Error: Unable to Register user")).toString(),
+                (userService.registerUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
+        User user = new User("user", "password", "user.password@gmail.com");
+        //server.db.writeUser(user);
+
+        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        User founduser = server.db.readUser(user.username());
+        Assertions.assertEquals(user.toString(), founduser.toString(),
+                "Wrong User Found");
+
     }
 }
