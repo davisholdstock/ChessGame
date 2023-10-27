@@ -6,10 +6,8 @@ import server.server;
  * A service that defines methods that helps in testing
  */
 public class TestingService {
-    //public DataAccess db;
 
     public TestingService() {
-        /* db = new MemoryDatabase(); */
     }
 
     /**

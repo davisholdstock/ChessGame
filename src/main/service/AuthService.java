@@ -11,10 +11,8 @@ import java.util.UUID;
  * Defines what services can be preformed on a session object
  */
 public class AuthService {
-    //public DataAccess db;
 
     public AuthService() {
-        /* db = new MemoryDatabase(); */
     }
 
     /**

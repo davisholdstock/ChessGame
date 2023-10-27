@@ -7,20 +7,35 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import server.server;
-import service.AuthService;
-import service.LoginRequest;
-import service.LoginResponse;
-import service.LogoutResponse;
+import service.*;
 
 import java.util.HashMap;
 
 public class ServicesTests {
     //private MemoryDatabase db = new MemoryDatabase();
     private AuthService authService = new AuthService();
+    private TestingService testingService = new TestingService();
 
     @BeforeEach
     public void setup() throws DataAccessException {
         server.db.clear();
+    }
+
+    @Test
+    @DisplayName("Clear Data")
+    public void clearDataSuccess() throws DataAccessException {
+        User user = new User("user", "password", "user.password@gmail.com");
+        User user1 = new User("user1", "password", "user.password@gmail.com");
+        User user2 = new User("user2", "password", "user.password@gmail.com");
+        User user3 = new User("user3", "password", "user.password@gmail.com");
+        server.db.writeUser(user);
+        server.db.writeUser(user1);
+        server.db.writeUser(user2);
+        server.db.writeUser(user3);
+
+        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals((new LogoutResponse("Error: description")).toString(), (testingService.clearData()).toString());
+        Assertions.assertEquals(new HashMap<>(), server.db.getUsers());
     }
 
     @Test
