@@ -91,11 +91,11 @@ public class MemoryDatabase implements DataAccess {
 
     @Override
     public AuthToken writeAuth(AuthToken authtoken) throws DataAccessException {
-        if (auths.get(authtoken.username()) == null) {
+        if (users.get(authtoken.username()) != null) {
             auths.put(authtoken.username(), authtoken);
             return authtoken;
         }
-        throw new DataAccessException("Duplicate User");
+        throw new DataAccessException("User does not exist");
     }
 
     @Override

@@ -24,10 +24,15 @@ public class JoinGameHandler implements Route {
      * @return
      */
     public Object handle(Request request, Response response) throws Exception {
-        if (request.body().isEmpty())
+        if (request.body() == null) {
+            response.status(400);
             return gson.toJson(new CreateGameResponse("Error: bad request", 400));
+        }
         JoinGameRequest req = (JoinGameRequest) gson.fromJson(request.body(), JoinGameRequest.class);
-        //req.setAuthToken((AuthToken) gson.fromJson(request.headers(), AuthToken.class));
+        if (req.getGameID() == 0 || req.getPlayerColor() == null) {
+            response.status(400);
+            return gson.toJson(new CreateGameResponse("Error: bad request", 400));
+        }
         GameService service = new GameService();
         JoinGameResponse res = service.joinGame(req);
         response.status(res.getSTATUS_CODE());

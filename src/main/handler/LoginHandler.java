@@ -24,7 +24,15 @@ public class LoginHandler implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        if (request.body() == null) {
+            response.status(400);
+            return gson.toJson(new LoginResponse("Error: bad request", 400));
+        }
         LoginRequest req = (LoginRequest) gson.fromJson(request.body(), LoginRequest.class);
+        if (req.getUsername() == null || req.getPassword() == null) {
+            response.status(400);
+            return gson.toJson(new LoginResponse("Error: bad request", 400));
+        }
         AuthService service = new AuthService();
         LoginResponse res = service.Login(req);
         response.status(res.getSTATUS_CODE());

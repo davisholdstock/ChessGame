@@ -22,9 +22,15 @@ public class AuthService {
      * @return the attempted login response
      */
     public LoginResponse Login(LoginRequest request) throws DataAccessException {
-        User user = server.db.readUser(request.getUsername());
-        if (!user.password().equals(request.getPassword()))
+        try {
+            //if (server.db.readUser(request.getUsername()) == null)
+            User user = server.db.readUser(request.getUsername());
+            if (!user.password().equals(request.getPassword()))
+                return new LoginResponse("Error: unauthorized", 401);
+        } catch (Exception e) {
+            e.printStackTrace();
             return new LoginResponse("Error: unauthorized", 401);
+        }
 
         String authToken = UUID.randomUUID().toString();
 
