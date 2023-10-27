@@ -28,4 +28,11 @@ public class JoinGameResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "JoinGameResponse{" +
+                "message='" + message + '\'' +
+                '}';
+    }
 }

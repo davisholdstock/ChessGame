@@ -5,6 +5,7 @@ import model.Game;
 import model.User;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Represents all operations that may be performed on a database
@@ -81,4 +82,10 @@ public interface DataAccess {
     AuthToken readAuth(AuthToken authtoken) throws DataAccessException;
 
     void removeAuth(AuthToken authtoken);
+
+    Map<String, User> getUsers();
+
+    Map<String, AuthToken> getAuths();
+
+    Map<Integer, Game> getGames();
 }

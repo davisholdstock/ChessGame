@@ -40,4 +40,12 @@ public class CreateGameResponse {
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
+
+    @Override
+    public String toString() {
+        return "CreateGameResponse{" +
+                "message='" + message + '\'' +
+                ", gameID=" + gameID +
+                '}';
+    }
 }

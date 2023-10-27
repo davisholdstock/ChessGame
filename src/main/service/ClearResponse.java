@@ -28,4 +28,11 @@ public class ClearResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "ClearResponse{" +
+                "message='" + message + '\'' +
+                '}';
+    }
 }

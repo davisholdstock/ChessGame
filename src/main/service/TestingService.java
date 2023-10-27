@@ -1,16 +1,15 @@
 package service;
 
-import dataAccess.DataAccess;
-import dataAccess.MemoryDatabase;
+import server.server;
 
 /**
  * A service that defines methods that helps in testing
  */
 public class TestingService {
-    public DataAccess db;
+    //public DataAccess db;
 
     public TestingService() {
-        db = new MemoryDatabase();
+        /* db = new MemoryDatabase(); */
     }
 
     /**
@@ -21,7 +20,7 @@ public class TestingService {
      */
     public ClearResponse clearData() {
         try {
-            db.clear();
+            server.db.clear();
             return new ClearResponse();
         } catch (Exception e) {
             e.printStackTrace();

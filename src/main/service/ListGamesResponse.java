@@ -42,4 +42,12 @@ public class ListGamesResponse {
     public void setGameList(ArrayList<model.Game> gameList) {
         this.gameList = gameList;
     }
+
+    @Override
+    public String toString() {
+        return "ListGamesResponse{" +
+                "message='" + message + '\'' +
+                ", gameList=" + gameList +
+                '}';
+    }
 }

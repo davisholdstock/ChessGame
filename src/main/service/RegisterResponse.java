@@ -50,4 +50,13 @@ public class RegisterResponse {
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterResponse{" +
+                "message='" + message + '\'' +
+                ", username='" + username + '\'' +
+                ", authToken='" + authToken + '\'' +
+                '}';
+    }
 }

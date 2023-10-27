@@ -28,4 +28,11 @@ public class LogoutResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "LogoutResponse{" +
+                "message='" + message + '\'' +
+                '}';
+    }
 }

@@ -1,10 +1,9 @@
 package service;
 
-import dataAccess.DataAccess;
 import dataAccess.DataAccessException;
-import dataAccess.MemoryDatabase;
 import model.AuthToken;
 import model.User;
+import server.server;
 
 import java.util.UUID;
 
@@ -12,10 +11,10 @@ import java.util.UUID;
  * Defines what services can be preformed on a session object
  */
 public class AuthService {
-    public DataAccess db;
+    //public DataAccess db;
 
     public AuthService() {
-        db = new MemoryDatabase();
+        /* db = new MemoryDatabase(); */
     }
 
     /**
@@ -25,15 +24,35 @@ public class AuthService {
      * @return the attempted login response
      */
     public LoginResponse Login(LoginRequest request) throws DataAccessException {
-        User user = db.readUser(request.username());
-        if (!user.password().equals(request.password()))
+        User user = server.db.readUser(request.getUsername());
+        if (!user.password().equals(request.getPassword()))
             return new LoginResponse("Error: unauthorized");
 
         String authToken = UUID.randomUUID().toString();
 
         try {
-            db.writeAuth(new AuthToken(authToken, request.username()));
-            return new LoginResponse(request.username(), authToken);
+            server.db.writeAuth(new AuthToken(authToken, request.getUsername()));
+            return new LoginResponse(request.getUsername(), authToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new LoginResponse("Error: description");
+        }
+    }
+
+    /**
+     * Logs a user in for testing purposes only
+     *
+     * @param request for the login
+     * @return the attempted login response
+     */
+    public LoginResponse TestLogin(LoginRequest request, String authToken) throws DataAccessException {
+        User user = server.db.readUser(request.getUsername());
+        if (!user.password().equals(request.getPassword()))
+            return new LoginResponse("Error: unauthorized");
+
+        try {
+            server.db.writeAuth(new AuthToken(authToken, request.getUsername()));
+            return new LoginResponse(request.getUsername(), authToken);
         } catch (Exception e) {
             e.printStackTrace();
             return new LoginResponse("Error: description");
@@ -51,7 +70,7 @@ public class AuthService {
             return new LogoutResponse("Error: unauthorized");
 
         try {
-            db.removeUser(db.readUser(username));
+            server.db.removeUser(server.db.readUser(username));
             return new LogoutResponse();
         } catch (Exception e) {
             e.printStackTrace();

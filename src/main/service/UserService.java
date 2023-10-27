@@ -1,10 +1,9 @@
 package service;
 
-import dataAccess.DataAccess;
 import dataAccess.DataAccessException;
-import dataAccess.MemoryDatabase;
 import model.AuthToken;
 import model.User;
+import server.server;
 
 import java.util.UUID;
 
@@ -12,10 +11,10 @@ import java.util.UUID;
  * Defines services to be preformed on a User
  */
 public class UserService {
-    public DataAccess db;
+    //public DataAccess db;
 
     public UserService() {
-        db = new MemoryDatabase();
+        /* db = new MemoryDatabase(); */
     }
 
     /**
@@ -25,12 +24,12 @@ public class UserService {
      * @return the attempted registration response
      */
     public RegisterResponse registerUser(RegisterRequest request) throws DataAccessException {
-        User user = new User(request.username(), request.password(), request.email());
+        User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
         String authtoken = UUID.randomUUID().toString();
         try {
-            db.writeUser(user);
-            db.writeAuth(new AuthToken(authtoken, request.username()));
-            return new RegisterResponse(request.username(), authtoken);
+            server.db.writeUser(user);
+            server.db.writeAuth(new AuthToken(authtoken, request.getUsername()));
+            return new RegisterResponse(request.getUsername(), authtoken);
         } catch (Exception e) {
             e.printStackTrace();
             String message = "Error: Unable to Register user";

@@ -1,7 +1,5 @@
 package service;
 
-import dataAccess.DataAccess;
-import dataAccess.MemoryDatabase;
 import model.Game;
 
 import java.util.ArrayList;
@@ -10,10 +8,10 @@ import java.util.ArrayList;
  * Defines services that can be preformed on a Game object
  */
 public class GameService {
-    public DataAccess db;
+    //public DataAccess db;
 
     public GameService() {
-        db = new MemoryDatabase();
+        /* db = new MemoryDatabase(); */
     }
 
     /**
