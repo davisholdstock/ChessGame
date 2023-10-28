@@ -26,7 +26,7 @@ public class ListGamesHandler implements Route {
      */
     public Object handle(Request request, Response response) throws Exception {
         GameService service = new GameService();
-        ListGamesResponse res = service.listGames();
+        ListGamesResponse res = service.listGames(request.headers("Authorization"));
         response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }

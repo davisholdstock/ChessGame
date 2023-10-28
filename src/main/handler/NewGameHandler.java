@@ -33,7 +33,7 @@ public class NewGameHandler implements Route {
             return gson.toJson(new CreateGameResponse("Error: bad request", 400));
         }
         GameService service = new GameService();
-        CreateGameResponse res = service.newGame(req);
+        CreateGameResponse res = service.newGame(req, request.headers("Authorization"));
         response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }

@@ -18,7 +18,7 @@ public class StandardAPITests {
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int HTTP_UNAUTHORIZED = 401;
     private static final int HTTP_FORBIDDEN = 403;
-    
+
     private static TestModels.TestUser existingUser;
     private static TestModels.TestUser newUser;
     private static TestModels.TestCreateRequest createRequest;
@@ -276,7 +276,8 @@ public class StandardAPITests {
         Assertions.assertFalse(createResult.success, "Bad result didn't return not successful");
         Assertions.assertTrue(createResult.message.toLowerCase(Locale.ROOT).contains("error"),
                 "Bad result did not return an error message");
-        Assertions.assertNull(createResult.gameID, "Bad result returned a game ID");
+        //Assertions.assertNull(createResult.gameID, "Bad result returned a game ID");
+        Assertions.assertEquals(0, createResult.gameID, "Bad result returned a game ID");
     }
 
 

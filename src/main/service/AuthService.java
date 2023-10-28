@@ -70,10 +70,12 @@ public class AuthService {
      * @return the attempted Logout response
      */
     public LogoutResponse Logout(String authToken) {
-        if (authToken.isEmpty())
-            return new LogoutResponse("Error: unauthorized", 401);
-
         try {
+            try {
+                server.db.readAuth(authToken);
+            } catch (Exception e) {
+                return new LogoutResponse("Error: unauthorized", 401);
+            }
             server.db.removeAuth(server.db.readAuth(authToken));
             return new LogoutResponse();
         } catch (Exception e) {

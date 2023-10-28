@@ -21,10 +21,15 @@ public class GameService {
      * @param request of the game being created
      * @return the attempted creating game response
      */
-    public CreateGameResponse newGame(CreateGameRequest request) {
+    public CreateGameResponse newGame(CreateGameRequest request, String authToken) {
         //if ()
         Game game = new Game(request.getGameName(), new main.Game(), "", "", (int) (Math.random() * 1000));
         try {
+            try {
+                server.db.readAuth(authToken);
+            } catch (Exception e) {
+                return new CreateGameResponse("Error: unauthorized", 401);
+            }
             server.db.writeGame(game);
             return new CreateGameResponse(game.gameID());
         } catch (Exception e) {
@@ -40,7 +45,6 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse testNewGame(CreateGameRequest request, int gameID) { //Still need to get Authorization
-        //if ()
         Game game = new Game(request.getGameName(), new main.Game(), "", "", gameID);
         try {
             server.db.writeGame(game);
@@ -57,11 +61,15 @@ public class GameService {
      * @param request of the game to join
      * @return the attempted joining game response
      */
-    public JoinGameResponse joinGame(JoinGameRequest request) throws DataAccessException {
+    public JoinGameResponse joinGame(JoinGameRequest request, String authToken) throws DataAccessException {
         Game game = server.db.readGame(request.getGameID());
         try {
+            try {
+                server.db.readAuth(authToken);
+            } catch (Exception e) {
+                return new JoinGameResponse("Error: unauthorized", 401);
+            }
             if (request.getPlayerColor() == null) {
-                // Join as an observer
 
             } else if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
                 if (!game.whiteUsername().isEmpty())
@@ -70,7 +78,7 @@ public class GameService {
             } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
                 if (!game.blackUsername().isEmpty())
                     return new JoinGameResponse("Error: already taken", 403);
-                server.db.updateGame(request.getGameID(), new Game(game.gameName(), game.game(), game.whiteUsername(), request.getAuthToken().username(), game.gameID()));
+                server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), request.getAuthToken().username(), game.gameID()));
             }
             return new JoinGameResponse();
         } catch (Exception e) {
@@ -84,9 +92,15 @@ public class GameService {
      *
      * @return the attempted listing games response
      */
-    public ListGamesResponse listGames() {
+    public ListGamesResponse listGames(String authToken) {
         try {
+            try {
+                server.db.readAuth(authToken);
+            } catch (Exception e) {
+                return new ListGamesResponse("Error: unauthorized", 401);
+            }
             ArrayList<Game> games = new ArrayList<>();
+            games = server.db.readAllGame();
             return new ListGamesResponse(games);
         } catch (Exception e) {
             e.printStackTrace();
