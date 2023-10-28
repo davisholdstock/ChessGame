@@ -23,7 +23,7 @@ public class GameService {
      */
     public CreateGameResponse newGame(CreateGameRequest request, String authToken) {
         //if ()
-        Game game = new Game(request.getGameName(), new main.Game(), "", "", (int) (Math.random() * 1000));
+        Game game = new Game(request.getGameName(), new main.Game(), null, null, (int) (Math.random() * 1000));
         try {
             try {
                 server.db.readAuth(authToken);
@@ -45,7 +45,7 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse testNewGame(CreateGameRequest request, int gameID) { //Still need to get Authorization
-        Game game = new Game(request.getGameName(), new main.Game(), "", "", gameID);
+        Game game = new Game(request.getGameName(), new main.Game(), null, null, gameID);
         try {
             server.db.writeGame(game);
             return new CreateGameResponse(game.gameID());
@@ -72,13 +72,14 @@ public class GameService {
             if (request.getPlayerColor() == null) {
 
             } else if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
-                if (!game.whiteUsername().isEmpty())
+                if (game.whiteUsername() != null)
                     return new JoinGameResponse("Error: already taken", 403);
-                server.db.updateGame(request.getGameID(), new Game(game.gameName(), game.game(), request.getAuthToken().username(), game.blackUsername(), game.gameID()));
+                model.Game updatedgame = new model.Game(game.gameName(), game.game(), server.db.readAuth(authToken).username(), game.blackUsername(), game.gameID());
+                server.db.updateGame(request.getGameID(), updatedgame);
             } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
-                if (!game.blackUsername().isEmpty())
+                if (game.blackUsername() != null)
                     return new JoinGameResponse("Error: already taken", 403);
-                server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), request.getAuthToken().username(), game.gameID()));
+                server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), server.db.readAuth(authToken).username(), game.gameID()));
             }
             return new JoinGameResponse();
         } catch (Exception e) {

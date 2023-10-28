@@ -1,7 +1,5 @@
 package model;
 
-import chess.ChessGame;
-
 /**
  * Creates a new game for two players
  *
@@ -11,7 +9,7 @@ import chess.ChessGame;
  * @param whiteUsername
  * @param blackUsername
  */
-public record Game(String gameName, ChessGame game, String whiteUsername, String blackUsername, int gameID) {
+public record Game(String gameName, main.Game game, String whiteUsername, String blackUsername, int gameID) {
     @Override
     public String toString() {
         return "Game: " + gameName + "(" + gameID + ")"

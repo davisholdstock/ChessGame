@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class ListGamesResponse {
     String message;
-    ArrayList<model.Game> gameList;
+    ArrayList<model.Game> games;
     int STATUS_CODE;
 
     /**
@@ -16,7 +16,7 @@ public class ListGamesResponse {
      * @param gameList of the saved games
      */
     public ListGamesResponse(ArrayList<model.Game> gameList) {
-        this.gameList = gameList;
+        this.games = gameList;
         this.STATUS_CODE = 200;
     }
 
@@ -38,19 +38,19 @@ public class ListGamesResponse {
         this.message = message;
     }
 
-    public ArrayList<model.Game> getGameList() {
-        return gameList;
+    public ArrayList<model.Game> getGames() {
+        return games;
     }
 
-    public void setGameList(ArrayList<model.Game> gameList) {
-        this.gameList = gameList;
+    public void setGames(ArrayList<model.Game> games) {
+        this.games = games;
     }
 
     @Override
     public String toString() {
         return "ListGamesResponse{" +
                 "message='" + message + '\'' +
-                ", gameList: " + ((gameList == null) ? "[]" : gameList.toString()) +
+                ", gameList: " + ((games == null) ? "[]" : games.toString()) +
                 '}';
     }
 
