@@ -11,10 +11,8 @@ import java.util.UUID;
  * Defines services to be preformed on a User
  */
 public class UserService {
-    //public DataAccess db;
 
     public UserService() {
-        /* db = new MemoryDatabase(); */
     }
 
     /**
@@ -23,7 +21,7 @@ public class UserService {
      * @param request to register a user
      * @return the attempted registration response
      */
-    public RegisterResponse registerUser(RegisterRequest request) throws DataAccessException {
+    public RegisterResponse registerUser(RegisterRequest request) {
         User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
         String authtoken = UUID.randomUUID().toString();
         try {
@@ -32,8 +30,11 @@ public class UserService {
             return new RegisterResponse(request.getUsername(), authtoken);
         } catch (Exception e) {
             e.printStackTrace();
-            if (server.db.readUser(request.getUsername()) != null) {
-                return new RegisterResponse("Error: already taken", 403);
+            try {
+                if (server.db.readUser(request.getUsername()) != null) {
+                    return new RegisterResponse("Error: already taken", 403);
+                }
+            } catch (DataAccessException ignored) {
             }
             String message = "Error: description";
             return new RegisterResponse(message, 500);

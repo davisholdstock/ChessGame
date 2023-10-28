@@ -22,7 +22,6 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse newGame(CreateGameRequest request, String authToken) {
-        //if ()
         Game game = new Game(request.getGameName(), new main.Game(), null, null, (int) (Math.random() * 1000));
         try {
             try {
@@ -30,23 +29,6 @@ public class GameService {
             } catch (Exception e) {
                 return new CreateGameResponse("Error: unauthorized", 401);
             }
-            server.db.writeGame(game);
-            return new CreateGameResponse(game.gameID());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new CreateGameResponse("Error: description", 500);
-        }
-    }
-
-    /**
-     * Creates a new Game for testing only
-     *
-     * @param request of the game being created
-     * @return the attempted creating game response
-     */
-    public CreateGameResponse testNewGame(CreateGameRequest request, int gameID) { //Still need to get Authorization
-        Game game = new Game(request.getGameName(), new main.Game(), null, null, gameID);
-        try {
             server.db.writeGame(game);
             return new CreateGameResponse(game.gameID());
         } catch (Exception e) {
@@ -86,7 +68,7 @@ public class GameService {
             e.printStackTrace();
             return new JoinGameResponse("Error: description", 500);
         }
-    }///
+    }
 
     /**
      * Lists all the saved games

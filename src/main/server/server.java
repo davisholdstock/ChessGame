@@ -22,8 +22,6 @@ public class server {
         Spark.externalStaticFileLocation("web");
         Spark.port(8080);
 
-        Spark.get("/hello", (req, res) -> "Hello!"); /* this is for testing */
-
         Spark.delete("/db", (req, res) -> (new ClearDBHandler()).handle(req, res));
 
         Spark.post("/user", (req, res) -> (new RegisterUserHandler()).handle(req, res));

@@ -3,19 +3,16 @@ package service;
 public class LoginRequest {
     private String username;
     private String password;
-    private String email;
 
     /**
      * Requests login of a user from the server
      *
      * @param username of the user
      * @param password of the user
-     * @param email    of the user
      */
-    public LoginRequest(String username, String password, String email) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
-        this.email = email;
     }
 
     public String getUsername() {
@@ -34,20 +31,11 @@ public class LoginRequest {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Override
     public String toString() {
         return "LoginRequest{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
                 '}';
     }
 }
