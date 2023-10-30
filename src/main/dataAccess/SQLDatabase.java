@@ -28,7 +28,8 @@ public class SQLDatabase implements DataAccess {
                        username VARCHAR(255) NOT NULL,
                        password VARCHAR(255) NOT NULL,
                        authToken VARCHAR(255),
-                       PRIMARY KEY (id))
+                       PRIMARY KEY (id),
+                       INDEX(username))
                     """;
 
             try (var createTableStatement = conn.prepareStatement(createUserTable)) {
