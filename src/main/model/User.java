@@ -8,6 +8,7 @@ package model;
  * @param email    for the User
  */
 public record User(String username, String password, String email) {
+
     @Override
     public String toString() {
         return username;

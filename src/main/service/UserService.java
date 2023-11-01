@@ -22,8 +22,8 @@ public class UserService {
      * @return the attempted registration response
      */
     public RegisterResponse registerUser(RegisterRequest request) {
-        User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
         String authtoken = UUID.randomUUID().toString();
+        User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
         try {
             server.db.writeUser(user);
             server.db.writeAuth(new AuthToken(authtoken, request.getUsername()));

@@ -4,66 +4,74 @@ import model.AuthToken;
 import model.Game;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class SQLDatabase implements DataAccess {
+    private final Database db = new Database();
 
-    public SQLDatabase() throws SQLException {
-        try (var conn = getSQLConnection()) {
-            try (var createDbStatement = conn.prepareStatement(
-                    "CREATE DATABASE IF NOT EXISTS chess_db")) {
-                createDbStatement.executeUpdate();
-            }
+    public SQLDatabase() {
+        createTables();
+    }
 
-            conn.setCatalog("chess_db");
-
+    public void createTables() {
+        try (var conn = db.getConnection()) {
             var createUserTable = """
-                       CREATE TABLE IF NOT EXISTS user (
+                       CREATE TABLE IF NOT EXISTS users (
                        id INT NOT NULL AUTO_INCREMENT,
-                       username VARCHAR(255) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
-                       authToken VARCHAR(255),
+                       username VARCHAR(15) NOT NULL,
+                       password VARCHAR(30) NOT NULL,
+                       email VARCHAR(75) NOT NULL,
+                       authToken CHAR(36),
                        PRIMARY KEY (id),
                        INDEX(username))
                     """;
-
             try (var createTableStatement = conn.prepareStatement(createUserTable)) {
                 createTableStatement.executeUpdate();
             }
-        }
-    }
 
-    Connection getSQLConnection() throws SQLException {
-        return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306",
-                "root",
-                "password"
-        );
+            var createGameTable = """
+                       CREATE TABLE IF NOT EXISTS games (
+                       gameID INT NOT NULL AUTO_INCREMENT,
+                       gameName VARCHAR(30) NOT NULL,
+                       whiteUsername VARCHAR(15) NOT NULL,
+                       blackUsername VARCHAR(15) NOT NULL,
+                       PRIMARY KEY (gameID),
+                       INDEX(gameName))
+                    """;
+            try (var createTableStatement = conn.prepareStatement(createGameTable)) {
+                createTableStatement.executeUpdate();
+            }
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void clear() throws DataAccessException {
-        try (var conn = getSQLConnection()) {
+        try (var conn = db.getConnection()) {
             try (var createDbStatement = conn.prepareStatement(
-                    "DROP DATABASE chess_db")) {
+                    "DROP DATABASE " + Database.DB_NAME)) {
                 createDbStatement.executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("Connection failed in clear()");
         }
+
+        createTables();
     }
 
     @Override
     public User writeUser(User user) throws DataAccessException {
-        try (var conn = getSQLConnection()) {
-            try (var preparedStatement = conn.prepareStatement("INSERT INTO user (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+        // FIXME: You can write multiple users
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, user.username());
+                preparedStatement.setString(2, user.password());
+                preparedStatement.setString(3, user.email());
                 preparedStatement.executeUpdate();
 
                 var resultSet = preparedStatement.getGeneratedKeys();
@@ -115,7 +123,18 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public AuthToken writeAuth(AuthToken authtoken) throws DataAccessException {
-        return null;
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("UPDATE users SET authToken = ? WHERE username = ?")) {
+                preparedStatement.setString(1, authtoken.authToken());
+                preparedStatement.setString(2, authtoken.username());
+                preparedStatement.executeUpdate();
+
+                return authtoken;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in writeAuth()");
+        }
     }
 
     @Override

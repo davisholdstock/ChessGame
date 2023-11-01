@@ -1,7 +1,7 @@
 package server;
 
 import dataAccess.DataAccess;
-import dataAccess.MemoryDatabase;
+import dataAccess.SQLDatabase;
 import handler.*;
 import spark.Spark;
 
@@ -9,7 +9,7 @@ import spark.Spark;
  * Creates the server
  */
 public class server {
-    public static DataAccess db = new MemoryDatabase();
+    public static DataAccess db = new SQLDatabase();
 
     public static void main(String[] args) {
         new server().run();

@@ -25,7 +25,7 @@ import java.util.LinkedList;
  */
 public class Database {
 
-    // FIXME: Change these fields, if necessary, to match your database configuration
+    // Change these fields, if necessary, to match your database configuration
     public static final String DB_NAME = "chess";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "password";
@@ -46,6 +46,10 @@ public class Database {
             Connection connection;
             if (connections.isEmpty()) {
                 connection = DriverManager.getConnection(CONNECTION_URL, DB_USERNAME, DB_PASSWORD);
+                try (var createDbStatement = connection.prepareStatement(
+                        "CREATE DATABASE IF NOT EXISTS " + DB_NAME)) {
+                    createDbStatement.executeUpdate();
+                }
                 connection.setCatalog(DB_NAME);
             } else {
                 connection = connections.removeFirst();
