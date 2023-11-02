@@ -1,5 +1,6 @@
 package dataAccess;
 
+import main.Board;
 import model.AuthToken;
 import model.Game;
 import model.User;
@@ -7,6 +8,7 @@ import model.User;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class SQLDatabase implements DataAccess {
@@ -36,8 +38,8 @@ public class SQLDatabase implements DataAccess {
                        CREATE TABLE IF NOT EXISTS games (
                        gameID INT NOT NULL AUTO_INCREMENT,
                        gameName VARCHAR(30) NOT NULL,
-                       whiteUsername VARCHAR(15) NOT NULL,
-                       blackUsername VARCHAR(15) NOT NULL,
+                       whiteUsername VARCHAR(15),
+                       blackUsername VARCHAR(15),
                        PRIMARY KEY (gameID),
                        INDEX(gameName))
                     """;
@@ -88,37 +90,120 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public User readUser(String username) throws DataAccessException {
-        return null;
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE username = ?")) {
+                preparedStatement.setString(1, username);
+                var resultSet = preparedStatement.executeQuery();
+
+                List<User> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String usernameresult = resultSet.getString("username");
+                    String passwordresult = resultSet.getString("password");
+                    String emailresult = resultSet.getString("email");
+                    User newUser = new User(usernameresult, passwordresult, emailresult);
+                    data.add(newUser);
+                }
+
+                if (data.size() == 1) {
+                    return data.get(0);
+                }
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readUser()");
+        }
     }
 
     @Override
     public void removeUser(User user) {
-
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("DELETE FROM users WHERE username = ?")) {
+                preparedStatement.setString(1, user.username());
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Game writeGame(Game game) throws DataAccessException {
-        return null;
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setString(1, game.gameName());
+                preparedStatement.executeUpdate();
+
+                var resultSet = preparedStatement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    // Do something with the ID
+                }
+                return game;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in writeGame()");
+        }
     }
 
     @Override
     public Game readGame(int gameID) throws DataAccessException {
-        return null;
+        // FIXME: Read One Game
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
+                preparedStatement.setString(1, String.valueOf(gameID));
+                var resultSet = preparedStatement.executeQuery();
+
+                List<Game> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String gameNameResult = resultSet.getString("gameName");
+                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    String whitUserResult = resultSet.getString("whiteUsername");
+                    String blackUserResult = resultSet.getString("blackUsername");
+                    Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameID);
+                    data.add(newGame);
+                }
+
+                if (data.size() == 1) {
+                    return data.get(0);
+                }
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readUser()");
+        }
+    }
+
+    private main.Game resolveGame(String game) {
+        // FIXME: Resolve Game from a string
+        main.Game tempGame = new main.Game();
+        tempGame.setBoard(new Board());
+        return tempGame;
     }
 
     @Override
     public ArrayList<Game> readAllGame() {
+        // FIXME: Read All Games
         return null;
     }
 
     @Override
     public Game updateGame(int gameID, Game newGame) throws DataAccessException {
+        // FIXME: Update Game
         return null;
     }
 
     @Override
     public void removeGame(int gameID) {
-
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("DELETE FROM games WHERE gameID = ?")) {
+                preparedStatement.setString(1, String.valueOf(gameID));
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -139,12 +224,21 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public AuthToken readAuth(String username) throws DataAccessException {
+        // FIXME: readAuth
         return null;
     }
 
     @Override
     public void removeAuth(AuthToken authtoken) {
-
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("UPDATE users SET authToken = ? WHERE username = ?")) {
+                preparedStatement.setString(1, null);
+                preparedStatement.setString(2, authtoken.username());
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
