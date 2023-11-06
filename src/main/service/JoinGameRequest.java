@@ -4,7 +4,7 @@ import chess.ChessGame;
 
 public class JoinGameRequest {
     private ChessGame.TeamColor playerColor;
-    private int gameID;
+    private Integer gameID;
 
     /**
      * Requests to join a Game from the server
@@ -25,11 +25,11 @@ public class JoinGameRequest {
         this.playerColor = playerColor;
     }
 
-    public int getGameID() {
+    public Integer getGameID() {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
+    public void setGameID(Integer gameID) {
         this.gameID = gameID;
     }
 

@@ -22,14 +22,14 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse newGame(CreateGameRequest request, String authToken) {
-        Game game = new Game(request.getGameName(), new main.Game(), null, null, (int) (Math.random() * 1000));
+//        Game game = new Game(request.getGameName(), new main.Game(), null, null, (int) (Math.random() * 1000));
         try {
             try {
                 server.db.readAuth(authToken);
             } catch (Exception e) {
                 return new CreateGameResponse("Error: unauthorized", 401);
             }
-            server.db.writeGame(game);
+            Game game = server.db.writeGame(request.getGameName());
             return new CreateGameResponse(game.gameID());
         } catch (Exception e) {
             e.printStackTrace();

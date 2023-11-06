@@ -29,7 +29,7 @@ public class JoinGameHandler implements Route {
             return gson.toJson(new CreateGameResponse("Error: bad request", 400));
         }
         JoinGameRequest req = (JoinGameRequest) gson.fromJson(request.body(), JoinGameRequest.class);
-        if (req.getGameID() == 0) {
+        if (req.getGameID() == null) {
             response.status(400);
             return gson.toJson(new CreateGameResponse("Error: bad request", 400));
         }

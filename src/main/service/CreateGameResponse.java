@@ -5,7 +5,7 @@ package service;
  */
 public class CreateGameResponse {
     String message;
-    int gameID;
+    Integer gameID;
     int STATUS_CODE;
 
     /**
@@ -36,11 +36,11 @@ public class CreateGameResponse {
         this.message = message;
     }
 
-    public int getGameID() {
+    public Integer getGameID() {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
+    public void setGameID(Integer gameID) {
         this.gameID = gameID;
     }
 

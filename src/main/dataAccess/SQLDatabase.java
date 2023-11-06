@@ -37,6 +37,7 @@ public class SQLDatabase implements DataAccess {
                        CREATE TABLE IF NOT EXISTS games (
                        gameID INT NOT NULL AUTO_INCREMENT,
                        gameName VARCHAR(30) NOT NULL,
+                       gameBoard VARCHAR(255) NOT NULL,
                        whiteUsername VARCHAR(15),
                        blackUsername VARCHAR(15),
                        PRIMARY KEY (gameID),
@@ -50,8 +51,8 @@ public class SQLDatabase implements DataAccess {
                        CREATE TABLE IF NOT EXISTS authorizations (
                        username VARCHAR(15),
                        authToken CHAR(36),
-                       PRIMARY KEY (username),
-                       INDEX(authToken))
+                       PRIMARY KEY (authToken),
+                       INDEX(username))
                     """;
             try (var createTableStatement = conn.prepareStatement(createAuthTable)) {
                 createTableStatement.executeUpdate();
@@ -117,7 +118,7 @@ public class SQLDatabase implements DataAccess {
 
                 if (data.size() == 1) {
                     return data.get(0);
-                } else if (data.size() == 0) {
+                } else if (data.isEmpty()) {
                     return null;
                 }
                 throw new RuntimeException();
@@ -130,7 +131,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public void removeUser(User user) {
-        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("DELETE FROM users WHERE username = ?")) {
                 preparedStatement.setString(1, user.username());
@@ -142,18 +142,25 @@ public class SQLDatabase implements DataAccess {
     }
 
     @Override
-    public Game writeGame(Game game) throws DataAccessException {
-        // FIXME: Have not tested
+    public Game writeGame(String gameName) throws DataAccessException {
+        // FIXME: Need to serialize main.Game
         try (var conn = db.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
-                preparedStatement.setString(1, game.gameName());
+            main.Game newGame = new main.Game();
+            String gameString = newGame.toString();
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName, gameBoard) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setString(1, gameName);
+                preparedStatement.setString(2, "gameString");
                 preparedStatement.executeUpdate();
 
                 var resultSet = preparedStatement.getGeneratedKeys();
+                int id = 0;
                 if (resultSet.next()) {
-                    // Do something with the ID
+                    id = resultSet.getInt(1);
+                } else {
+                    throw new DataAccessException("Invalid request");
                 }
-                return game;
+                return new Game(gameName, newGame, null, null, id);
+//                throw new DataAccessException("Invalid request");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,7 +170,7 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public Game readGame(int gameID) throws DataAccessException {
-        // FIXME: Read One Game
+        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
                 preparedStatement.setString(1, String.valueOf(gameID));
@@ -172,10 +179,11 @@ public class SQLDatabase implements DataAccess {
                 List<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    String gameResult = resultSet.getString("game");
+//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
-                    Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameID);
+                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameID);
                     data.add(newGame);
                 }
 
@@ -198,14 +206,48 @@ public class SQLDatabase implements DataAccess {
     }
 
     @Override
-    public ArrayList<Game> readAllGame() {
-        // FIXME: Read All Games
-        return null;
+    public ArrayList<Game> readAllGame() throws DataAccessException {
+        // FIXME: Needs to resolve game from string
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM games")) {
+                var resultSet = preparedStatement.executeQuery();
+
+                ArrayList<Game> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String gameNameResult = resultSet.getString("gameName");
+                    String gameResult = resultSet.getString("gameBoard");
+//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    String whitUserResult = resultSet.getString("whiteUsername");
+                    String blackUserResult = resultSet.getString("blackUsername");
+                    int gameIDResult = resultSet.getInt(1);
+                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameIDResult);
+                    data.add(newGame);
+                }
+
+                if (!data.isEmpty()) return data;
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readAllGames()");
+        }
     }
 
     @Override
     public Game updateGame(int gameID, Game newGame) throws DataAccessException {
         // FIXME: Update Game
+        Game updatedGame = new Game(newGame.gameName(), newGame.game(), newGame.whiteUsername(), newGame.blackUsername(), newGame.gameID());
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard = ?, whiteUsername = ?, blackUsername = ? WHERE gameID = ?")) {
+                preparedStatement.setString(1, "newGame.toString()");
+                preparedStatement.setString(2, newGame.whiteUsername());
+                preparedStatement.setString(3, newGame.blackUsername());
+                preparedStatement.setInt(4, gameID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -239,18 +281,17 @@ public class SQLDatabase implements DataAccess {
     }
 
     @Override
-    public AuthToken readAuth(String username) throws DataAccessException {
-        // FIXME: Have not tested
+    public AuthToken readAuth(String authToken) throws DataAccessException {
         try (var conn = db.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("SELECT * FROM authorizations WHERE username = ?")) {
-                preparedStatement.setString(1, username);
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM authorizations WHERE authToken = ?")) {
+                preparedStatement.setString(1, authToken);
                 var resultSet = preparedStatement.executeQuery();
 
                 List<AuthToken> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String usernameresult = resultSet.getString("username");
                     String authTokenresult = resultSet.getString("authToken");
-                    AuthToken newAuth = new AuthToken(usernameresult, authTokenresult);
+                    AuthToken newAuth = new AuthToken(authTokenresult, usernameresult);
                     data.add(newAuth);
                 }
 
@@ -268,11 +309,9 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public void removeAuth(AuthToken authtoken) {
-        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("UPDATE users SET authToken = ? WHERE username = ?")) {
-                preparedStatement.setString(1, null);
-                preparedStatement.setString(2, authtoken.username());
+            try (var preparedStatement = conn.prepareStatement("DELETE FROM authorizations WHERE username = ?")) {
+                preparedStatement.setString(1, authtoken.username());
                 preparedStatement.executeUpdate();
             }
         } catch (Exception e) {

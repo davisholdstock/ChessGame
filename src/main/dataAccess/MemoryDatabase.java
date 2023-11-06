@@ -45,7 +45,8 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public Game writeGame(Game game) throws DataAccessException {
+    public Game writeGame(String gameName) throws DataAccessException {
+        Game game = new Game(gameName, new main.Game(), null, null, (int) (Math.random() * 1000));
         if (games.get(game.gameID()) == null) {
             games.put(game.gameID(), game);
             return game;
@@ -77,7 +78,7 @@ public class MemoryDatabase implements DataAccess {
         if (games.get(gameID) != null) {
             Game updatedGame = new Game(newGame.gameName(), newGame.game(), newGame.whiteUsername(), newGame.blackUsername(), newGame.gameID());
             removeGame(gameID);
-            writeGame(updatedGame);
+            games.put(gameID, updatedGame);
             return updatedGame;
         }
         throw new DataAccessException("Game Does Not Exist");

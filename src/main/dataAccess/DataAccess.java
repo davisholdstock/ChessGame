@@ -41,10 +41,10 @@ public interface DataAccess {
     /**
      * Saves the Game
      *
-     * @param game to be saved
+     * @param gameName of the game to be saved
      * @return the game that was saved
      */
-    Game writeGame(Game game) throws DataAccessException;
+    Game writeGame(String gameName) throws DataAccessException;
 
     /**
      * Find a single game out of the saved games
@@ -59,7 +59,7 @@ public interface DataAccess {
      *
      * @return all the saved games
      */
-    ArrayList<Game> readAllGame();
+    ArrayList<Game> readAllGame() throws DataAccessException;
 
     /**
      * Updates the string name of a game
