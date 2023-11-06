@@ -26,7 +26,6 @@ public class SQLDatabase implements DataAccess {
                        username VARCHAR(15) NOT NULL,
                        password VARCHAR(30) NOT NULL,
                        email VARCHAR(75) NOT NULL,
-                       authToken CHAR(36),
                        PRIMARY KEY (id),
                        INDEX(username))
                     """;
@@ -44,6 +43,17 @@ public class SQLDatabase implements DataAccess {
                        INDEX(gameName))
                     """;
             try (var createTableStatement = conn.prepareStatement(createGameTable)) {
+                createTableStatement.executeUpdate();
+            }
+
+            var createAuthTable = """
+                       CREATE TABLE IF NOT EXISTS authorizations (
+                       username VARCHAR(15),
+                       authToken CHAR(36),
+                       PRIMARY KEY (username),
+                       INDEX(authToken))
+                    """;
+            try (var createTableStatement = conn.prepareStatement(createAuthTable)) {
                 createTableStatement.executeUpdate();
             }
         } catch (DataAccessException | SQLException e) {
@@ -68,7 +78,8 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public User writeUser(User user) throws DataAccessException {
-        // FIXME: You can write multiple users
+        if (readUser(user.username()) != null)
+            throw new DataAccessException("Duplicate User");
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, user.username());
@@ -106,6 +117,8 @@ public class SQLDatabase implements DataAccess {
 
                 if (data.size() == 1) {
                     return data.get(0);
+                } else if (data.size() == 0) {
+                    return null;
                 }
                 throw new RuntimeException();
             }
@@ -117,6 +130,7 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public void removeUser(User user) {
+        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("DELETE FROM users WHERE username = ?")) {
                 preparedStatement.setString(1, user.username());
@@ -129,6 +143,7 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public Game writeGame(Game game) throws DataAccessException {
+        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, game.gameName());
@@ -167,11 +182,11 @@ public class SQLDatabase implements DataAccess {
                 if (data.size() == 1) {
                     return data.get(0);
                 }
-                throw new RuntimeException();
+                throw new DataAccessException("No Game Found");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Connection failed in readUser()");
+            throw new DataAccessException("Connection failed in readGame()");
         }
     }
 
@@ -196,6 +211,7 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public void removeGame(int gameID) {
+        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("DELETE FROM games WHERE gameID = ?")) {
                 preparedStatement.setString(1, String.valueOf(gameID));
@@ -209,27 +225,50 @@ public class SQLDatabase implements DataAccess {
     @Override
     public AuthToken writeAuth(AuthToken authtoken) throws DataAccessException {
         try (var conn = db.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("UPDATE users SET authToken = ? WHERE username = ?")) {
-                preparedStatement.setString(1, authtoken.authToken());
-                preparedStatement.setString(2, authtoken.username());
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO authorizations (username, authToken) VALUES (?, ?)")) {
+                preparedStatement.setString(1, authtoken.username());
+                preparedStatement.setString(2, authtoken.authToken());
                 preparedStatement.executeUpdate();
 
                 return authtoken;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataAccessException("Connection failed in writeAuth()");
+            throw new DataAccessException("Connection failed in writeUser()");
         }
     }
 
     @Override
     public AuthToken readAuth(String username) throws DataAccessException {
-        // FIXME: readAuth
-        return null;
+        // FIXME: Have not tested
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM authorizations WHERE username = ?")) {
+                preparedStatement.setString(1, username);
+                var resultSet = preparedStatement.executeQuery();
+
+                List<AuthToken> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String usernameresult = resultSet.getString("username");
+                    String authTokenresult = resultSet.getString("authToken");
+                    AuthToken newAuth = new AuthToken(usernameresult, authTokenresult);
+                    data.add(newAuth);
+                }
+
+                if (!(data.isEmpty())) {
+                    return data.get(0);
+                }
+                throw new DataAccessException("No Authorization Found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readUser()");
+        }
+//        return null;
     }
 
     @Override
     public void removeAuth(AuthToken authtoken) {
+        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("UPDATE users SET authToken = ? WHERE username = ?")) {
                 preparedStatement.setString(1, null);
