@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SQLDatabase implements DataAccess {
     private final Database db = new Database();
@@ -179,7 +178,7 @@ public class SQLDatabase implements DataAccess {
                 List<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    String gameResult = resultSet.getString("game");
+                    String gameResult = resultSet.getString("gameBoard");
 //                    main.Game gameResult = resolveGame(resultSet.getString("game"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
@@ -224,8 +223,7 @@ public class SQLDatabase implements DataAccess {
                     data.add(newGame);
                 }
 
-                if (!data.isEmpty()) return data;
-                return null;
+                return data;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -320,17 +318,76 @@ public class SQLDatabase implements DataAccess {
     }
 
     @Override
-    public Map<String, User> getUsers() {
-        return null;
+    public ArrayList<User> getUsers() throws DataAccessException {
+        // FIXME: Needs to resolve game from string
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM users")) {
+                var resultSet = preparedStatement.executeQuery();
+
+                ArrayList<User> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String usernameResult = resultSet.getString("username");
+                    String passwordResult = resultSet.getString("password");
+                    String emailResult = resultSet.getString("email");
+                    User newUser = new User(usernameResult, passwordResult, emailResult);
+                    data.add(newUser);
+                }
+
+                return data;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readAllGames()");
+        }
     }
 
     @Override
-    public Map<String, String> getAuths() {
-        return null;
+    public ArrayList<AuthToken> getAuths() throws DataAccessException {
+        // FIXME: Needs to resolve game from string
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM authorizations")) {
+                var resultSet = preparedStatement.executeQuery();
+
+                ArrayList<AuthToken> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String authTokenResult = resultSet.getString("authToken");
+                    String usernameResult = resultSet.getString("username");
+                    AuthToken newAuth = new AuthToken(authTokenResult, usernameResult);
+                    data.add(newAuth);
+                }
+
+                return data;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readAllGames()");
+        }
     }
 
     @Override
-    public Map<Integer, Game> getGames() {
-        return null;
+    public ArrayList<Game> getGames() throws DataAccessException {
+        // FIXME: Needs to resolve game from string
+        try (var conn = db.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT * FROM games")) {
+                var resultSet = preparedStatement.executeQuery();
+
+                ArrayList<Game> data = new ArrayList<>();
+                while (resultSet.next()) {
+                    String gameNameResult = resultSet.getString("gameName");
+                    String gameResult = resultSet.getString("gameBoard");
+//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    String whitUserResult = resultSet.getString("whiteUsername");
+                    String blackUserResult = resultSet.getString("blackUsername");
+                    int gameIDResult = resultSet.getInt(1);
+                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameIDResult);
+                    data.add(newGame);
+                }
+
+                return data;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataAccessException("Connection failed in readAllGames()");
+        }
     }
 }

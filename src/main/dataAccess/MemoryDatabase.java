@@ -118,15 +118,15 @@ public class MemoryDatabase implements DataAccess {
             auths.remove(authtoken.username(), authtoken.authToken());
     }
 
-    public Map<String, User> getUsers() {
-        return users;
+    public ArrayList<User> getUsers() {
+        return (ArrayList<User>) users;
     }
 
-    public Map<String, String> getAuths() {
-        return auths;
+    public ArrayList<AuthToken> getAuths() {
+        return (ArrayList<AuthToken>) auths;
     }
 
-    public Map<Integer, Game> getGames() {
-        return games;
+    public ArrayList<Game> getGames() {
+        return (ArrayList<Game>) games;
     }
 }

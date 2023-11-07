@@ -44,29 +44,34 @@ public class GameService {
      * @return the attempted joining game response
      */
     public JoinGameResponse joinGame(JoinGameRequest request, String authToken) throws DataAccessException {
-        Game game = server.db.readGame(request.getGameID());
         try {
+            Game game = server.db.readGame(request.getGameID());
             try {
-                server.db.readAuth(authToken);
-            } catch (Exception e) {
-                return new JoinGameResponse("Error: unauthorized", 401);
-            }
-            if (request.getPlayerColor() == null) {
+                try {
+                    server.db.readAuth(authToken);
+                } catch (Exception e) {
+                    return new JoinGameResponse("Error: unauthorized", 401);
+                }
+                if (request.getPlayerColor() == null) {
 
-            } else if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
-                if (game.whiteUsername() != null)
-                    return new JoinGameResponse("Error: already taken", 403);
-                model.Game updatedgame = new model.Game(game.gameName(), game.game(), server.db.readAuth(authToken).username(), game.blackUsername(), game.gameID());
-                server.db.updateGame(request.getGameID(), updatedgame);
-            } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
-                if (game.blackUsername() != null)
-                    return new JoinGameResponse("Error: already taken", 403);
-                server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), server.db.readAuth(authToken).username(), game.gameID()));
+                } else if (request.getPlayerColor() == ChessGame.TeamColor.WHITE) {
+                    if (game.whiteUsername() != null)
+                        return new JoinGameResponse("Error: already taken", 403);
+                    model.Game updatedgame = new model.Game(game.gameName(), game.game(), server.db.readAuth(authToken).username(), game.blackUsername(), game.gameID());
+                    server.db.updateGame(request.getGameID(), updatedgame);
+                } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
+                    if (game.blackUsername() != null)
+                        return new JoinGameResponse("Error: already taken", 403);
+                    server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), server.db.readAuth(authToken).username(), game.gameID()));
+                }
+                return new JoinGameResponse();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new JoinGameResponse("Error: description", 500);
             }
-            return new JoinGameResponse();
         } catch (Exception e) {
             e.printStackTrace();
-            return new JoinGameResponse("Error: description", 500);
+            return new JoinGameResponse("Error: bad request", 400);
         }
     }
 

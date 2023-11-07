@@ -277,7 +277,7 @@ public class StandardAPITests {
         Assertions.assertTrue(createResult.message.toLowerCase(Locale.ROOT).contains("error"),
                 "Bad result did not return an error message");
         //Assertions.assertNull(createResult.gameID, "Bad result returned a game ID");
-        Assertions.assertEquals(0, createResult.gameID, "Bad result returned a game ID");
+        Assertions.assertEquals(null, createResult.gameID, "Bad result returned a game ID");
     }
 
 

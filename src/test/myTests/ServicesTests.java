@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import server.server;
 import service.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ServicesTests {
@@ -72,7 +73,7 @@ public class ServicesTests {
 
         Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
         Assertions.assertNotEquals((new LogoutResponse("Error: description", 500)).toString(), (testingService.clearData()).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getUsers());
     }
 
     @Test
@@ -87,7 +88,7 @@ public class ServicesTests {
                 "Wrong User Found");
 
         Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (authService.Logout(res.getAuthToken())).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getAuths());
     }
 
     @Test
@@ -102,7 +103,7 @@ public class ServicesTests {
                 "Wrong User Found");
 
         Assertions.assertEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (authService.Logout("fake auth")).toString());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getAuths());
     }
 
     @Test
@@ -117,11 +118,11 @@ public class ServicesTests {
                 "Wrong User Found");
 
         Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (authService.Logout(res.getAuthToken())).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getAuths());
 
         Assertions.assertNotEquals((new LoginResponse("Error: unauthorized", 401)).toString(), (authService.Login(new LoginRequest(user.username(),
                 user.password()))).toString());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getAuths());
     }
 
     @Test
@@ -136,11 +137,11 @@ public class ServicesTests {
                 "Wrong User Found");
 
         Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (authService.Logout(res.getAuthToken())).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getAuths());
 
         Assertions.assertEquals((new LoginResponse("Error: unauthorized", 401)).toString(), (authService.Login(new LoginRequest(user.username(),
                 "fake password"))).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getAuths());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getAuths());
     }
 
     @Test
@@ -164,7 +165,7 @@ public class ServicesTests {
 
         Assertions.assertEquals((new CreateGameResponse("Error: unauthorized", 401)).toString(),
                 (gameService.newGame(new CreateGameRequest("game"), "fake auth")).toString());
-        Assertions.assertEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertEquals(new ArrayList<>(), server.db.getGames());
     }
 
     @Test
