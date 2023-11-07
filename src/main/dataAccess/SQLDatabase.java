@@ -159,7 +159,6 @@ public class SQLDatabase implements DataAccess {
                     throw new DataAccessException("Invalid request");
                 }
                 return new Game(gameName, newGame, null, null, id);
-//                throw new DataAccessException("Invalid request");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,7 +301,6 @@ public class SQLDatabase implements DataAccess {
             e.printStackTrace();
             throw new DataAccessException("Connection failed in readUser()");
         }
-//        return null;
     }
 
     @Override
