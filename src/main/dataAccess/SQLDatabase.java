@@ -240,10 +240,14 @@ public class SQLDatabase implements DataAccess {
                 preparedStatement.setString(2, newGame.whiteUsername());
                 preparedStatement.setString(3, newGame.blackUsername());
                 preparedStatement.setInt(4, gameID);
-                preparedStatement.executeUpdate();
+                var resultSet = preparedStatement.executeQuery();
+                if (!resultSet.next()) {
+                    throw new DataAccessException("bla bla bla");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new DataAccessException("something");
         }
         return null;
     }

@@ -272,9 +272,9 @@ public class MethodTests {
     @DisplayName("Clear DB")
     public void clearSuccess() throws DataAccessException {
         User user = new User("user", "password", "user.password@gmail.com");
-        User user1 = new User("user", "password", "user.password@gmail.com");
-        User user2 = new User("user", "password", "user.password@gmail.com");
-        User user3 = new User("user", "password", "user.password@gmail.com");
+        User user1 = new User("user1", "password1", "user.password@gmail.com");
+        User user2 = new User("user2", "password2", "user.password@gmail.com");
+        User user3 = new User("user3", "password3", "user.password@gmail.com");
         server.db.writeUser(user);
         server.db.writeUser(user1);
         server.db.writeUser(user2);
@@ -288,5 +288,22 @@ public class MethodTests {
         Assertions.assertEquals(null, founduser,
                 "Remove user failed");
         Assertions.assertThrows(DataAccessException.class, () -> server.db.readAuth("Authorized"));
+    }
+
+    @Test
+    @DisplayName("Update Game")
+    public void updateGameSuccess() throws DataAccessException {
+        Game game = server.db.writeGame("game");
+
+        Game foundGame = server.db.readGame(game.gameID());
+        Assertions.assertEquals(game.toString(), foundGame.toString(),
+                "Wrong Game Found");
+    }
+
+    @Test
+    @DisplayName("Update Game Fail")
+    public void updateGameFail() throws DataAccessException {
+        Game game = server.db.writeGame("game");
+        Assertions.assertThrows(DataAccessException.class, () -> server.db.updateGame(0, new Game("updated", new main.Game(), "white", "black", 1)));
     }
 }
