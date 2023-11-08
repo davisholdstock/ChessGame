@@ -145,10 +145,10 @@ public class SQLDatabase implements DataAccess {
         // FIXME: Need to serialize main.Game
         try (var conn = db.getConnection()) {
             main.Game newGame = new main.Game();
-            String gameString = newGame.toString();
+            String gameString = newGame.fenNotation();
             try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName, gameBoard) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, gameName);
-                preparedStatement.setString(2, "gameString");
+                preparedStatement.setString(2, gameString);
                 preparedStatement.executeUpdate();
 
                 var resultSet = preparedStatement.getGeneratedKeys();

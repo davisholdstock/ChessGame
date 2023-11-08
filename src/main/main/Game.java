@@ -13,20 +13,26 @@ public class Game implements ChessGame {
     Position enPassant;
     int halfMove; // Moves since last pawn move
     int fullMove; // Total moves in the game
+    public static final Rules rules = new Rules();
 
     public Game() {
         turn = TeamColor.WHITE;
         board = new Board();
-    }
-
-    public Game(ChessGame otherGame) {
-        turn = otherGame.getTeamTurn();
-        board = otherGame.getBoard();
+        board.resetBoard();
         castling = new Boolean[4];
         Arrays.fill(castling, true);
         enPassant = null;
         halfMove = 0;
         fullMove = 0;
+    }
+
+    public Game(ChessGame otherGame) {
+        turn = otherGame.getTeamTurn();
+        board = otherGame.getBoard();
+        castling = otherGame.getCastling();
+        enPassant = otherGame.getEnPassant();
+        halfMove = otherGame.getHalfMove();
+        fullMove = otherGame.getFullMove();
     }
 
     public Game(String fenNotation) {
@@ -242,7 +248,7 @@ public class Game implements ChessGame {
             }
         }
         chessGame.append(" ");
-        for (int i = 0; i < castling.length; ++i) {
+        for (int i = 0; i < 4; ++i) {
             switch (i) {
                 case 0 -> {
                     if (castling[i])
@@ -278,7 +284,39 @@ public class Game implements ChessGame {
         chessGame.append(halfMove);
         chessGame.append(" ");
         chessGame.append(fullMove);
-        return null;
+        return chessGame.toString();
+    }
+
+    public Boolean[] getCastling() {
+        return castling;
+    }
+
+    public void setCastling(Boolean[] castling) {
+        this.castling = castling;
+    }
+
+    public Position getEnPassant() {
+        return enPassant;
+    }
+
+    public void setEnPassant(Position enPassant) {
+        this.enPassant = enPassant;
+    }
+
+    public int getHalfMove() {
+        return halfMove;
+    }
+
+    public void setHalfMove(int halfMove) {
+        this.halfMove = halfMove;
+    }
+
+    public int getFullMove() {
+        return fullMove;
+    }
+
+    public void setFullMove(int fullMove) {
+        this.fullMove = fullMove;
     }
 }
 

@@ -6,11 +6,15 @@ import java.util.ArrayList;
 
 public class Board implements ChessBoard {
     final int rows = 8;
+    final static int rowsStatic = 8;
     final int columns = 8;
+    final static int columnsStatic = 8;
     ChessPiece[][] chessBoard;
+//    public final Rules rules;
 
     public Board() {
         chessBoard = new ChessPiece[rows][columns];
+//        rules = new Rules();
     }
 
     // Copy constructor
@@ -116,7 +120,8 @@ public class Board implements ChessBoard {
                 chessBoard.append(emptySquares);
                 emptySquares = 0;
             }
-            chessBoard.append("/");
+            if (i != 0)
+                chessBoard.append("/");
         }
         return chessBoard.toString();
     }

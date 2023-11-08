@@ -1,10 +1,12 @@
 package chess;
 
+import main.Position;
+
 import java.util.Collection;
 
 /**
  * For a class that can manage a chess game, making moves on a board
- * 
+ * <p>
  * Note: You can add to this interface, but you should not alter the existing
  * methods.
  */
@@ -17,10 +19,18 @@ public interface ChessGame {
 
     /**
      * Set's which teams turn it is
-     * 
+     *
      * @param team the team whose turn it is
      */
     void setTeamTurn(TeamColor team);
+
+    Boolean[] getCastling();
+
+    Position getEnPassant();
+
+    int getHalfMove();
+
+    int getFullMove();
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -32,16 +42,16 @@ public interface ChessGame {
 
     /**
      * Gets a valid moves for a piece at the given location
-     * 
+     *
      * @param startPosition the piece to get valid moves for
      * @return Set of valid moves for requested piece, or null if no piece at
-     *         startPosition
+     * startPosition
      */
     Collection<ChessMove> validMoves(ChessPosition startPosition);
 
     /**
      * Makes a move in a chess game
-     * 
+     *
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
@@ -74,14 +84,14 @@ public interface ChessGame {
 
     /**
      * Sets this game's chessboard with a given board
-     * 
+     *
      * @param board the new board to use
      */
     void setBoard(ChessBoard board);
 
     /**
      * Gets the current chessboard
-     * 
+     *
      * @return the chessboard
      */
     ChessBoard getBoard();
