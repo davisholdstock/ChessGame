@@ -3,11 +3,16 @@ package main;
 import chess.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class Game implements ChessGame {
     TeamColor turn;
     ChessBoard board;
+    Boolean[] castling;
+    Position enPassant;
+    int halfMove; // Moves since last pawn move
+    int fullMove; // Total moves in the game
 
     public Game() {
         turn = TeamColor.WHITE;
@@ -17,6 +22,53 @@ public class Game implements ChessGame {
     public Game(ChessGame otherGame) {
         turn = otherGame.getTeamTurn();
         board = otherGame.getBoard();
+        castling = new Boolean[4];
+        Arrays.fill(castling, true);
+        enPassant = null;
+        halfMove = 0;
+        fullMove = 0;
+    }
+
+    public Game(String fenNotation) {
+        String[] gameSetup = fenNotation.split("\\s+");
+        switch (gameSetup[1]) {
+            case "w" -> {
+                turn = TeamColor.WHITE;
+                break;
+            }
+            case "b" -> {
+                turn = TeamColor.BLACK;
+                break;
+            }
+        }
+        castling = new Boolean[4];
+        Arrays.fill(castling, false);
+        for (int i = 0; i < gameSetup[2].length(); ++i) {
+            switch (gameSetup[2].charAt(i)) {
+                case 'K' -> {
+                    castling[0] = true;
+                    break;
+                }
+                case 'Q' -> {
+                    castling[1] = true;
+                    break;
+                }
+                case 'k' -> {
+                    castling[2] = true;
+                    break;
+                }
+                case 'q' -> {
+                    castling[3] = true;
+                    break;
+                }
+            }
+        }
+        if (gameSetup[3].equals("-"))
+            enPassant = null;
+        else
+            enPassant = new Position(gameSetup[3]);
+        halfMove = Integer.parseInt(gameSetup[4]);
+        halfMove = Integer.parseInt(gameSetup[5]);
     }
 
     public Game getGame() {
@@ -63,8 +115,7 @@ public class Game implements ChessGame {
                     tempBoard.movePiece(move.getStartPosition(), move.getEndPosition());
                     if (tempBoard.isInCheck(turn)) {
                         throw new InvalidMoveException("Not Moving out of check");
-                    }
-                    else {
+                    } else {
                         if (move.getPromotionPiece() != null)
                             board.movePieceAndPromote(move.getStartPosition(), move.getEndPosition(), move.getPromotionPiece());
                         else
@@ -170,6 +221,64 @@ public class Game implements ChessGame {
     @Override
     public String toString() {
         return board.toString();
+    }
+
+    public String fenNotation() {
+        StringBuilder chessGame = new StringBuilder();
+        chessGame.append(board.fenNotation());
+        chessGame.append(" ");
+        switch (turn) {
+            case WHITE -> {
+                chessGame.append("w");
+                break;
+            }
+            case BLACK -> {
+                chessGame.append("b");
+                break;
+            }
+            default -> {
+                chessGame.append("N");
+                break;
+            }
+        }
+        chessGame.append(" ");
+        for (int i = 0; i < castling.length; ++i) {
+            switch (i) {
+                case 0 -> {
+                    if (castling[i])
+                        chessGame.append("K");
+                    break;
+                }
+                case 1 -> {
+                    if (castling[i])
+                        chessGame.append("Q");
+                    break;
+                }
+                case 2 -> {
+                    if (castling[i])
+                        chessGame.append("k");
+                    break;
+                }
+                case 3 -> {
+                    if (castling[i])
+                        chessGame.append("q");
+                    break;
+                }
+                default -> {
+                    break;
+                }
+            }
+        }
+        chessGame.append(" ");
+        if (enPassant != null)
+            chessGame.append(enPassant.toString()); // Replace with the notation of the square behind the pawn that can be taken en Passant
+        else
+            chessGame.append("-");
+        chessGame.append(" ");
+        chessGame.append(halfMove);
+        chessGame.append(" ");
+        chessGame.append(fullMove);
+        return null;
     }
 }
 

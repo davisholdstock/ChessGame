@@ -2,7 +2,7 @@ package chess;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
- * 
+ * <p>
  * Note: You can add to this interface, but you should not alter the existing
  * methods.
  */
@@ -10,7 +10,7 @@ public interface ChessBoard {
 
     /**
      * Adds a chess piece to the chessboard
-     * 
+     *
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
@@ -18,10 +18,10 @@ public interface ChessBoard {
 
     /**
      * Gets a chess piece on the chessboard
-     * 
+     *
      * @param position The position to get the piece from
      * @return Either the piece at the position, or null if no piece is at that
-     *         position
+     * position
      */
     ChessPiece getPiece(ChessPosition position);
 
@@ -43,4 +43,6 @@ public interface ChessBoard {
     boolean isInCheck(ChessGame.TeamColor teamColor);
 
     void movePieceAndPromote(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece);
+
+    String fenNotation();
 }

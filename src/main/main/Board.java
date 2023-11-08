@@ -71,7 +71,7 @@ public class Board implements ChessBoard {
                 if (getPiece(new Position(i, j)) != null
                         && getPiece(new Position(i, j)).getPieceType() == ChessPiece.PieceType.KING
                         && getPiece(new Position(i, j)).getTeamColor() == color) {
-                    return new Position(i,j);
+                    return new Position(i, j);
                 }
             }
         }
@@ -95,6 +95,30 @@ public class Board implements ChessBoard {
                         {null, null, null, null, null, null, null, null},
                         {new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN)},
                         {new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT), new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK)}};
+    }
+
+    public String fenNotation() {
+        StringBuilder chessBoard = new StringBuilder();
+        int emptySquares = 0;
+        for (int i = rows - 1; i >= 0; --i) {
+            for (int y = 0; y < columns; ++y) {
+                if (getPiece(new Position(i, y)) != null) {
+                    if (emptySquares != 0) {
+                        chessBoard.append(emptySquares);
+                        emptySquares = 0;
+                    }
+                    chessBoard.append(getPiece(new Position(i, y)).toString());
+                } else {
+                    ++emptySquares;
+                }
+            }
+            if (emptySquares != 0) {
+                chessBoard.append(emptySquares);
+                emptySquares = 0;
+            }
+            chessBoard.append("/");
+        }
+        return chessBoard.toString();
     }
 
     @Override
