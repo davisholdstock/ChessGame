@@ -1,6 +1,5 @@
 package dataAccess;
 
-import main.Board;
 import model.AuthToken;
 import model.Game;
 import model.User;
@@ -168,7 +167,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public Game readGame(int gameID) throws DataAccessException {
-        // FIXME: Have not tested
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
                 preparedStatement.setString(1, String.valueOf(gameID));
@@ -177,7 +175,6 @@ public class SQLDatabase implements DataAccess {
                 List<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-//                    String gameResult = resultSet.getString("gameBoard");
                     main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
@@ -194,13 +191,6 @@ public class SQLDatabase implements DataAccess {
             e.printStackTrace();
             throw new DataAccessException("Connection failed in readGame()");
         }
-    }
-
-    private main.Game resolveGame(String game) {
-        // FIXME: Resolve Game from a string
-        main.Game tempGame = new main.Game();
-        tempGame.setBoard(new Board());
-        return tempGame;
     }
 
     @Override
@@ -233,23 +223,28 @@ public class SQLDatabase implements DataAccess {
     @Override
     public Game updateGame(int gameID, Game newGame) throws DataAccessException {
         // FIXME: Update Game
-        Game updatedGame = new Game(newGame.gameName(), newGame.game(), newGame.whiteUsername(), newGame.blackUsername(), newGame.gameID());
         try (var conn = db.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard = ?, whiteUsername = ?, blackUsername = ? WHERE gameID = ?")) {
-                preparedStatement.setString(1, "newGame.toString()");
-                preparedStatement.setString(2, newGame.whiteUsername());
-                preparedStatement.setString(3, newGame.blackUsername());
-                preparedStatement.setInt(4, gameID);
-                var resultSet = preparedStatement.executeQuery();
-                if (!resultSet.next()) {
-                    throw new DataAccessException("bla bla bla");
+            if (newGame.whiteUsername() != null) {
+                try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, whiteUsername=? WHERE gameID = ?")) {
+                    preparedStatement.setString(1, newGame.game().fenNotation());
+                    preparedStatement.setString(2, newGame.whiteUsername());
+                    preparedStatement.setInt(3, gameID);
+                    preparedStatement.executeUpdate();
+                    return newGame;
+                }
+            } else {
+                try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, blackUsername=? WHERE gameID = ?")) {
+                    preparedStatement.setString(1, newGame.game().fenNotation());
+                    preparedStatement.setString(2, newGame.blackUsername());
+                    preparedStatement.setInt(3, gameID);
+                    preparedStatement.executeUpdate();
+                    return newGame;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataAccessException("something");
         }
-        return null;
     }
 
     @Override
