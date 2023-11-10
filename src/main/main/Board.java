@@ -36,6 +36,71 @@ public class Board implements ChessBoard {
         }
     }
 
+    public Board(String fenNotation) {
+        String[] boardSetup = fenNotation.split("/");
+
+        // Initialize the new chess board
+        this.chessBoard = new ChessPiece[rows][columns];
+
+        // Copy the pieces from the FEN string
+        int blankSpaces = 0;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                if (boardSetup[i].substring(0, 1).matches("[0-9]")) {
+                    this.chessBoard[i][j] = null;
+                    if (boardSetup[i].charAt(0) != '0') {
+                        boardSetup[i] = (Integer.parseInt(boardSetup[i]) - 1) + boardSetup[i].substring(1);
+                    } else {
+                        boardSetup[i] = boardSetup[i].substring(1);
+                    }
+                    if (boardSetup[i].length() > 1)
+                        boardSetup[i] = boardSetup[i].substring(1);
+                } else {
+                    switch (boardSetup[i].charAt(0)) {
+                        case 'K' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+                        }
+                        case 'Q' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+                        }
+                        case 'R' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+                        }
+                        case 'B' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+                        }
+                        case 'N' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+                        }
+                        case 'P' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+                        }
+                        case 'k' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+                        }
+                        case 'q' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+                        }
+                        case 'r' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+                        }
+                        case 'b' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+                        }
+                        case 'n' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+                        }
+                        case 'p' -> {
+                            this.chessBoard[i][j] = new Piece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+                        }
+                    }
+                    if (boardSetup[i].length() > 1)
+                        boardSetup[i] = boardSetup[i].substring(1);
+                }
+            }
+        }
+    }
+
     public int getRows() {
         return rows;
     }

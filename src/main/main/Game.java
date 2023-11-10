@@ -37,6 +37,8 @@ public class Game implements ChessGame {
 
     public Game(String fenNotation) {
         String[] gameSetup = fenNotation.split("\\s+");
+        board = new Board(gameSetup[0]);
+//        String[] boardSetup = gameSetup[0].split("/");
         switch (gameSetup[1]) {
             case "w" -> {
                 turn = TeamColor.WHITE;
@@ -49,23 +51,25 @@ public class Game implements ChessGame {
         }
         castling = new Boolean[4];
         Arrays.fill(castling, false);
-        for (int i = 0; i < gameSetup[2].length(); ++i) {
-            switch (gameSetup[2].charAt(i)) {
-                case 'K' -> {
-                    castling[0] = true;
-                    break;
-                }
-                case 'Q' -> {
-                    castling[1] = true;
-                    break;
-                }
-                case 'k' -> {
-                    castling[2] = true;
-                    break;
-                }
-                case 'q' -> {
-                    castling[3] = true;
-                    break;
+        if (!gameSetup[2].equals("-")) {
+            for (int i = 0; i < gameSetup[2].length(); ++i) {
+                switch (gameSetup[2].charAt(i)) {
+                    case 'K' -> {
+                        castling[0] = true;
+                        break;
+                    }
+                    case 'Q' -> {
+                        castling[1] = true;
+                        break;
+                    }
+                    case 'k' -> {
+                        castling[2] = true;
+                        break;
+                    }
+                    case 'q' -> {
+                        castling[3] = true;
+                        break;
+                    }
                 }
             }
         }
@@ -248,30 +252,34 @@ public class Game implements ChessGame {
             }
         }
         chessGame.append(" ");
-        for (int i = 0; i < 4; ++i) {
-            switch (i) {
-                case 0 -> {
-                    if (castling[i])
-                        chessGame.append("K");
-                    break;
-                }
-                case 1 -> {
-                    if (castling[i])
-                        chessGame.append("Q");
-                    break;
-                }
-                case 2 -> {
-                    if (castling[i])
-                        chessGame.append("k");
-                    break;
-                }
-                case 3 -> {
-                    if (castling[i])
-                        chessGame.append("q");
-                    break;
-                }
-                default -> {
-                    break;
+        if (!(castling[0] || castling[1] || castling[2] || castling[3])) {
+            chessGame.append("-");
+        } else {
+            for (int i = 0; i < 4; ++i) {
+                switch (i) {
+                    case 0 -> {
+                        if (castling[i])
+                            chessGame.append("K");
+                        break;
+                    }
+                    case 1 -> {
+                        if (castling[i])
+                            chessGame.append("Q");
+                        break;
+                    }
+                    case 2 -> {
+                        if (castling[i])
+                            chessGame.append("k");
+                        break;
+                    }
+                    case 3 -> {
+                        if (castling[i])
+                            chessGame.append("q");
+                        break;
+                    }
+                    default -> {
+                        break;
+                    }
                 }
             }
         }

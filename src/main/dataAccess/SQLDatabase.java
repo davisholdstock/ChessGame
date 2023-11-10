@@ -177,11 +177,11 @@ public class SQLDatabase implements DataAccess {
                 List<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    String gameResult = resultSet.getString("gameBoard");
-//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+//                    String gameResult = resultSet.getString("gameBoard");
+                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
-                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameID);
+                    Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameID);
                     data.add(newGame);
                 }
 
