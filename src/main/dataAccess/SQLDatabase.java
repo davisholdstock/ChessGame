@@ -225,20 +225,50 @@ public class SQLDatabase implements DataAccess {
         // FIXME: Update Game
         try (var conn = db.getConnection()) {
             if (newGame.whiteUsername() != null) {
-                try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, whiteUsername=? WHERE gameID = ?")) {
-                    preparedStatement.setString(1, newGame.game().fenNotation());
-                    preparedStatement.setString(2, newGame.whiteUsername());
-                    preparedStatement.setInt(3, gameID);
-                    preparedStatement.executeUpdate();
-                    return newGame;
+                try (var preparedStatementUserIsTaken = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
+                    preparedStatementUserIsTaken.setInt(1, gameID);
+                    var resultSet = preparedStatementUserIsTaken.executeQuery();
+
+                    Boolean userTaken = false;
+                    if (resultSet.next()) {
+                        String whiteUsernameResult = resultSet.getString("whiteUsername");
+                        if (whiteUsernameResult != null)
+                            userTaken = true;
+                    }
+
+                    if (!userTaken) {
+                        try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, whiteUsername=? WHERE gameID = ?")) {
+                            preparedStatement.setString(1, newGame.game().fenNotation());
+                            preparedStatement.setString(2, newGame.whiteUsername());
+                            preparedStatement.setInt(3, gameID);
+                            preparedStatement.executeUpdate();
+                            return newGame;
+                        }
+                    }
+                    throw new DataAccessException("User is already taken");
                 }
             } else {
-                try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, blackUsername=? WHERE gameID = ?")) {
-                    preparedStatement.setString(1, newGame.game().fenNotation());
-                    preparedStatement.setString(2, newGame.blackUsername());
-                    preparedStatement.setInt(3, gameID);
-                    preparedStatement.executeUpdate();
-                    return newGame;
+                try (var preparedStatementUserIsTaken = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
+                    preparedStatementUserIsTaken.setInt(1, gameID);
+                    var resultSet = preparedStatementUserIsTaken.executeQuery();
+
+                    Boolean userTaken = false;
+                    if (resultSet.next()) {
+                        String whiteUsernameResult = resultSet.getString("blackUsername");
+                        if (whiteUsernameResult != null)
+                            userTaken = true;
+                    }
+
+                    if (!userTaken) {
+                        try (var preparedStatement = conn.prepareStatement("UPDATE games SET gameBoard=?, blackUsername=? WHERE gameID = ?")) {
+                            preparedStatement.setString(1, newGame.game().fenNotation());
+                            preparedStatement.setString(2, newGame.blackUsername());
+                            preparedStatement.setInt(3, gameID);
+                            preparedStatement.executeUpdate();
+                            return newGame;
+                        }
+                    }
+                    throw new DataAccessException("User is already taken");
                 }
             }
         } catch (Exception e) {
