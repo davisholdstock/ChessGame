@@ -16,7 +16,6 @@ public class Move extends Game implements ChessMove {
         this.promotionPiece = promotionPiece;
         this.start = start;
         this.end = end;
-        //this.piece = getGame().getBoard().getPiece(start);
     }
 
     @Override

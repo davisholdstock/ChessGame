@@ -11,14 +11,13 @@ import server.server;
 import service.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ServicesTests {
     //private MemoryDatabase db = new MemoryDatabase();
-    private AuthService authService = new AuthService();
-    private TestingService testingService = new TestingService();
-    private UserService userService = new UserService();
-    private GameService gameService = new GameService();
+    private final AuthService authService = new AuthService();
+    private final TestingService testingService = new TestingService();
+    private final UserService userService = new UserService();
+    private final GameService gameService = new GameService();
 
     @BeforeEach
     public void setup() throws DataAccessException {
@@ -32,7 +31,7 @@ public class ServicesTests {
                 (userService.registerUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
         User user = new User("user", "password", "user.password@gmail.com");
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -48,7 +47,7 @@ public class ServicesTests {
                 (userService.registerUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
         User user = new User("user", "password", "user.password@gmail.com");
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -71,7 +70,7 @@ public class ServicesTests {
         Assertions.assertNotEquals((new RegisterResponse("Error: description", 500)).toString(),
                 (userService.registerUser(new RegisterRequest(user3.username(), user3.password(), user3.email()))).toString());
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         Assertions.assertNotEquals((new LogoutResponse("Error: description", 500)).toString(), (testingService.clearData()).toString());
         Assertions.assertEquals(new ArrayList<>(), server.db.getUsers());
     }
@@ -82,7 +81,7 @@ public class ServicesTests {
         User user = new User("user", "password", "user.password@gmail.com");
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -97,7 +96,7 @@ public class ServicesTests {
         User user = new User("user", "password", "user.password@gmail.com");
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -112,7 +111,7 @@ public class ServicesTests {
         User user = new User("user", "password", "user.password@gmail.com");
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -131,7 +130,7 @@ public class ServicesTests {
         User user = new User("user", "password", "user.password@gmail.com");
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getUsers());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getUsers());
         User founduser = server.db.readUser(user.username());
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
@@ -153,7 +152,7 @@ public class ServicesTests {
 
         Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
                 (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
     }
 
     @Test
@@ -182,7 +181,7 @@ public class ServicesTests {
                 (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
         Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
                 (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
 
         Assertions.assertNotEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
                 (gameService.listGames(res.getAuthToken())).toString());
@@ -202,7 +201,7 @@ public class ServicesTests {
                 (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
         Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
                 (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
 
         Assertions.assertEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
                 (gameService.listGames("fake auth")).toString());
@@ -215,7 +214,7 @@ public class ServicesTests {
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
         CreateGameResponse gameResponse = gameService.newGame(new CreateGameRequest("game"), res.getAuthToken());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
 
         Assertions.assertNotEquals((new JoinGameResponse("Error: unauthorized", 401)).toString(),
                 (gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE, gameResponse.getGameID()), res.getAuthToken())).toString());
@@ -228,7 +227,7 @@ public class ServicesTests {
         RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
         CreateGameResponse gameResponse = gameService.newGame(new CreateGameRequest("game"), res.getAuthToken());
-        Assertions.assertNotEquals(new HashMap<>(), server.db.getGames());
+        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
 
         Assertions.assertEquals((new JoinGameResponse("Error: unauthorized", 401)).toString(),
                 (gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE, gameResponse.getGameID()), "fake auth")).toString());

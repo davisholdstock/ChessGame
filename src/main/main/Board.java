@@ -10,11 +10,9 @@ public class Board implements ChessBoard {
     final int columns = 8;
     final static int columnsStatic = 8;
     ChessPiece[][] chessBoard;
-//    public final Rules rules;
 
     public Board() {
         chessBoard = new ChessPiece[rows][columns];
-//        rules = new Rules();
     }
 
     // Copy constructor

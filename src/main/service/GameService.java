@@ -22,7 +22,6 @@ public class GameService {
      * @return the attempted creating game response
      */
     public CreateGameResponse newGame(CreateGameRequest request, String authToken) {
-//        Game game = new Game(request.getGameName(), new main.Game(), null, null, (int) (Math.random() * 1000));
         try {
             try {
                 server.db.readAuth(authToken);

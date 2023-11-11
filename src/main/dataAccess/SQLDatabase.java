@@ -141,7 +141,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public Game writeGame(String gameName) throws DataAccessException {
-        // FIXME: Need to serialize main.Game
         try (var conn = db.getConnection()) {
             main.Game newGame = new main.Game();
             String gameString = newGame.fenNotation();
@@ -195,7 +194,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public ArrayList<Game> readAllGame() throws DataAccessException {
-        // FIXME: Needs to resolve game from string
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM games")) {
                 var resultSet = preparedStatement.executeQuery();
@@ -203,12 +201,11 @@ public class SQLDatabase implements DataAccess {
                 ArrayList<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    String gameResult = resultSet.getString("gameBoard");
-//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
                     int gameIDResult = resultSet.getInt(1);
-                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameIDResult);
+                    Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameIDResult);
                     data.add(newGame);
                 }
 
@@ -222,7 +219,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public Game updateGame(int gameID, Game newGame) throws DataAccessException {
-        // FIXME: Update Game
         try (var conn = db.getConnection()) {
             if (newGame.whiteUsername() != null) {
                 try (var preparedStatementUserIsTaken = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
@@ -346,7 +342,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public ArrayList<User> getUsers() throws DataAccessException {
-        // FIXME: Needs to resolve game from string
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM users")) {
                 var resultSet = preparedStatement.executeQuery();
@@ -370,7 +365,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public ArrayList<AuthToken> getAuths() throws DataAccessException {
-        // FIXME: Needs to resolve game from string
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM authorizations")) {
                 var resultSet = preparedStatement.executeQuery();
@@ -393,7 +387,6 @@ public class SQLDatabase implements DataAccess {
 
     @Override
     public ArrayList<Game> getGames() throws DataAccessException {
-        // FIXME: Needs to resolve game from string
         try (var conn = db.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT * FROM games")) {
                 var resultSet = preparedStatement.executeQuery();
@@ -401,12 +394,11 @@ public class SQLDatabase implements DataAccess {
                 ArrayList<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    String gameResult = resultSet.getString("gameBoard");
-//                    main.Game gameResult = resolveGame(resultSet.getString("game"));
+                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
                     int gameIDResult = resultSet.getInt(1);
-                    Game newGame = new Game(gameNameResult, new main.Game(), whitUserResult, blackUserResult, gameIDResult);
+                    Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameIDResult);
                     data.add(newGame);
                 }
 

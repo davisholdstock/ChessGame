@@ -13,8 +13,8 @@ public class Position implements ChessPosition {
         this.column = column;
     }
 
-    public Position(String squarNotation) {
-        switch (squarNotation.charAt(0)) {
+    public Position(String squareNotation) {
+        switch (squareNotation.charAt(0)) {
             case 'a' -> {
                 this.row = 0;
             }
@@ -40,7 +40,7 @@ public class Position implements ChessPosition {
                 this.row = 7;
             }
         }
-        this.column = Integer.parseInt(squarNotation.substring(1)) + 1;
+        this.column = Integer.parseInt(squareNotation.substring(1)) + 1;
     }
 
     @Override
