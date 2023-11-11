@@ -49,11 +49,11 @@ public class Board implements ChessBoard {
                 if (boardSetup[i].substring(0, 1).matches("[0-9]")) {
                     this.chessBoard[i][j] = null;
                     if (boardSetup[i].charAt(0) != '0') {
-                        boardSetup[i] = (Integer.parseInt(boardSetup[i]) - 1) + boardSetup[i].substring(1);
+                        boardSetup[i] = (Integer.parseInt(boardSetup[i].substring(0, 1)) - 1) + boardSetup[i].substring(1);
                     } else {
                         boardSetup[i] = boardSetup[i].substring(1);
                     }
-                    if (boardSetup[i].length() > 1)
+                    if ((boardSetup[i].length() > 1) && (boardSetup[i].charAt(0) == '0'))
                         boardSetup[i] = boardSetup[i].substring(1);
                 } else {
                     switch (boardSetup[i].charAt(0)) {
@@ -169,7 +169,7 @@ public class Board implements ChessBoard {
     public String fenNotation() {
         StringBuilder chessBoard = new StringBuilder();
         int emptySquares = 0;
-        for (int i = rows - 1; i >= 0; --i) {
+        for (int i = 0; i < rows; ++i) {
             for (int y = 0; y < columns; ++y) {
                 if (getPiece(new Position(i, y)) != null) {
                     if (emptySquares != 0) {
@@ -185,7 +185,7 @@ public class Board implements ChessBoard {
                 chessBoard.append(emptySquares);
                 emptySquares = 0;
             }
-            if (i != 0)
+            if (i != 7)
                 chessBoard.append("/");
         }
         return chessBoard.toString();

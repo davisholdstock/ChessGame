@@ -38,7 +38,6 @@ public class Game implements ChessGame {
     public Game(String fenNotation) {
         String[] gameSetup = fenNotation.split("\\s+");
         board = new Board(gameSetup[0]);
-//        String[] boardSetup = gameSetup[0].split("/");
         switch (gameSetup[1]) {
             case "w" -> {
                 turn = TeamColor.WHITE;
@@ -78,7 +77,7 @@ public class Game implements ChessGame {
         else
             enPassant = new Position(gameSetup[3]);
         halfMove = Integer.parseInt(gameSetup[4]);
-        halfMove = Integer.parseInt(gameSetup[5]);
+        fullMove = Integer.parseInt(gameSetup[5]);
     }
 
     public Game getGame() {

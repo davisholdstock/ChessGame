@@ -294,9 +294,11 @@ public class MethodTests {
     @DisplayName("Update Game")
     public void updateGameSuccess() throws DataAccessException {
         Game game = server.db.writeGame("game");
-
+        Game game1 = new Game("updatedGame", new main.Game("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"), "wUser", null, 1);
+        Game updatedGame = server.db.updateGame(game.gameID(), game1);
         Game foundGame = server.db.readGame(game.gameID());
-        Assertions.assertEquals(game.toString(), foundGame.toString(),
+
+        Assertions.assertEquals(updatedGame.game().fenNotation(), foundGame.game().fenNotation(),
                 "Wrong Game Found");
     }
 
@@ -304,6 +306,6 @@ public class MethodTests {
     @DisplayName("Update Game Fail")
     public void updateGameFail() throws DataAccessException {
         Game game = server.db.writeGame("game");
-        Assertions.assertThrows(DataAccessException.class, () -> server.db.updateGame(0, new Game("updated", new main.Game(), "white", "black", 1)));
+        Assertions.assertThrows(DataAccessException.class, () -> server.db.updateGame(0, new Game("updated", new main.Game(), "white", null, 1)));
     }
 }
