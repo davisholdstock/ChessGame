@@ -1,18 +1,21 @@
-package service;
+package requests;
 
-public class LoginRequest {
+public class RegisterRequest {
     private String username;
     private String password;
+    private String email;
 
     /**
-     * Requests login of a user from the server
+     * Requests registration of a user from the server
      *
      * @param username of the user
      * @param password of the user
+     * @param email    of the user
      */
-    public LoginRequest(String username, String password) {
+    public RegisterRequest(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -31,11 +34,20 @@ public class LoginRequest {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
-        return "LoginRequest{" +
+        return "RegisterRequest{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

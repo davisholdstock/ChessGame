@@ -1,5 +1,6 @@
 package dataAccess;
 
+import chess.ChessGame;
 import model.AuthToken;
 import model.Game;
 import model.User;
@@ -218,9 +219,9 @@ public class SQLDatabase implements DataAccess {
     }
 
     @Override
-    public Game updateGame(int gameID, Game newGame) throws DataAccessException {
+    public Game updateGame(int gameID, Game newGame, ChessGame.TeamColor colorToUpdate) throws DataAccessException {
         try (var conn = db.getConnection()) {
-            if (newGame.whiteUsername() != null) {
+            if (colorToUpdate == ChessGame.TeamColor.WHITE && newGame.whiteUsername() != null) {
                 try (var preparedStatementUserIsTaken = conn.prepareStatement("SELECT * FROM games WHERE gameID = ?")) {
                     preparedStatementUserIsTaken.setInt(1, gameID);
                     var resultSet = preparedStatementUserIsTaken.executeQuery();

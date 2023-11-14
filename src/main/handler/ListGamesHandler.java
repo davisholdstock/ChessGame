@@ -2,7 +2,7 @@ package handler;
 
 import com.google.gson.Gson;
 import service.GameService;
-import service.ListGamesResponse;
+import response.ListGamesResponse;
 import spark.Request;
 import spark.Response;
 import spark.Route;

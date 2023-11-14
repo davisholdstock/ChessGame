@@ -2,7 +2,7 @@ package handler;
 
 import com.google.gson.Gson;
 import service.AuthService;
-import service.LogoutResponse;
+import response.LogoutResponse;
 import spark.Request;
 import spark.Response;
 import spark.Route;

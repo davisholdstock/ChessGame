@@ -1,5 +1,6 @@
 package dataAccess;
 
+import chess.ChessGame;
 import model.AuthToken;
 import model.Game;
 import model.User;
@@ -67,7 +68,7 @@ public interface DataAccess {
      * @param newGame the desired updated game
      * @return the game being searched, showing the updated name
      */
-    Game updateGame(int gameID, Game newGame) throws DataAccessException;
+    Game updateGame(int gameID, Game newGame, ChessGame.TeamColor colorToUpdate) throws DataAccessException;
 
     /**
      * Removes a single game from where it is saved

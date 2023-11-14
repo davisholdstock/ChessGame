@@ -1,4 +1,6 @@
-package service;
+package response;
+
+import java.util.Objects;
 
 /**
  * Returns a response from POST on the /game endpoint
@@ -58,5 +60,18 @@ public class CreateGameResponse {
 
     public void setSTATUS_CODE(int STATUS_CODE) {
         this.STATUS_CODE = STATUS_CODE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateGameResponse that = (CreateGameResponse) o;
+        return STATUS_CODE == that.STATUS_CODE && Objects.equals(message, that.message) && Objects.equals(gameID, that.gameID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, gameID, STATUS_CODE);
     }
 }

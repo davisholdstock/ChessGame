@@ -11,31 +11,31 @@ public class TestFactory {
 
     //Chess Functions
     //------------------------------------------------------------------------------------------------------------------
-    public static ChessBoard getNewBoard(){
-		return new Board();
+    public static ChessBoard getNewBoard() {
+        return new Board();
     }
 
-    public static ChessGame getNewGame(){
-		return new Game();
+    public static ChessGame getNewGame() {
+        return new Game();
     }
 
-    public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type){
+    public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         return new Piece(pieceColor, type);
     }
 
-    public static ChessPosition getNewPosition(Integer row, Integer col){
-		return new Position(row - 1, col - 1);
+    public static ChessPosition getNewPosition(Integer row, Integer col) {
+        return new Position(row - 1, col - 1);
     }
 
-    public static ChessMove getNewMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece){
-		return new Move(startPosition, endPosition, promotionPiece);
+    public static ChessMove getNewMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece) {
+        return new Move(startPosition, endPosition, promotionPiece);
     }
     //------------------------------------------------------------------------------------------------------------------
 
 
     //Server API's
     //------------------------------------------------------------------------------------------------------------------
-    public static String getServerPort(){
+    public static String getServerPort() {
         return "8080";
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ public class TestFactory {
 
     //Websocket Tests
     //------------------------------------------------------------------------------------------------------------------
-    public static Long getMessageTime(){
+    public static Long getMessageTime() {
         /*
         Changing this will change how long tests will wait for the server to send messages.
         3000 Milliseconds (3 seconds) will be enough for most computers. Feel free to change as you see fit,

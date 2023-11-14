@@ -1,4 +1,6 @@
-package service;
+package response;
+
+import java.util.Objects;
 
 /**
  * Returns a response from POST on the /session endpoint
@@ -70,5 +72,18 @@ public class LoginResponse {
 
     public void setSTATUS_CODE(int STATUS_CODE) {
         this.STATUS_CODE = STATUS_CODE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginResponse that = (LoginResponse) o;
+        return STATUS_CODE == that.STATUS_CODE && Objects.equals(message, that.message) && Objects.equals(authToken, that.authToken) && Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, authToken, username, STATUS_CODE);
     }
 }

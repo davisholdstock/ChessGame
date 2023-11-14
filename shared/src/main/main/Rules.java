@@ -75,10 +75,10 @@ public class Rules {
 
     public ArrayList<ChessMove> rookMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        int spacesForward = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? board.getRows() - startPosition.getRow() : startPosition.getRow());
-        int spacesRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? board.getColumns() - startPosition.getColumn() : startPosition.getColumn());
-        int spacesBackward = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? startPosition.getRow() : board.getRows() - startPosition.getRow());
-        int spacesLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? startPosition.getColumn() : board.getColumns() - startPosition.getColumn());
+        int spacesForward = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? ((Board) board).getRows() - startPosition.getRow() : startPosition.getRow());
+        int spacesRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? ((Board) board).getColumns() - startPosition.getColumn() : startPosition.getColumn());
+        int spacesBackward = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? startPosition.getRow() : ((Board) board).getRows() - startPosition.getRow());
+        int spacesLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? startPosition.getColumn() : ((Board) board).getColumns() - startPosition.getColumn());
 
         for (int i = 1; i <= spacesForward; ++i) {
             if (moveForward(i, startPosition, board) != null) {
@@ -117,10 +117,10 @@ public class Rules {
 
     public ArrayList<ChessMove> bishopMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        int spacesForwardRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(((board.getRows() - 1) - startPosition.getRow()), ((board.getColumns() - 1) - startPosition.getColumn())) : Math.min(startPosition.getColumn(), startPosition.getRow()));
-        int spacesForwardLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getColumn(), ((board.getRows() - 1) - startPosition.getRow())) : Math.min(startPosition.getRow(), ((board.getColumns() - 1) - startPosition.getColumn())));
-        int spacesBackwardRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getRow(), ((board.getColumns() - 1) - startPosition.getColumn())) : Math.min(startPosition.getColumn(), ((board.getRows() - 1) - startPosition.getRow())));
-        int spacesBackwardLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getColumn(), startPosition.getRow()) : Math.min(((board.getRows() - 1) - startPosition.getRow()), ((board.getColumns() - 1) - startPosition.getColumn())));
+        int spacesForwardRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(((((Board) board).getRows() - 1) - startPosition.getRow()), ((((Board) board).getColumns() - 1) - startPosition.getColumn())) : Math.min(startPosition.getColumn(), startPosition.getRow()));
+        int spacesForwardLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getColumn(), ((((Board) board).getRows() - 1) - startPosition.getRow())) : Math.min(startPosition.getRow(), ((((Board) board).getColumns() - 1) - startPosition.getColumn())));
+        int spacesBackwardRight = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getRow(), ((((Board) board).getColumns() - 1) - startPosition.getColumn())) : Math.min(startPosition.getColumn(), ((((Board) board).getRows() - 1) - startPosition.getRow())));
+        int spacesBackwardLeft = ((board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) ? Math.min(startPosition.getColumn(), startPosition.getRow()) : Math.min(((((Board) board).getRows() - 1) - startPosition.getRow()), ((((Board) board).getColumns() - 1) - startPosition.getColumn())));
 
         for (int i = 1; i <= spacesForwardRight; ++i) {
             if (moveForwardRight(i, startPosition, board) != null) {

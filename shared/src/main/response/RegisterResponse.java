@@ -1,4 +1,6 @@
-package service;
+package response;
+
+import java.util.Objects;
 
 /**
  * Returns a response to POST at the /user endpoint
@@ -69,5 +71,18 @@ public class RegisterResponse {
                 ", username='" + username + '\'' +
                 ", authToken='" + authToken + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegisterResponse that = (RegisterResponse) o;
+        return STATUS_CODE == that.STATUS_CODE && Objects.equals(message, that.message) && Objects.equals(username, that.username) && Objects.equals(authToken, that.authToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, username, authToken, STATUS_CODE);
     }
 }

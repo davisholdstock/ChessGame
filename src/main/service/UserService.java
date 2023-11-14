@@ -3,6 +3,8 @@ package service;
 import dataAccess.DataAccessException;
 import model.AuthToken;
 import model.User;
+import requests.RegisterRequest;
+import response.RegisterResponse;
 import server.server;
 
 import java.util.UUID;

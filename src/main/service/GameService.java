@@ -3,6 +3,11 @@ package service;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import model.Game;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
+import response.CreateGameResponse;
+import response.JoinGameResponse;
+import response.ListGamesResponse;
 import server.server;
 
 import java.util.ArrayList;
@@ -57,11 +62,11 @@ public class GameService {
                     if (game.whiteUsername() != null)
                         return new JoinGameResponse("Error: already taken", 403);
                     model.Game updatedgame = new model.Game(game.gameName(), game.game(), server.db.readAuth(authToken).username(), game.blackUsername(), game.gameID());
-                    server.db.updateGame(request.getGameID(), updatedgame);
+                    server.db.updateGame(request.getGameID(), updatedgame, ChessGame.TeamColor.WHITE);
                 } else if (request.getPlayerColor() == ChessGame.TeamColor.BLACK) {
                     if (game.blackUsername() != null)
                         return new JoinGameResponse("Error: already taken", 403);
-                    server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), server.db.readAuth(authToken).username(), game.gameID()));
+                    server.db.updateGame(request.getGameID(), new model.Game(game.gameName(), game.game(), game.whiteUsername(), server.db.readAuth(authToken).username(), game.gameID()), ChessGame.TeamColor.BLACK);
                 }
                 return new JoinGameResponse();
             } catch (Exception e) {

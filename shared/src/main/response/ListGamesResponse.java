@@ -1,6 +1,7 @@
-package service;
+package response;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Returns a response from GET on the /game endpoint
@@ -18,6 +19,19 @@ public class ListGamesResponse {
     public ListGamesResponse(ArrayList<model.Game> gameList) {
         this.games = gameList;
         this.STATUS_CODE = 200;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListGamesResponse that = (ListGamesResponse) o;
+        return STATUS_CODE == that.STATUS_CODE && Objects.equals(message, that.message) && Objects.equals(games, that.games);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, games, STATUS_CODE);
     }
 
     /**

@@ -1,5 +1,6 @@
 package dataAccess;
 
+import chess.ChessGame;
 import model.AuthToken;
 import model.Game;
 import model.User;
@@ -74,7 +75,7 @@ public class MemoryDatabase implements DataAccess {
     }
 
     @Override
-    public Game updateGame(int gameID, Game newGame) throws DataAccessException {
+    public Game updateGame(int gameID, Game newGame, ChessGame.TeamColor colorToUpdate) throws DataAccessException {
         if (games.get(gameID) != null) {
             Game updatedGame = new Game(newGame.gameName(), newGame.game(), newGame.whiteUsername(), newGame.blackUsername(), newGame.gameID());
             removeGame(gameID);

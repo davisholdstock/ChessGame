@@ -40,9 +40,9 @@ public interface ChessBoard {
 
     void movePiece(ChessPosition start, ChessPosition end);
 
+    String toFENNotation();
+
     boolean isInCheck(ChessGame.TeamColor teamColor);
 
     void movePieceAndPromote(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece);
-
-    String fenNotation();
 }

@@ -1,4 +1,6 @@
-package service;
+package response;
+
+import java.util.Objects;
 
 /**
  * Returns a response to DELETE at the /db endpoint
@@ -45,5 +47,18 @@ public class ClearResponse {
 
     public void setSTATUS_CODE(int STATUS_CODE) {
         this.STATUS_CODE = STATUS_CODE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClearResponse that = (ClearResponse) o;
+        return STATUS_CODE == that.STATUS_CODE && Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, STATUS_CODE);
     }
 }
