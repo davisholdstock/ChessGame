@@ -1,5 +1,5 @@
 import chess.ChessBoard;
-import main.Board;
+import chess.Board;
 
 public class serverTesting {
     public static void main(String[] args) {

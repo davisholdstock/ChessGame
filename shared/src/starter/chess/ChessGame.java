@@ -1,7 +1,5 @@
 package chess;
 
-import main.Position;
-
 import java.util.Collection;
 
 /**

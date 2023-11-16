@@ -1,9 +1,4 @@
-package main;
-
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPiece;
-import chess.InvalidMoveException;
+package chess;
 
 import javax.swing.*;
 import java.awt.*;

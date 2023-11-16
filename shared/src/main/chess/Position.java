@@ -1,6 +1,4 @@
-package main;
-
-import chess.ChessPosition;
+package chess;
 
 import java.util.Objects;
 

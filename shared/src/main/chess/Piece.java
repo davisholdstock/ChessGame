@@ -1,6 +1,4 @@
-package main;
-
-import chess.*;
+package chess;
 
 import java.util.Collection;
 

@@ -1,6 +1,4 @@
-package main;
-
-import chess.ChessBoard;
+package chess;
 
 public class Main {
 

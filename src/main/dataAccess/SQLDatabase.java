@@ -143,7 +143,7 @@ public class SQLDatabase implements DataAccess {
     @Override
     public Game writeGame(String gameName) throws DataAccessException {
         try (var conn = db.getConnection()) {
-            main.Game newGame = new main.Game();
+            chess.Game newGame = new chess.Game();
             String gameString = newGame.fenNotation();
             try (var preparedStatement = conn.prepareStatement("INSERT INTO games (gameName, gameBoard) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, gameName);
@@ -175,7 +175,7 @@ public class SQLDatabase implements DataAccess {
                 List<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
+                    chess.Game gameResult = new chess.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
                     Game newGame = new Game(gameNameResult, gameResult, whitUserResult, blackUserResult, gameID);
@@ -202,7 +202,7 @@ public class SQLDatabase implements DataAccess {
                 ArrayList<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
+                    chess.Game gameResult = new chess.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
                     int gameIDResult = resultSet.getInt(1);
@@ -395,7 +395,7 @@ public class SQLDatabase implements DataAccess {
                 ArrayList<Game> data = new ArrayList<>();
                 while (resultSet.next()) {
                     String gameNameResult = resultSet.getString("gameName");
-                    main.Game gameResult = new main.Game(resultSet.getString("gameBoard"));
+                    chess.Game gameResult = new chess.Game(resultSet.getString("gameBoard"));
                     String whitUserResult = resultSet.getString("whiteUsername");
                     String blackUserResult = resultSet.getString("blackUsername");
                     int gameIDResult = resultSet.getInt(1);

@@ -236,7 +236,7 @@ public class MethodTests {
         games.add(game.toString());
         games.add(game1.toString());
         games.add(game2.toString());
-        games.add((new Game("test", new main.Game(), "This should", "fail", 32)).toString());
+        games.add((new Game("test", new chess.Game(), "This should", "fail", 32)).toString());
         Collections.sort(games);
 
         ArrayList<Game> foundGames = server.db.readAllGame();
@@ -295,7 +295,7 @@ public class MethodTests {
     @DisplayName("Update Game")
     public void updateGameSuccess() throws DataAccessException {
         Game game = server.db.writeGame("game");
-        Game game1 = new Game("updatedGame", new main.Game("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"), "wUser", null, 1);
+        Game game1 = new Game("updatedGame", new chess.Game("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"), "wUser", null, 1);
         Game updatedGame = server.db.updateGame(game.gameID(), game1, ChessGame.TeamColor.WHITE);
         Game foundGame = server.db.readGame(game.gameID());
 
@@ -307,7 +307,7 @@ public class MethodTests {
     @DisplayName("Update Game Fail")
     public void updateGameFail() throws DataAccessException {
         Game game = server.db.writeGame("game");
-        Game game1 = new Game("updatedGame", new main.Game("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"), "wUser", null, 1);
+        Game game1 = new Game("updatedGame", new chess.Game("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"), "wUser", null, 1);
         Game updatedGame = server.db.updateGame(game.gameID(), game1, ChessGame.TeamColor.WHITE);
         Game foundGame = server.db.readGame(game.gameID());
 

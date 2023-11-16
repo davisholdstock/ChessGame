@@ -47,7 +47,7 @@ public class MemoryDatabase implements DataAccess {
 
     @Override
     public Game writeGame(String gameName) throws DataAccessException {
-        Game game = new Game(gameName, new main.Game(), null, null, (int) (Math.random() * 1000));
+        Game game = new Game(gameName, new chess.Game(), null, null, (int) (Math.random() * 1000));
         if (games.get(game.gameID()) == null) {
             games.put(game.gameID(), game);
             return game;
