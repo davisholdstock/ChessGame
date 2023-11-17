@@ -1,11 +1,18 @@
 package server;
 
 import com.google.gson.Gson;
-import model.User;
+import requests.LoginRequest;
+import requests.RegisterRequest;
+import response.LoginResponse;
 import response.RegisterResponse;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 
 public class ServerFacade {
 
@@ -16,9 +23,14 @@ public class ServerFacade {
     }
 
 
-    public RegisterResponse addUser(User user) {
+    public RegisterResponse addUser(RegisterRequest user) {
         var path = "/user";
         return this.makeRequest("POST", path, user, RegisterResponse.class);
+    }
+
+    public LoginResponse login(LoginRequest user) {
+        var path = "/session";
+        return this.makeRequest("POST", path, user, LoginResponse.class);
     }
 
 //    public void deletePet(int id) throws ResponseException {

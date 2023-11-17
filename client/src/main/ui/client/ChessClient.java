@@ -1,6 +1,8 @@
 package ui.client;
 
-import model.User;
+import requests.LoginRequest;
+import requests.RegisterRequest;
+import response.LoginResponse;
 import response.RegisterResponse;
 import server.ServerFacade;
 import ui.client.websocket.WebSocketFacade;
@@ -41,13 +43,14 @@ public class ChessClient {
     }
 
     public String login(String... params) {
-//        if (params.length >= 1) {
-//            state = State.SIGNED_IN;
-//            visitorName = String.join("-", params);
-//            ws = new WebSocketFacade(serverUrl);
-//            ws.enterPetShop(visitorName);
-//            return String.format("You signed in as %s.", visitorName);
-//        }
+        if (params.length == 2) {
+            var username = params[0];
+            var password = params[1];
+            LoginRequest user = new LoginRequest(username, password);
+            LoginResponse loginResponse = server.login(user);
+            state = State.LOGGED_IN;
+            return String.format("You signed in as %s.\n", username);
+        }
 //        return null;
         return "login";
     }
@@ -66,10 +69,10 @@ public class ChessClient {
             var username = params[0];
             var password = params[1];
             var email = params[2];
-            User user = new User(username, password, email);
+            RegisterRequest user = new RegisterRequest(username, password, email);
             RegisterResponse registerResponse = server.addUser(user);
             state = State.LOGGED_IN;
-            return "registration worked\n";
+            return registerResponse + "\n";
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
