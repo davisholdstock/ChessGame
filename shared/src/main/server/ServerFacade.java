@@ -1,9 +1,11 @@
 package server;
 
 import com.google.gson.Gson;
+import model.ModelSerializer;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import response.LoginResponse;
+import response.LogoutResponse;
 import response.RegisterResponse;
 
 import java.io.IOException;
@@ -33,10 +35,10 @@ public class ServerFacade {
         return this.makeRequest("POST", path, user, LoginResponse.class);
     }
 
-//    public void deletePet(int id) throws ResponseException {
-//        var path = String.format("/pet/%s", id);
-//        this.makeRequest("DELETE", path, null, null);
-//    }
+    public LogoutResponse logout() {
+        var path = "/session";
+        return this.makeRequest("DELETE", path, null, LogoutResponse.class);
+    }
 //
 //    public void deleteAllPets() throws ResponseException {
 //        var path = "/pet";
@@ -91,7 +93,7 @@ public class ServerFacade {
             try (InputStream respBody = http.getInputStream()) {
                 InputStreamReader reader = new InputStreamReader(respBody);
                 if (responseClass != null) {
-//                    response = ModelSerializer.deserialize(reader, responseClass);
+                    response = ModelSerializer.deserialize(reader, responseClass);
                 }
             }
         }

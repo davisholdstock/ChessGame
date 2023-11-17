@@ -3,6 +3,7 @@ package ui.client;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import response.LoginResponse;
+import response.LogoutResponse;
 import response.RegisterResponse;
 import server.ServerFacade;
 import ui.client.websocket.WebSocketFacade;
@@ -49,18 +50,18 @@ public class ChessClient {
             LoginRequest user = new LoginRequest(username, password);
             LoginResponse loginResponse = server.login(user);
             state = State.LOGGED_IN;
-            return String.format("You signed in as %s.\n", username);
+            if (loginResponse.getSTATUS_CODE() == 200)
+                return String.format("You signed in as %s.\n", username);
+            return "" + loginResponse.getSTATUS_CODE();
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
     }
 
-    public String logout() {
-//        assertSignedIn();
-//        ws.leavePetShop(visitorName);
-//        ws = null;
-//        state = State.SIGNEDOUT;
-//        return String.format("%s left the shop", visitorName);
-        return "logout";
+    public String logout() throws ResponseException {
+        assertSignedIn();
+        LogoutResponse logoutResponse = server.logout();
+        state = State.LOGGED_OUT;
+        return "Bye!\n";
     }
 
     public String registerUser(String... params) throws ResponseException {
@@ -148,9 +149,9 @@ public class ChessClient {
                 """;
     }
 
-//    private void assertSignedIn() throws ResponseException {
-//        if (state == State.SIGNEDOUT) {
-//            throw new ResponseException(400, "You must sign in");
-//        }
-//    }
+    private void assertSignedIn() throws ResponseException {
+        if (state == State.LOGGED_OUT) {
+            throw new ResponseException(400, "You must sign in\n");
+        }
+    }
 }
