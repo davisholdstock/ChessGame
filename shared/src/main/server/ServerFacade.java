@@ -19,8 +19,6 @@ public class ServerFacade {
     public RegisterResponse addUser(User user) {
         var path = "/user";
         return this.makeRequest("POST", path, user, RegisterResponse.class);
-//        System.out.println("registerUser");
-//        return null;
     }
 
 //    public void deletePet(int id) throws ResponseException {

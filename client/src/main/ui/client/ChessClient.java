@@ -12,7 +12,7 @@ public class ChessClient {
     private final ServerFacade server;
     private final String serverUrl;
     private WebSocketFacade ws;
-    private State state = State.SIGNED_OUT;
+    private State state = State.LOGGED_OUT;
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -35,7 +35,7 @@ public class ChessClient {
                 case "quit" -> "quit";
                 default -> help();
             };
-        } catch (Exception e) {
+        } catch (Exception | ResponseException e) {
             return e.getMessage();
         }
     }
@@ -61,17 +61,17 @@ public class ChessClient {
         return "logout";
     }
 
-    public String registerUser(String... params) {
+    public String registerUser(String... params) throws ResponseException {
         if (params.length == 3) {
             var username = params[0];
             var password = params[1];
             var email = params[2];
             User user = new User(username, password, email);
             RegisterResponse registerResponse = server.addUser(user);
-            return "registration worked";
+            state = State.LOGGED_IN;
+            return "registration worked\n";
         }
-//        throw new ResponseException(400, "Expected: <name> <CAT|DOG|FROG> [<friend name>]*");
-        return "register";
+        throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
 
     public String createGame(String... params) {
@@ -127,7 +127,7 @@ public class ChessClient {
     }
 
     public String help() {
-        if (state == State.SIGNED_OUT) {
+        if (state == State.LOGGED_OUT) {
             return """
                     - register <USERNAME> <PASSWORD> <EMAIL> - to create an account
                     - login <USERNAME> <PASSWORD>
