@@ -15,6 +15,7 @@ public class ChessClient {
     private final ServerFacade server;
     private final String serverUrl;
     private WebSocketFacade ws;
+    String authToken = "";
     private State state = State.LOGGED_OUT;
 
     public ChessClient(String serverUrl) {
@@ -50,8 +51,10 @@ public class ChessClient {
             LoginRequest user = new LoginRequest(username, password);
             LoginResponse loginResponse = server.login(user);
             state = State.LOGGED_IN;
-            if (loginResponse.getSTATUS_CODE() == 200)
+            if (loginResponse.getSTATUS_CODE() == 200) {
+                authToken = loginResponse.getAuthToken();
                 return String.format("You signed in as %s.\n", username);
+            }
             return "" + loginResponse.getSTATUS_CODE();
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
@@ -59,7 +62,7 @@ public class ChessClient {
 
     public String logout() throws ResponseException {
         assertSignedIn();
-        LogoutResponse logoutResponse = server.logout();
+        LogoutResponse logoutResponse = server.logout(authToken);
         state = State.LOGGED_OUT;
         return "Bye!\n";
     }
@@ -72,7 +75,11 @@ public class ChessClient {
             RegisterRequest user = new RegisterRequest(username, password, email);
             RegisterResponse registerResponse = server.addUser(user);
             state = State.LOGGED_IN;
-            return registerResponse + "\n";
+            if (registerResponse.getSTATUS_CODE() == 200) {
+                authToken = registerResponse.getAuthToken();
+                return String.format("Welcome %s!\n", username);
+            }
+            return "" + registerResponse.getSTATUS_CODE();
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }

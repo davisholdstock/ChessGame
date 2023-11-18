@@ -27,17 +27,17 @@ public class ServerFacade {
 
     public RegisterResponse addUser(RegisterRequest user) {
         var path = "/user";
-        return this.makeRequest("POST", path, user, RegisterResponse.class);
+        return this.makeRequest("POST", path, user, null, RegisterResponse.class);
     }
 
     public LoginResponse login(LoginRequest user) {
         var path = "/session";
-        return this.makeRequest("POST", path, user, LoginResponse.class);
+        return this.makeRequest("POST", path, user, null, LoginResponse.class);
     }
 
-    public LogoutResponse logout() {
+    public LogoutResponse logout(String authToken) {
         var path = "/session";
-        return this.makeRequest("DELETE", path, null, LogoutResponse.class);
+        return this.makeRequest("DELETE", path, null, authToken, LogoutResponse.class);
     }
 //
 //    public void deleteAllPets() throws ResponseException {
@@ -53,14 +53,18 @@ public class ServerFacade {
 //        return response.pet();
 //    }
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) {
+    private <T> T makeRequest(String method, String path, Object request, String authToken, Class<T> responseClass) {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
+            http.setDoInput(true);
 
             writeBody(request, http);
+            if (authToken != null)
+                http.addRequestProperty("authToken", authToken);
+
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
@@ -71,8 +75,8 @@ public class ServerFacade {
 
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
+        http.addRequestProperty("Content-Type", "application/json");
         if (request != null) {
-            http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());
