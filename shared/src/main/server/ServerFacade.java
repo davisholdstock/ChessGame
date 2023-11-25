@@ -61,9 +61,10 @@ public class ServerFacade {
             http.setDoOutput(true);
             http.setDoInput(true);
 
-            writeBody(request, http);
+            http.addRequestProperty("Accept", "application/json");
             if (authToken != null)
-                http.addRequestProperty("authToken", authToken);
+                http.addRequestProperty("Authorization", authToken);
+            writeBody(request, http);
 
             http.connect();
             throwIfNotSuccessful(http);
@@ -75,7 +76,6 @@ public class ServerFacade {
 
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
-        http.addRequestProperty("Content-Type", "application/json");
         if (request != null) {
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
