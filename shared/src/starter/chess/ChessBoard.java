@@ -45,4 +45,6 @@ public interface ChessBoard {
     boolean isInCheck(ChessGame.TeamColor teamColor);
 
     void movePieceAndPromote(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece);
+
+    void printFancy();
 }

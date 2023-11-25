@@ -2,6 +2,8 @@ package chess;
 
 import java.util.ArrayList;
 
+import static chess.EscapeSequences.*;
+
 public class Board implements ChessBoard {
     final int rows = 8;
     final static int rowsStatic = 8;
@@ -202,6 +204,81 @@ public class Board implements ChessBoard {
             chessBoard.append("\n");
         }
         return chessBoard.toString();
+    }
+
+    public void printFancy() {
+        for (int i = rows; i >= -1; --i) {
+            for (int y = -1; y <= columns; ++y) {
+                if ((i == rows || i == -1) && y > -1 && y < columns) {
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                    System.out.print(" ");
+                    System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
+                    System.out.print(" ");
+                } else if ((y == columns || y == -1)) {
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                    System.out.print(" ");
+                    if (i < rows && i > -1)
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                    else
+                        System.out.print(" ");
+                    System.out.print(" ");
+                } else {
+                    if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                        System.out.print(SET_BG_COLOR_GREEN);
+                    else
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    if (getPiece(new Position(i, y)) != null) {
+                        System.out.print(" ");
+                        System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)).toString());
+                        System.out.print(" ");
+                    } else {
+                        System.out.print(" ");
+                        System.out.print(" ");
+                        System.out.print(" ");
+                    }
+                }
+            }
+            System.out.print(RESET_BG_COLOR);
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        for (int i = -1; i <= rows; ++i) {
+            for (int y = columns; y >= -1; --y) {
+                if ((i == rows || i == -1) && y > -1 && y < columns) {
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                    System.out.print(" ");
+                    System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
+                    System.out.print(" ");
+                } else if (y == columns || y == -1) {
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                    System.out.print(" ");
+                    if (i < rows && i > -1)
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                    else
+                        System.out.print(" ");
+                    System.out.print(" ");
+                } else {
+                    if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                        System.out.print(SET_BG_COLOR_GREEN);
+                    else
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    if (getPiece(new Position(i, y)) != null) {
+                        System.out.print(" ");
+                        System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)));
+                        System.out.print(" ");
+                    } else {
+                        System.out.print(" ");
+                        System.out.print(" ");
+                        System.out.print(" ");
+                    }
+                }
+            }
+            System.out.print(RESET_BG_COLOR);
+            System.out.println();
+        }
     }
 
     public boolean isInCheck(ChessGame.TeamColor teamColor) {
