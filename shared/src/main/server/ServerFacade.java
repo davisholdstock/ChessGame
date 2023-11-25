@@ -2,8 +2,10 @@ package server;
 
 import com.google.gson.Gson;
 import model.ModelSerializer;
+import requests.CreateGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import response.CreateGameResponse;
 import response.LoginResponse;
 import response.LogoutResponse;
 import response.RegisterResponse;
@@ -39,19 +41,11 @@ public class ServerFacade {
         var path = "/session";
         return this.makeRequest("DELETE", path, null, authToken, LogoutResponse.class);
     }
-//
-//    public void deleteAllPets() throws ResponseException {
-//        var path = "/pet";
-//        this.makeRequest("DELETE", path, null, null);
-//    }
-//
-//    public Pet[] listPets() throws ResponseException {
-//        var path = "/pet";
-//        record listPetResponse(Pet[] pet) {
-//        }
-//        var response = this.makeRequest("GET", path, null, listPetResponse.class);
-//        return response.pet();
-//    }
+
+    public CreateGameResponse createGame(String authToken, CreateGameRequest game) {
+        var path = "/game";
+        return this.makeRequest("POST", path, game, authToken, CreateGameResponse.class);
+    }
 
     private <T> T makeRequest(String method, String path, Object request, String authToken, Class<T> responseClass) {
         try {

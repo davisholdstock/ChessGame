@@ -1,7 +1,11 @@
 package ui.client;
 
+import chess.ChessGame;
+import chess.Game;
+import requests.CreateGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import response.CreateGameResponse;
 import response.LoginResponse;
 import response.LogoutResponse;
 import response.RegisterResponse;
@@ -32,10 +36,10 @@ public class ChessClient {
                 case "login" -> login(params);
                 case "logout" -> logout();
                 case "register" -> registerUser(params);
-                case "create" -> createGame();
+                case "create" -> createGame(params);
                 case "list" -> listGames();
-                case "join" -> joinGame();
-                case "observe" -> observeGame();
+                case "join" -> joinGame(params);
+                case "observe" -> observeGame(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -64,7 +68,10 @@ public class ChessClient {
         assertSignedIn();
         LogoutResponse logoutResponse = server.logout(authToken);
         state = State.LOGGED_OUT;
-        return "Bye!\n";
+        if (logoutResponse.getSTATUS_CODE() == 200) {
+            return "Bye!\n";
+        }
+        return "" + logoutResponse.getSTATUS_CODE();
     }
 
     public String registerUser(String... params) throws ResponseException {
@@ -84,51 +91,31 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
 
-    public String createGame(String... params) {
-//        assertSignedIn();
-//        if (params.length == 1) {
-//            var id = Integer.parseInt(params[0]);
-//            var pet = getPet(id);
-//            if (pet != null) {
-//                server.deletePet(id);
-//                return String.format("%s says %s", pet.name(), pet.sound());
-//            }
-//        }
-//        throw new ResponseException(400, "Expected: <pet id>");
-        return "create";
+    public String createGame(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length == 1) {
+            var gameName = params[0];
+            CreateGameRequest game = new CreateGameRequest(gameName);
+            CreateGameResponse createGameResponse = server.createGame(authToken, game);
+            if (createGameResponse.getSTATUS_CODE() == 200) {
+                int gameID = createGameResponse.getGameID();
+                ChessGame game1 = new Game();
+                game1.getBoard().printFancy();
+                return String.format("Game created %s!\n", gameID);
+            }
+        }
+        throw new ResponseException(400, "Expected: <GAMENAME>");
     }
 
     public String listGames() {
-//        assertSignedIn();
-//        var pets = server.listPets();
-//        var result = new StringBuilder();
-//        var gson = new Gson();
-//        for (var pet : pets) {
-//            result.append(gson.toJson(pet)).append('\n');
-//        }
-//        return result.toString();
         return "list";
     }
 
-    public String joinGame() {
-//        assertSignedIn();
-//        var buffer = new StringBuilder();
-//        for (var pet : server.listPets()) {
-//            buffer.append(String.format("%s says %s%n", pet.name(), pet.sound()));
-//        }
-//
-//        server.deleteAllPets();
-//        return buffer.toString();
+    public String joinGame(String... params) {
         return "join";
     }
 
-    public String observeGame() {
-//        for (var pet : server.listPets()) {
-//            if (pet.id() == id) {
-//                return pet;
-//            }
-//        }
-//        return null;
+    public String observeGame(String... params) {
         return "observe";
     }
 
@@ -139,20 +126,20 @@ public class ChessClient {
     public String help() {
         if (state == State.LOGGED_OUT) {
             return """
-                    - register <USERNAME> <PASSWORD> <EMAIL> - to create an account
-                    - login <USERNAME> <PASSWORD>
-                    - quit - playing chess
-                    - help - with possible commands
+                        register <USERNAME> <PASSWORD> <EMAIL> - to create an account
+                        login <USERNAME> <PASSWORD>
+                        quit - playing chess
+                        help - with possible commands
                     """;
         }
         return """
-                - create <NAME> - a game
-                - list - games
-                - join <ID> [WHITE|BLACK|<empty>] - a game
-                - observe <ID> - a game
-                - logout - when you are done
-                - quit - playing chess
-                - help - with possible commands
+                    create <NAME> - a game
+                    list - games
+                    join <ID> [WHITE|BLACK|<empty>] - a game
+                    observe <ID> - a game
+                    logout - when you are done
+                    quit - playing chess
+                    help - with possible commands
                 """;
     }
 
