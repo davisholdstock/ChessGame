@@ -211,30 +211,28 @@ public class Board implements ChessBoard {
             for (int y = -1; y <= columns; ++y) {
                 if ((i == rows || i == -1) && y > -1 && y < columns) {
                     System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                     System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                 } else if ((y == columns || y == -1)) {
                     System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                     if (i < rows && i > -1)
                         System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
                     else
-                        System.out.print(" ");
-                    System.out.print(" ");
+                        System.out.print(EMPTY);
+                    System.out.print(EMPTY);
                 } else {
                     if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
                         System.out.print(SET_BG_COLOR_GREEN);
                     else
                         System.out.print(SET_BG_COLOR_WHITE);
                     if (getPiece(new Position(i, y)) != null) {
-                        System.out.print(" ");
+                        System.out.print(EMPTY);
                         System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)).toString());
-                        System.out.print(" ");
+                        System.out.print(EMPTY);
                     } else {
-                        System.out.print(" ");
-                        System.out.print(" ");
-                        System.out.print(" ");
+                        System.out.print(EMPTY.repeat(3));
                     }
                 }
             }
@@ -243,36 +241,33 @@ public class Board implements ChessBoard {
         }
         System.out.println();
         System.out.println();
-        System.out.println();
 
         for (int i = -1; i <= rows; ++i) {
             for (int y = columns; y >= -1; --y) {
                 if ((i == rows || i == -1) && y > -1 && y < columns) {
                     System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                     System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                 } else if (y == columns || y == -1) {
                     System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                     if (i < rows && i > -1)
                         System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
                     else
-                        System.out.print(" ");
-                    System.out.print(" ");
+                        System.out.print(EMPTY);
+                    System.out.print(EMPTY);
                 } else {
                     if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
                         System.out.print(SET_BG_COLOR_GREEN);
                     else
                         System.out.print(SET_BG_COLOR_WHITE);
                     if (getPiece(new Position(i, y)) != null) {
-                        System.out.print(" ");
+                        System.out.print(EMPTY);
                         System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)));
-                        System.out.print(" ");
+                        System.out.print(EMPTY);
                     } else {
-                        System.out.print(" ");
-                        System.out.print(" ");
-                        System.out.print(" ");
+                        System.out.print(EMPTY.repeat(3));
                     }
                 }
             }

@@ -3,12 +3,10 @@ package server;
 import com.google.gson.Gson;
 import model.ModelSerializer;
 import requests.CreateGameRequest;
+import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
-import response.CreateGameResponse;
-import response.LoginResponse;
-import response.LogoutResponse;
-import response.RegisterResponse;
+import response.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +43,21 @@ public class ServerFacade {
     public CreateGameResponse createGame(String authToken, CreateGameRequest game) {
         var path = "/game";
         return this.makeRequest("POST", path, game, authToken, CreateGameResponse.class);
+    }
+
+    public ListGamesResponse listGames(String authToken) {
+        var path = "/game";
+        return this.makeRequest("GET", path, null, authToken, ListGamesResponse.class);
+    }
+
+    public JoinGameResponse joinGame(String authToken, JoinGameRequest request) {
+        var path = "/game";
+        return this.makeRequest("PUT", path, request, authToken, JoinGameResponse.class);
+    }
+
+    public ClearResponse clear() {
+        var path = "/db";
+        return this.makeRequest("DELETE", path, null, null, ClearResponse.class);
     }
 
     private <T> T makeRequest(String method, String path, Object request, String authToken, Class<T> responseClass) {

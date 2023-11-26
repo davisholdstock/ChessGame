@@ -18,7 +18,6 @@ import service.*;
 import java.util.ArrayList;
 
 public class ServicesTests {
-    //private MemoryDatabase db = new MemoryDatabase();
     private final AuthService authService = new AuthService();
     private final TestingService testingService = new TestingService();
     private final UserService userService = new UserService();

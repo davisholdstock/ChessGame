@@ -3,28 +3,23 @@ package ui.client;
 import chess.ChessGame;
 import chess.Game;
 import requests.CreateGameRequest;
+import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
-import response.CreateGameResponse;
-import response.LoginResponse;
-import response.LogoutResponse;
-import response.RegisterResponse;
+import response.*;
 import server.ServerFacade;
 import ui.client.websocket.WebSocketFacade;
 
 import java.util.Arrays;
 
 public class ChessClient {
-    private String visitorName = null;
     private final ServerFacade server;
-    private final String serverUrl;
     private WebSocketFacade ws;
     String authToken = "";
     private State state = State.LOGGED_OUT;
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
-        this.serverUrl = serverUrl;
     }
 
     public String eval(String input) {
@@ -107,15 +102,46 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <GAMENAME>");
     }
 
-    public String listGames() {
-        return "list";
+    public String listGames() throws ResponseException { //FIXME: Does not work
+//        assertSignedIn();
+//        ListGamesResponse listGamesResponse = server.listGames(authToken);
+//        if (listGamesResponse.getSTATUS_CODE() == 200) {
+//            return "games listed!";
+//        }
+//        return "" + listGamesResponse.getSTATUS_CODE();
+        ChessGame game1 = new Game();
+        game1.getBoard().printFancy();
+        return "games listed!";
     }
 
-    public String joinGame(String... params) {
-        return "join";
+    public String joinGame(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length == 1) {
+            int gameID = Integer.parseInt(params[0]);
+            JoinGameRequest joinGameRequest = new JoinGameRequest(null, gameID);
+            JoinGameResponse joinGameResponse = server.joinGame(authToken, joinGameRequest);
+            if (joinGameResponse.getSTATUS_CODE() == 200) {
+                ChessGame game1 = new Game();
+                game1.getBoard().printFancy();
+                return String.format("Game joined %s!\n", gameID);
+            }
+        } else if (params.length == 2) {
+            int gameID = Integer.parseInt(params[0]);
+            ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
+            JoinGameRequest joinGameRequest = new JoinGameRequest(color, gameID);
+            JoinGameResponse joinGameResponse = server.joinGame(authToken, joinGameRequest);
+            if (joinGameResponse.getSTATUS_CODE() == 200) {
+                ChessGame game1 = new Game();
+                game1.getBoard().printFancy();
+                return String.format("Game joined %s!\n", gameID);
+            }
+        }
+        throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK|<empty>]");
     }
 
     public String observeGame(String... params) {
+        ChessGame game1 = new Game();
+        game1.getBoard().printFancy();
         return "observe";
     }
 
