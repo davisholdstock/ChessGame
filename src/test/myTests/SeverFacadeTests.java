@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import requests.LoginRequest;
@@ -80,7 +81,7 @@ public class SeverFacadeTests {
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
 
-        Assertions.assertEquals((server.logout("fake auth")).toString(), (new RuntimeException()).toString());
+        Assertions.assertThrows(RuntimeException.class, (Executable) server.logout("fake auth"));
         Assertions.assertNotEquals(new ArrayList<>(), db.getAuths());
     }
 
@@ -146,45 +147,47 @@ public class SeverFacadeTests {
         Assertions.assertEquals(new ArrayList<>(), db.getGames());
     }
 
-//    @Test
-//    @DisplayName("List All Games")
-//    public void listGamesSuccess() throws DataAccessException {
-//        User user = new User("user", "password", "user.password@gmail.com");
-//        RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
-//
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
-//
-//        Assertions.assertNotEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
-//                (gameService.listGames(res.getAuthToken())).toString());
-//    }
-//
-//    @Test
-//    @DisplayName("List All Games Unauthorized")
-//    public void listGamesUnauthorized() throws DataAccessException {
-//        User user = new User("user", "password", "user.password@gmail.com");
-//        RegisterResponse res = userService.registerUser(new RegisterRequest(user.username(), user.password(), user.email()));
-//
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
-//                (gameService.newGame(new CreateGameRequest("game"), res.getAuthToken())).toString());
-//        Assertions.assertNotEquals(new ArrayList<>(), server.db.getGames());
-//
-//        Assertions.assertEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
-//                (gameService.listGames("fake auth")).toString());
-//    }
+    @Test
+    @DisplayName("List All Games")
+    public void listGamesSuccess() throws DataAccessException {
+        User user = new User("user", "password", "user.password@gmail.com");
+        RegisterResponse res = server.addUser(new RegisterRequest(user.username(), user.password(), user.email()));
+
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+
+        Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
+
+        Assertions.assertNotEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
+                (server.listGames(res.getAuthToken())).toString());
+    }
+
+    @Test
+    @DisplayName("List All Games Unauthorized")
+    public void listGamesUnauthorized() throws DataAccessException {
+        User user = new User("user", "password", "user.password@gmail.com");
+        RegisterResponse res = server.addUser(new RegisterRequest(user.username(), user.password(), user.email()));
+
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+        Assertions.assertNotEquals((new CreateGameResponse("Error: description", 500)).toString(),
+                (server.createGame(res.getAuthToken(), new CreateGameRequest("game"))).toString());
+
+        Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
+
+        Assertions.assertEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
+                (server.listGames("fake auth")).toString());
+    }
 
     @Test
     @DisplayName("Join Game")
