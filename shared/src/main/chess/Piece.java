@@ -11,6 +11,11 @@ public class Piece implements ChessPiece {
         this.type = type;
     }
 
+    public Piece(ChessPiece other) {
+        this.color = other.getTeamColor();
+        this.type = other.getPieceType();
+    }
+
     @Override
     public ChessGame.TeamColor getTeamColor() {
         return color;

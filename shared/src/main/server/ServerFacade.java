@@ -68,6 +68,8 @@ public class ServerFacade {
             var res = this.makeRequest("GET", path, null, authToken, ListGamesResponse.class);
             return res;
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             return new ListGamesResponse("Unauthorized", 401);
         }
     }
@@ -101,6 +103,7 @@ public class ServerFacade {
 
             http.connect();
             throwIfNotSuccessful(http);
+            System.out.print(http.toString());
             return readBody(http, responseClass);
         } catch (Exception ex) {
             throw new RuntimeException();

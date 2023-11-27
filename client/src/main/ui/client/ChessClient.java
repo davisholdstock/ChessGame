@@ -103,15 +103,15 @@ public class ChessClient {
     }
 
     public String listGames() throws ResponseException { //FIXME: Does not work
-//        assertSignedIn();
-//        ListGamesResponse listGamesResponse = server.listGames(authToken);
-//        if (listGamesResponse.getSTATUS_CODE() == 200) {
-//            return "games listed!";
-//        }
-//        return "" + listGamesResponse.getSTATUS_CODE();
-        ChessGame game1 = new Game();
-        game1.getBoard().printFancy();
-        return "games listed!";
+        assertSignedIn();
+        ListGamesResponse listGamesResponse = server.listGames(authToken);
+        if (listGamesResponse.getSTATUS_CODE() == 200) {
+            return "games listed!";
+        }
+        return "" + listGamesResponse.getSTATUS_CODE();
+//        ChessGame game1 = new Game();
+//        game1.getBoard().printFancy();
+        //return "games listed!";
     }
 
     public String joinGame(String... params) throws ResponseException {
