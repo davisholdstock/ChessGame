@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import requests.LoginRequest;
@@ -46,8 +45,8 @@ public class SeverFacadeTests {
     public void registerUserFail() throws DataAccessException {
         Assertions.assertNotEquals((new RegisterResponse("Error: already taken", 403)).toString(),
                 (server.addUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
-        Assertions.assertEquals((new RegisterResponse("Error: already taken", 403)).toString(),
-                (server.addUser(new RegisterRequest("user", "password", "user.password@gmail.com"))).toString());
+        Assertions.assertEquals(new RegisterResponse("Bad Request", 500),
+                (server.addUser(new RegisterRequest("user", "password", "user.password@gmail.com"))));
         User user = new User("user", "password", "user.password@gmail.com");
         Assertions.assertNotEquals(new ArrayList<>(), db.getUsers());
         User founduser = db.readUser(user.username());
@@ -81,7 +80,7 @@ public class SeverFacadeTests {
         Assertions.assertEquals(user.toString(), founduser.toString(),
                 "Wrong User Found");
 
-        Assertions.assertThrows(RuntimeException.class, (Executable) server.logout("fake auth"));
+        Assertions.assertEquals(new LogoutResponse("Unauthorized", 401), server.logout("fake auth"));
         Assertions.assertNotEquals(new ArrayList<>(), db.getAuths());
     }
 
@@ -118,8 +117,8 @@ public class SeverFacadeTests {
         Assertions.assertNotEquals((new LogoutResponse("Error: unauthorized", 401)).toString(), (server.logout(res.getAuthToken())).toString());
         Assertions.assertEquals(new ArrayList<>(), db.getAuths());
 
-        Assertions.assertEquals((new LoginResponse("Error: unauthorized", 401)).toString(), (server.login(new LoginRequest(user.username(),
-                "fake password"))).toString());
+        Assertions.assertEquals(new LoginResponse("Bad Login", 500), server.login(new LoginRequest(user.username(),
+                "fake password")));
         Assertions.assertEquals(new ArrayList<>(), db.getAuths());
     }
 
@@ -142,8 +141,8 @@ public class SeverFacadeTests {
         RegisterResponse res = server.addUser(new RegisterRequest(user.username(), user.password(), user.email()));
 
 
-        Assertions.assertEquals((new CreateGameResponse("Error: unauthorized", 401)).toString(),
-                (server.createGame("fake auth", new CreateGameRequest("game"))).toString());
+        Assertions.assertEquals(new CreateGameResponse("Unauthorized", 401),
+                server.createGame("fake auth", new CreateGameRequest("game")));
         Assertions.assertEquals(new ArrayList<>(), db.getGames());
     }
 
@@ -164,8 +163,8 @@ public class SeverFacadeTests {
 
         Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
 
-        Assertions.assertNotEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
-                (server.listGames(res.getAuthToken())).toString());
+        Assertions.assertNotEquals(new ListGamesResponse("Unauthorized", 401),
+                server.listGames(res.getAuthToken()));
     }
 
     @Test
@@ -185,8 +184,8 @@ public class SeverFacadeTests {
 
         Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
 
-        Assertions.assertEquals((new ListGamesResponse("Error: unauthorized", 401)).toString(),
-                (server.listGames("fake auth")).toString());
+        Assertions.assertEquals(new ListGamesResponse("Unauthorized", 401),
+                server.listGames("fake auth"));
     }
 
     @Test
@@ -211,7 +210,7 @@ public class SeverFacadeTests {
         CreateGameResponse gameResponse = server.createGame(res.getAuthToken(), new CreateGameRequest("game"));
         Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
 
-        Assertions.assertEquals((new JoinGameResponse("Error: unauthorized", 401)).toString(),
-                (server.joinGame("fake auth", new JoinGameRequest(ChessGame.TeamColor.WHITE, gameResponse.getGameID()))).toString());
+        Assertions.assertEquals(new JoinGameResponse("Unauthorized", 401),
+                server.joinGame("fake auth", new JoinGameRequest(ChessGame.TeamColor.WHITE, gameResponse.getGameID())));
     }
 }

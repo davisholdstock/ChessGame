@@ -14,6 +14,7 @@ public record Game(String gameName, chess.Game game, String whiteUsername, Strin
     @Override
     public String toString() {
         return "Game: " + gameName + "(" + gameID + ")"
+                + "\n" + game.fenNotation()
                 + "\nPlayers:"
                 + "\nWhite: " + whiteUsername
                 + "\nBlack: " + blackUsername;

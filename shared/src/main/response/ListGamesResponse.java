@@ -18,6 +18,10 @@ public class ListGamesResponse {
      */
     public ListGamesResponse(ArrayList<model.Game> gameList) {
         this.games = gameList;
+//        games = new ArrayList<>();
+//        for (var game : gameList) {
+//            this.games.add(game.toString());
+//        }
         this.STATUS_CODE = 200;
     }
 

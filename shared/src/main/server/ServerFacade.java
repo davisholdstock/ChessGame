@@ -27,36 +27,58 @@ public class ServerFacade {
 
     public RegisterResponse addUser(RegisterRequest user) {
         var path = "/user";
-        return this.makeRequest("POST", path, user, null, RegisterResponse.class);
+        try {
+            return this.makeRequest("POST", path, user, null, RegisterResponse.class);
+        } catch (Exception e) {
+            return new RegisterResponse("Bad Request", 500);
+        }
     }
 
     public LoginResponse login(LoginRequest user) {
         var path = "/session";
-        return this.makeRequest("POST", path, user, null, LoginResponse.class);
+        try {
+            return this.makeRequest("POST", path, user, null, LoginResponse.class);
+        } catch (Exception e) {
+            return new LoginResponse("Bad Login", 500);
+        }
     }
 
     public LogoutResponse logout(String authToken) {
         var path = "/session";
         try {
-            return this.makeRequest("DELETE", path, null, authToken, LogoutResponse.class);
+            var res = this.makeRequest("DELETE", path, null, authToken, LogoutResponse.class);
+            return res;
         } catch (Exception e) {
-            throw new RuntimeException();
+            return new LogoutResponse("Unauthorized", 401);
         }
     }
 
     public CreateGameResponse createGame(String authToken, CreateGameRequest game) {
         var path = "/game";
-        return this.makeRequest("POST", path, game, authToken, CreateGameResponse.class);
+        try {
+            return this.makeRequest("POST", path, game, authToken, CreateGameResponse.class);
+        } catch (Exception e) {
+            return new CreateGameResponse("Unauthorized", 401);
+        }
     }
 
     public ListGamesResponse listGames(String authToken) {
         var path = "/game";
-        return this.makeRequest("GET", path, null, authToken, ListGamesResponse.class);
+        try {
+            var res = this.makeRequest("GET", path, null, authToken, ListGamesResponse.class);
+            return res;
+        } catch (Exception e) {
+            return new ListGamesResponse("Unauthorized", 401);
+        }
     }
 
     public JoinGameResponse joinGame(String authToken, JoinGameRequest request) {
         var path = "/game";
-        return this.makeRequest("PUT", path, request, authToken, JoinGameResponse.class);
+        try {
+            return this.makeRequest("PUT", path, request, authToken, JoinGameResponse.class);
+        } catch (Exception e) {
+            return new JoinGameResponse("Unauthorized", 401);
+        }
     }
 
     public ClearResponse clear() {
