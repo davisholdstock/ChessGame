@@ -106,7 +106,7 @@ public class ChessClient {
         assertSignedIn();
         ListGamesResponse listGamesResponse = server.listGames(authToken);
         if (listGamesResponse.getSTATUS_CODE() == 200) {
-            return "games listed!";
+            return listGamesResponse.toString();
         }
         return "" + listGamesResponse.getSTATUS_CODE();
 //        ChessGame game1 = new Game();

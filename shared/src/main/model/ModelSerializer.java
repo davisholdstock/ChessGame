@@ -14,11 +14,16 @@ public class ModelSerializer {
     }
 
     public static <T> T deserialize(Reader reader, Class<T> responseClass) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(ChessGame.class, new GameAdapter());
-        gsonBuilder.registerTypeAdapter(ChessBoard.class, new BoardAdapter());
-        gsonBuilder.registerTypeAdapter(ChessPiece.class, new PieceAdapter());
+        try {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(ChessGame.class, new GameAdapter());
+            gsonBuilder.registerTypeAdapter(ChessBoard.class, new BoardAdapter());
+            gsonBuilder.registerTypeAdapter(ChessPiece.class, new PieceAdapter());
 
-        return gsonBuilder.create().fromJson(reader, responseClass);
+            return gsonBuilder.create().fromJson(reader, responseClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 }
