@@ -163,8 +163,20 @@ public class SeverFacadeTests {
 
         Assertions.assertNotEquals(new ArrayList<>(), db.getGames());
 
+        String correct_games = """
+                1.
+                >> Name: game>> White: null>> Black: null>> GameID: 1
+                2.
+                >> Name: game>> White: null>> Black: null>> GameID: 2
+                3.
+                >> Name: game>> White: null>> Black: null>> GameID: 3
+                4.
+                >> Name: game>> White: null>> Black: null>> GameID: 4
+                """;
+
         Assertions.assertNotEquals(new ListGamesResponse("Unauthorized", 401),
                 server.listGames(res.getAuthToken()));
+        Assertions.assertEquals(correct_games, server.listGames(res.getAuthToken()).toString());
     }
 
     @Test
