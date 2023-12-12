@@ -3,10 +3,10 @@ package ui.client;
 import java.util.Scanner;
 
 public class Repl {
-    private final ChessClient client;
+    private final WSClient client;
 
     public Repl(String severurl) {
-        client = new ChessClient(severurl);
+        client = new WSClient(severurl);
     }
 
     public void run() {

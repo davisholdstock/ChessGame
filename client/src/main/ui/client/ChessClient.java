@@ -9,6 +9,7 @@ import requests.RegisterRequest;
 import response.*;
 import server.ServerFacade;
 import ui.client.websocket.WebSocketFacade;
+import webSocketMessages.ResponseException;
 
 import java.util.Arrays;
 
@@ -17,9 +18,11 @@ public class ChessClient {
     private WebSocketFacade ws;
     String authToken = "";
     private State state = State.LOGGED_OUT;
+    private String serverUrl;
 
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
+        this.serverUrl = serverUrl;
     }
 
     public String eval(String input) {
@@ -49,8 +52,9 @@ public class ChessClient {
             var password = params[1];
             LoginRequest user = new LoginRequest(username, password);
             LoginResponse loginResponse = server.login(user);
-            state = State.LOGGED_IN;
             if (loginResponse.getSTATUS_CODE() == 200) {
+                state = State.LOGGED_IN;
+                ws = new WebSocketFacade(serverUrl);
                 authToken = loginResponse.getAuthToken();
                 return String.format("You signed in as %s.\n", username);
             }
@@ -102,16 +106,13 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <GAMENAME>");
     }
 
-    public String listGames() throws ResponseException { //FIXME: Does not work
+    public String listGames() throws ResponseException {
         assertSignedIn();
         ListGamesResponse listGamesResponse = server.listGames(authToken);
         if (listGamesResponse.getSTATUS_CODE() == 200) {
             return listGamesResponse.toString();
         }
         return "" + listGamesResponse.getSTATUS_CODE();
-//        ChessGame game1 = new Game();
-//        game1.getBoard().printFancy();
-        //return "games listed!";
     }
 
     public String joinGame(String... params) throws ResponseException {
@@ -155,6 +156,15 @@ public class ChessClient {
                         register <USERNAME> <PASSWORD> <EMAIL> - to create an account
                         login <USERNAME> <PASSWORD>
                         quit - playing chess
+                        help - with possible commands
+                    """;
+        } else if (state == State.IN_GAME) {
+            return """
+                        redraw - redraws the chess board
+                        move <INITIAL POSITION> <FINAL POSITION> - moves a piece based on chess board position
+                        highlight <POSITION> - highlights the legal moves for a piece based on chess board position
+                        resign - resigns from the game
+                        leave - leaves the game
                         help - with possible commands
                     """;
         }

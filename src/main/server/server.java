@@ -3,6 +3,7 @@ package server;
 import dataAccess.DataAccess;
 import dataAccess.SQLDatabase;
 import handler.*;
+import server.websocket.WebSocketHandler;
 import spark.Spark;
 
 /**
@@ -10,6 +11,11 @@ import spark.Spark;
  */
 public class server {
     public static DataAccess db = new SQLDatabase();
+    private final WebSocketHandler webSocketHandler;
+
+    public server() {
+        webSocketHandler = new WebSocketHandler();
+    }
 
     public static void main(String[] args) {
         new server().run();
@@ -21,6 +27,8 @@ public class server {
     void run() {
         Spark.externalStaticFileLocation("web");
         Spark.port(8080);
+
+        Spark.webSocket("/connect", webSocketHandler);
 
         Spark.delete("/db", (req, res) -> (new ClearDBHandler()).handle(req, res));
 
