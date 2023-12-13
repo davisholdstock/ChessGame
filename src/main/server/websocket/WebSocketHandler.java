@@ -20,29 +20,29 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws IOException {
         Action action = new Gson().fromJson(message, Action.class);
         switch (action.type()) {
-            case ENTER -> enter(action.visitorName(), session);
-            case EXIT -> exit(action.visitorName());
+            case JOIN -> join(action.visitorName(), session);
+            case LEAVE -> leave(action.visitorName());
         }
     }
 
-    private void enter(String visitorName, Session session) throws IOException {
-        connections.add(visitorName, session);
-        var message = String.format("%s is in the shop", visitorName);
-        var notification = new Notification(Notification.Type.ARRIVAL, message);
-        connections.broadcast(visitorName, notification);
+    private void join(String username, Session session) throws IOException {
+        connections.add(username, session);
+        var message = String.format("%s joined the game", username);
+        var notification = new Notification(Notification.Type.JOINED_GAME, message);
+        connections.broadcast(username, notification);
     }
 
-    private void exit(String visitorName) throws IOException {
-        connections.remove(visitorName);
-        var message = String.format("%s left the shop", visitorName);
-        var notification = new Notification(Notification.Type.DEPARTURE, message);
-        connections.broadcast(visitorName, notification);
+    private void leave(String username) throws IOException {
+        connections.remove(username);
+        var message = String.format("%s left the game", username);
+        var notification = new Notification(Notification.Type.LEFT_GAME, message);
+        connections.broadcast(username, notification);
     }
 
-    public void makeNoise(String petName, String sound) throws ResponseException {
+    public void makeMove(String startPosition, String endPosition) throws ResponseException {
         try {
-            var message = String.format("%s says %s", petName, sound);
-            var notification = new Notification(Notification.Type.NOISE, message);
+            var message = String.format("Moved from %s to %s", startPosition, endPosition);
+            var notification = new Notification(Notification.Type.MOVED, message);
             connections.broadcast("", notification);
         } catch (Exception ex) {
             throw new ResponseException(500, ex.getMessage());

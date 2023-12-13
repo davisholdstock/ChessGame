@@ -12,14 +12,15 @@ import java.net.URISyntaxException;
 
 //need to extend Endpoint for websocket to work properly
 public class WebSocketFacade extends Endpoint {
-
     Session session;
+    NotificationHandler notificationHandler;
 
 
-    public WebSocketFacade(String url) throws ResponseException {
+    public WebSocketFacade(String url, NotificationHandler notificationHandler) throws ResponseException {
         try {
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/connect");
+            this.notificationHandler = notificationHandler;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
@@ -29,7 +30,7 @@ public class WebSocketFacade extends Endpoint {
                 @Override
                 public void onMessage(String message) {
                     Notification notification = new Gson().fromJson(message, Notification.class);
-//                    notificationHandler.notify(notification);
+                    notificationHandler.notify(notification);
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
@@ -44,7 +45,7 @@ public class WebSocketFacade extends Endpoint {
 
     public void enterGame(String username) throws ResponseException {
         try {
-            var action = new Action(Action.Type.ENTER, username);
+            var action = new Action(Action.Type.JOIN, username);
             this.session.getBasicRemote().sendText(new Gson().toJson(action));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -53,7 +54,7 @@ public class WebSocketFacade extends Endpoint {
 
     public void leaveGame(String username) throws ResponseException {
         try {
-            var action = new Action(Action.Type.EXIT, username);
+            var action = new Action(Action.Type.LEAVE, username);
             this.session.getBasicRemote().sendText(new Gson().toJson(action));
             this.session.close();
         } catch (IOException ex) {

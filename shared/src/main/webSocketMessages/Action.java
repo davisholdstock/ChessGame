@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 
 public record Action(Type type, String visitorName) {
     public enum Type {
-        ENTER,
-        EXIT
+        JOIN,
+        LEAVE
     }
 
     public String toString() {
