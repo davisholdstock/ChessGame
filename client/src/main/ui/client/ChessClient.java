@@ -135,7 +135,7 @@ public class ChessClient {
             if (joinGameResponse.getSTATUS_CODE() == 200) {
                 // add websockets
                 ws = new WebSocketFacade(serverUrl, notificationHandler);
-                ws.enterGame(username);
+//                ws.enterGame(username, );
 
                 ChessGame game1 = new Game();
                 game1.getBoard().printFancy();
@@ -148,6 +148,10 @@ public class ChessClient {
             JoinGameRequest joinGameRequest = new JoinGameRequest(color, gameID);
             JoinGameResponse joinGameResponse = server.joinGame(authToken, joinGameRequest);
             if (joinGameResponse.getSTATUS_CODE() == 200) {
+                // add websockets
+                ws = new WebSocketFacade(serverUrl, notificationHandler);
+                ws.enterGame(username, color);
+
                 ChessGame game1 = new Game();
                 game1.getBoard().printFancy();
                 return String.format("Game joined %s!\n", gameID);

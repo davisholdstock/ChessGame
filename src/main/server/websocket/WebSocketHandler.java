@@ -1,5 +1,6 @@
 package server.websocket;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -20,13 +21,13 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws IOException {
         Action action = new Gson().fromJson(message, Action.class);
         switch (action.type()) {
-            case JOIN -> join(action.visitorName(), session);
-            case LEAVE -> leave(action.visitorName());
+            case JOIN -> join(action.username(), action.teamColor(), session);
+            case LEAVE -> leave(action.username());
         }
     }
 
-    private void join(String username, Session session) throws IOException {
-        connections.add(username, session);
+    private void join(String username, ChessGame.TeamColor teamColor, Session session) throws IOException {
+        connections.add(username, teamColor, session);
         var message = String.format("%s joined the game", username);
         var notification = new Notification(Notification.Type.JOINED_GAME, message);
         connections.broadcast(username, notification);

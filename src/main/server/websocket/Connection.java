@@ -1,15 +1,16 @@
 package server.websocket;
 
+import chess.ChessGame;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.io.IOException;
 
 public class Connection {
     public String username;
-    public String teamColor;
+    public ChessGame.TeamColor teamColor;
     public Session session;
 
-    public Connection(String username, String teamColor, Session session) {
+    public Connection(String username, ChessGame.TeamColor teamColor, Session session) {
         this.username = username;
         this.teamColor = teamColor;
         this.session = session;
