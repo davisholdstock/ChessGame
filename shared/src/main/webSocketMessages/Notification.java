@@ -6,7 +6,8 @@ public record Notification(Type type, String message) {
     public enum Type {
         JOINED_GAME,
         MOVED,
-        LEFT_GAME
+        LEFT_GAME,
+        RESIGNED_GAME
     }
 
     public String toString() {

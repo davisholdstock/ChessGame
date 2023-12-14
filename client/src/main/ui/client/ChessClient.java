@@ -181,6 +181,7 @@ public class ChessClient {
 
     private String resignGame() throws ResponseException {
         assertInGame();
+        ws.resignGame(username, this.teamColor);
         return "You lost!\n";
     }
 

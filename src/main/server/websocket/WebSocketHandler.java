@@ -23,6 +23,7 @@ public class WebSocketHandler {
         switch (action.type()) {
             case JOIN -> join(action.username(), action.teamColor(), session);
             case LEAVE -> leave(action.username());
+            case RESIGN -> resign(action.username());
         }
     }
 
@@ -37,6 +38,13 @@ public class WebSocketHandler {
         connections.remove(username);
         var message = String.format("%s left the game", username);
         var notification = new Notification(Notification.Type.LEFT_GAME, message);
+        connections.broadcast(username, notification);
+    }
+
+    private void resign(String username) throws IOException {
+        connections.remove(username);
+        var message = String.format("%s lost the game", username);
+        var notification = new Notification(Notification.Type.RESIGNED_GAME, message);
         connections.broadcast(username, notification);
     }
 

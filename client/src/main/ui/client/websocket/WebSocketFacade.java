@@ -63,4 +63,13 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
+    public void resignGame(String username, ChessGame.TeamColor teamColor) throws ResponseException {
+        try {
+            var action = new Action(Action.Type.RESIGN, username, teamColor);
+            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+    }
+
 }

@@ -5,7 +5,8 @@ import com.google.gson.Gson;
 public record Action(Type type, String username, chess.ChessGame.TeamColor teamColor) {
     public enum Type {
         JOIN,
-        LEAVE
+        LEAVE,
+        RESIGN
     }
 
     public String toString() {

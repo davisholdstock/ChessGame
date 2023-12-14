@@ -5,8 +5,7 @@ import webSocketMessages.Notification;
 
 import java.util.Scanner;
 
-import static chess.EscapeSequences.RESET_TEXT_COLOR;
-import static chess.EscapeSequences.SET_TEXT_COLOR_RED;
+import static chess.EscapeSequences.*;
 
 public class Repl implements NotificationHandler {
     private final ChessClient client;
@@ -41,7 +40,7 @@ public class Repl implements NotificationHandler {
 
     @Override
     public void notify(Notification notification) {
-        System.out.print("\n" + SET_TEXT_COLOR_RED + notification.message() + RESET_TEXT_COLOR);
+        System.out.print("\n" + SET_TEXT_COLOR_RED + notification.message() + SET_TEXT_COLOR_WHITE);
         printPrompt();
     }
 }
