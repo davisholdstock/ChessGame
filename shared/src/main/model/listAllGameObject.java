@@ -4,23 +4,33 @@ import java.util.Objects;
 
 public class listAllGameObject {
     String gameName;
+    String fenNotation;
     int gameID;
     String whiteUsername;
     String blackUsername;
 
-    public listAllGameObject(String gameName, int gameID, String whiteUsername, String blackUsername) {
+    public listAllGameObject(String gameName, int gameID, String fenNotation, String whiteUsername, String blackUsername) {
         this.blackUsername = blackUsername;
         this.gameID = gameID;
         this.gameName = gameName;
         this.whiteUsername = whiteUsername;
+        this.fenNotation = fenNotation;
     }
 
     public String getGameName() {
         return gameName;
     }
 
+    public String getFenNotation() {
+        return fenNotation;
+    }
+
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public void setFenNotation(String fenNotation) {
+        this.fenNotation = fenNotation;
     }
 
     public int getGameID() {

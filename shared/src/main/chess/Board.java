@@ -206,73 +206,140 @@ public class Board implements ChessBoard {
         return chessBoard.toString();
     }
 
-    public void printFancy() {
-        for (int i = rows; i >= -1; --i) {
-            for (int y = -1; y <= columns; ++y) {
-                if ((i == rows || i == -1) && y > -1 && y < columns) {
-                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(EMPTY);
-                    System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
-                    System.out.print(EMPTY);
-                } else if ((y == columns || y == -1)) {
-                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(EMPTY);
-                    if (i < rows && i > -1)
-                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
-                    else
+    public void printFancy(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            for (int i = rows; i >= -1; --i) {
+                for (int y = -1; y <= columns; ++y) {
+                    if ((i == rows || i == -1) && y > -1 && y < columns) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
                         System.out.print(EMPTY);
-                    System.out.print(EMPTY);
-                } else {
-                    if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
-                        System.out.print(SET_BG_COLOR_GREEN);
-                    else
-                        System.out.print(SET_BG_COLOR_WHITE);
-                    if (getPiece(new Position(i, y)) != null) {
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
                         System.out.print(EMPTY);
-                        System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)).toString());
+                    } else if ((y == columns || y == -1)) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        if (i < rows && i > -1)
+                            System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                        else
+                            System.out.print(EMPTY);
                         System.out.print(EMPTY);
                     } else {
-                        System.out.print(EMPTY.repeat(3));
+                        if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                            System.out.print(SET_BG_COLOR_GREEN);
+                        else
+                            System.out.print(SET_BG_COLOR_WHITE);
+                        if (getPiece(new Position(i, y)) != null) {
+                            System.out.print(EMPTY);
+                            System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)).toString());
+                            System.out.print(EMPTY);
+                        } else {
+                            System.out.print(EMPTY.repeat(3));
+                        }
                     }
                 }
+                System.out.print(RESET_BG_COLOR);
+                System.out.println();
             }
-            System.out.print(RESET_BG_COLOR);
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println();
-
-        for (int i = -1; i <= rows; ++i) {
-            for (int y = columns; y >= -1; --y) {
-                if ((i == rows || i == -1) && y > -1 && y < columns) {
-                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(EMPTY);
-                    System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
-                    System.out.print(EMPTY);
-                } else if (y == columns || y == -1) {
-                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    System.out.print(EMPTY);
-                    if (i < rows && i > -1)
-                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
-                    else
+        } else if (color == ChessGame.TeamColor.BLACK) {
+            for (int i = -1; i <= rows; ++i) {
+                for (int y = columns; y >= -1; --y) {
+                    if ((i == rows || i == -1) && y > -1 && y < columns) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
                         System.out.print(EMPTY);
-                    System.out.print(EMPTY);
-                } else {
-                    if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
-                        System.out.print(SET_BG_COLOR_GREEN);
-                    else
-                        System.out.print(SET_BG_COLOR_WHITE);
-                    if (getPiece(new Position(i, y)) != null) {
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
                         System.out.print(EMPTY);
-                        System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)));
+                    } else if (y == columns || y == -1) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        if (i < rows && i > -1)
+                            System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                        else
+                            System.out.print(EMPTY);
                         System.out.print(EMPTY);
                     } else {
-                        System.out.print(EMPTY.repeat(3));
+                        if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                            System.out.print(SET_BG_COLOR_GREEN);
+                        else
+                            System.out.print(SET_BG_COLOR_WHITE);
+                        if (getPiece(new Position(i, y)) != null) {
+                            System.out.print(EMPTY);
+                            System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)));
+                            System.out.print(EMPTY);
+                        } else {
+                            System.out.print(EMPTY.repeat(3));
+                        }
                     }
                 }
+                System.out.print(RESET_BG_COLOR);
+                System.out.println();
             }
-            System.out.print(RESET_BG_COLOR);
+        } else {
+            for (int i = rows; i >= -1; --i) {
+                for (int y = -1; y <= columns; ++y) {
+                    if ((i == rows || i == -1) && y > -1 && y < columns) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
+                        System.out.print(EMPTY);
+                    } else if ((y == columns || y == -1)) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        if (i < rows && i > -1)
+                            System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                        else
+                            System.out.print(EMPTY);
+                        System.out.print(EMPTY);
+                    } else {
+                        if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                            System.out.print(SET_BG_COLOR_GREEN);
+                        else
+                            System.out.print(SET_BG_COLOR_WHITE);
+                        if (getPiece(new Position(i, y)) != null) {
+                            System.out.print(EMPTY);
+                            System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)).toString());
+                            System.out.print(EMPTY);
+                        } else {
+                            System.out.print(EMPTY.repeat(3));
+                        }
+                    }
+                }
+                System.out.print(RESET_BG_COLOR);
+                System.out.println();
+            }
             System.out.println();
+            System.out.println();
+            for (int i = -1; i <= rows; ++i) {
+                for (int y = columns; y >= -1; --y) {
+                    if ((i == rows || i == -1) && y > -1 && y < columns) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (char) ('a' + y));
+                        System.out.print(EMPTY);
+                    } else if (y == columns || y == -1) {
+                        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+                        System.out.print(EMPTY);
+                        if (i < rows && i > -1)
+                            System.out.print(SET_TEXT_FAINT + SET_TEXT_COLOR_WHITE + (i + 1));
+                        else
+                            System.out.print(EMPTY);
+                        System.out.print(EMPTY);
+                    } else {
+                        if ((i % 2 == 0) && (y % 2 != 0) || (i % 2 != 0) && (y % 2 == 0))
+                            System.out.print(SET_BG_COLOR_GREEN);
+                        else
+                            System.out.print(SET_BG_COLOR_WHITE);
+                        if (getPiece(new Position(i, y)) != null) {
+                            System.out.print(EMPTY);
+                            System.out.print(SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + getPiece(new Position(i, y)));
+                            System.out.print(EMPTY);
+                        } else {
+                            System.out.print(EMPTY.repeat(3));
+                        }
+                    }
+                }
+                System.out.print(RESET_BG_COLOR);
+                System.out.println();
+            }
         }
     }
 

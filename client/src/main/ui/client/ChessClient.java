@@ -2,10 +2,7 @@ package ui.client;
 
 import chess.ChessGame;
 import chess.Game;
-import requests.CreateGameRequest;
-import requests.JoinGameRequest;
-import requests.LoginRequest;
-import requests.RegisterRequest;
+import requests.*;
 import response.*;
 import server.ServerFacade;
 import ui.client.websocket.NotificationHandler;
@@ -23,6 +20,7 @@ public class ChessClient {
     private State state = State.LOGGED_OUT;
     private String serverUrl;
     ChessGame.TeamColor teamColor = null;
+    int gameID = 0;
 
     public ChessClient(String serverUrl, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
@@ -79,6 +77,7 @@ public class ChessClient {
         LogoutResponse logoutResponse = server.logout(authToken);
         if (logoutResponse.getSTATUS_CODE() == 200) {
             state = State.LOGGED_OUT;
+            this.username = null;
             return "Bye!\n";
         }
         return "" + logoutResponse.getSTATUS_CODE();
@@ -95,6 +94,7 @@ public class ChessClient {
             state = State.LOGGED_IN;
             if (registerResponse.getSTATUS_CODE() == 200) {
                 authToken = registerResponse.getAuthToken();
+                this.username = username;
                 return String.format("Welcome %s!\n", username);
             }
             return "" + registerResponse.getSTATUS_CODE();
@@ -111,7 +111,7 @@ public class ChessClient {
             if (createGameResponse.getSTATUS_CODE() == 200) {
                 int gameID = createGameResponse.getGameID();
                 ChessGame game1 = new Game();
-                game1.getBoard().printFancy();
+                game1.getBoard().printFancy(teamColor);
                 return String.format("Game created %s!\n", gameID);
             }
         }
@@ -140,7 +140,7 @@ public class ChessClient {
                 this.teamColor = null;
 
                 ChessGame game1 = new Game();
-                game1.getBoard().printFancy();
+                game1.getBoard().printFancy(teamColor);
                 state = State.IN_GAME;
                 return String.format("Game joined %s!\n", gameID);
             }
@@ -155,8 +155,10 @@ public class ChessClient {
                 ws.enterGame(username, color);
                 this.teamColor = color;
 
-                ChessGame game1 = new Game();
-                game1.getBoard().printFancy();
+                ListGamesResponse listGamesResponse = server.listGames(authToken);
+                var games = listGamesResponse.getGames();
+                ChessGame game1 = new Game(games.get(gameID - 1).getFenNotation());
+                game1.getBoard().printFancy(color);
                 state = State.IN_GAME;
                 return String.format("Game joined %s!\n", gameID);
             }
@@ -167,7 +169,7 @@ public class ChessClient {
     public String observeGame(String... params) throws ResponseException {
         assertSignedIn();
         ChessGame game1 = new Game();
-        game1.getBoard().printFancy();
+        game1.getBoard().printFancy(teamColor);
         return "observe";
     }
 

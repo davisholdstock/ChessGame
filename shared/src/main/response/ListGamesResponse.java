@@ -21,7 +21,7 @@ public class ListGamesResponse {
     public ListGamesResponse(ArrayList<model.Game> gameList) {
         games = new ArrayList<>();
         for (var game : gameList) {
-            this.games.add(new listAllGameObject(game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername()));
+            this.games.add(new listAllGameObject(game.gameName(), game.gameID(), game.game().fenNotation(), game.whiteUsername(), game.blackUsername()));
         }
         this.STATUS_CODE = 200;
     }

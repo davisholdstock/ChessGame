@@ -46,5 +46,5 @@ public interface ChessBoard {
 
     void movePieceAndPromote(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece);
 
-    void printFancy();
+    void printFancy(ChessGame.TeamColor color);
 }

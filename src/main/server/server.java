@@ -43,5 +43,6 @@ public class server {
         Spark.post("/game", (req, res) -> (new NewGameHandler()).handle(req, res));
 
         Spark.put("/game", (req, res) -> (new JoinGameHandler()).handle(req, res));
+
     }
 }

@@ -2,10 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import model.ModelSerializer;
-import requests.CreateGameRequest;
-import requests.JoinGameRequest;
-import requests.LoginRequest;
-import requests.RegisterRequest;
+import requests.*;
 import response.*;
 
 import java.io.IOException;
