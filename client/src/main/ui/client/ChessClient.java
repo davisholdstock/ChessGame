@@ -22,6 +22,7 @@ public class ChessClient {
     String username = "";
     private State state = State.LOGGED_OUT;
     private String serverUrl;
+    ChessGame.TeamColor teamColor = null;
 
     public ChessClient(String serverUrl, NotificationHandler notificationHandler) {
         server = new ServerFacade(serverUrl);
@@ -135,7 +136,8 @@ public class ChessClient {
             if (joinGameResponse.getSTATUS_CODE() == 200) {
                 // add websockets
                 ws = new WebSocketFacade(serverUrl, notificationHandler);
-//                ws.enterGame(username, );
+                ws.enterGame(username, null);
+                this.teamColor = null;
 
                 ChessGame game1 = new Game();
                 game1.getBoard().printFancy();
@@ -151,9 +153,11 @@ public class ChessClient {
                 // add websockets
                 ws = new WebSocketFacade(serverUrl, notificationHandler);
                 ws.enterGame(username, color);
+                this.teamColor = color;
 
                 ChessGame game1 = new Game();
                 game1.getBoard().printFancy();
+                state = State.IN_GAME;
                 return String.format("Game joined %s!\n", gameID);
             }
         }
@@ -169,9 +173,10 @@ public class ChessClient {
 
     private String leaveGame() throws ResponseException {
         assertInGame();
+        ws.leaveGame(username, this.teamColor);
         state = State.LOGGED_IN;
         help();
-        return null;
+        return "You left the game!";
     }
 
     private String resignGame() throws ResponseException {
