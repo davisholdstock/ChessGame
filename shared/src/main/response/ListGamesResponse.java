@@ -19,25 +19,12 @@ public class ListGamesResponse {
      * @param gameList of the saved games
      */
     public ListGamesResponse(ArrayList<model.Game> gameList) {
-//        this.games = gameList;
         games = new ArrayList<>();
         for (var game : gameList) {
             this.games.add(new listAllGameObject(game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername()));
         }
         this.STATUS_CODE = 200;
     }
-
-//    public ListGamesResponse(String string) {
-//        String[] tmpStr = string.split("//");
-//        this.message = tmpStr[0];
-//        this.games = new ArrayList<>();
-//        for (int i = 1; i < tmpStr.length; ++i) {
-//            String[] tmp = tmpStr[i].split(">>");
-//            Game tmpGame = new Game(tmp[0], new chess.Game(tmp[4]), tmp[1], tmp[2], Integer.parseInt(tmp[3]));
-//            games.add(tmpGame);
-//        }
-//
-//    }
 
     @Override
     public boolean equals(Object o) {

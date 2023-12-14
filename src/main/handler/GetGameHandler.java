@@ -1,17 +1,17 @@
 package handler;
 
 import com.google.gson.Gson;
-import requests.JoinGameRequest;
-import response.JoinGameResponse;
+import requests.ListGameRequest;
+import response.ListGameResponse;
 import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class JoinGameHandler implements Route {
+public class GetGameHandler implements Route {
     Gson gson;
 
-    public JoinGameHandler() {
+    public GetGameHandler() {
         gson = new Gson();
     }
 
@@ -25,15 +25,15 @@ public class JoinGameHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         if (request.body() == null) {
             response.status(400);
-            return gson.toJson(new JoinGameResponse("Error: bad request", 400));
+            return gson.toJson(new ListGameResponse("Error: bad request", 400));
         }
-        JoinGameRequest req = (JoinGameRequest) gson.fromJson(request.body(), JoinGameRequest.class);
+        ListGameRequest req = (ListGameRequest) gson.fromJson(request.body(), ListGameRequest.class);
         if (req.getGameID() == null) {
             response.status(400);
-            return gson.toJson(new JoinGameResponse("Error: bad request", 400));
+            return gson.toJson(new ListGameResponse("Error: bad request", 400));
         }
         GameService service = new GameService();
-        JoinGameResponse res = service.joinGame(req, request.headers("Authorization"));
+        ListGameResponse res = service.listOneGame(req, request.headers("Authorization"));
         response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
     }

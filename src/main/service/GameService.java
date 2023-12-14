@@ -5,8 +5,10 @@ import dataAccess.DataAccessException;
 import model.Game;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
+import requests.ListGameRequest;
 import response.CreateGameResponse;
 import response.JoinGameResponse;
+import response.ListGameResponse;
 import response.ListGamesResponse;
 import server.server;
 
@@ -97,6 +99,21 @@ public class GameService {
         } catch (Exception e) {
             e.printStackTrace();
             return new ListGamesResponse("Error: description", 500);
+        }
+    }
+
+    public ListGameResponse listOneGame(ListGameRequest request, String authToken) {
+        try {
+            Game game = server.db.readGame(request.getGameID());
+            try {
+                server.db.readAuth(authToken);
+            } catch (Exception e) {
+                return new ListGameResponse("Error: unauthorized", 401);
+            }
+            return new ListGameResponse(game);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ListGameResponse("Error: bad request", 400);
         }
     }
 }
