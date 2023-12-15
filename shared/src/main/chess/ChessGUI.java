@@ -107,7 +107,6 @@ public class ChessGUI extends JFrame implements MouseListener {
         Collection<ChessMove> moves = game.validMoves(new Position(y, x));
         for (ChessMove move1 : moves) {
         }
-        //game.makeMove(new Move(new Position(pntMoveFrom.y, pntMoveFrom.x), new Position(pntMoveTo.y, pntMoveTo.x), null));
         return isMoveValid;
     }
 

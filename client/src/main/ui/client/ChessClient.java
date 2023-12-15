@@ -1,7 +1,6 @@
 package ui.client;
 
-import chess.ChessGame;
-import chess.Game;
+import chess.*;
 import requests.*;
 import response.*;
 import server.ServerFacade;
@@ -138,8 +137,11 @@ public class ChessClient {
                 ws = new WebSocketFacade(serverUrl, notificationHandler);
                 ws.enterGame(username, null);
                 this.teamColor = null;
+                this.gameID = gameID;
 
-                ChessGame game1 = new Game();
+                ListGamesResponse listGamesResponse = server.listGames(authToken);
+                var games = listGamesResponse.getGames();
+                ChessGame game1 = new Game(games.get(gameID - 1).getFenNotation());
                 game1.getBoard().printFancy(teamColor);
                 state = State.IN_GAME;
                 return String.format("Game joined %s!\n", gameID);
@@ -154,6 +156,7 @@ public class ChessClient {
                 ws = new WebSocketFacade(serverUrl, notificationHandler);
                 ws.enterGame(username, color);
                 this.teamColor = color;
+                this.gameID = gameID;
 
                 ListGamesResponse listGamesResponse = server.listGames(authToken);
                 var games = listGamesResponse.getGames();
@@ -168,15 +171,23 @@ public class ChessClient {
 
     public String observeGame(String... params) throws ResponseException {
         assertSignedIn();
-        ChessGame game1 = new Game();
-        game1.getBoard().printFancy(teamColor);
-        return "observe";
+        if (params.length == 1) {
+            int gameID = Integer.parseInt(params[0]);
+            ListGamesResponse listGamesResponse = server.listGames(authToken);
+            var games = listGamesResponse.getGames();
+            ChessGame game1 = new Game(games.get(gameID - 1).getFenNotation());
+            game1.getBoard().printFancy(teamColor);
+            return "observe";
+        }
+        throw new ResponseException(400, "Expected: <ID>");
     }
 
     private String leaveGame() throws ResponseException {
         assertInGame();
         ws.leaveGame(username, this.teamColor);
         state = State.LOGGED_IN;
+        this.teamColor = null;
+        this.gameID = 0;
         help();
         return "You left the game!";
     }
@@ -189,16 +200,33 @@ public class ChessClient {
 
     private String redrawBoard() throws ResponseException {
         assertInGame();
-        return null;
+        ListGamesResponse listGamesResponse = server.listGames(authToken);
+        var games = listGamesResponse.getGames();
+        ChessGame game1 = new Game(games.get(this.gameID - 1).getFenNotation());
+        game1.getBoard().printFancy(this.teamColor);
+        return "Updated Board";
     }
 
     private String movePiece(String... params) throws ResponseException {
-        assertInGame();
-        return null;
+        try {
+            if (params.length == 2) {
+                assertInGame();
+                String initialPosition = params[0];
+                String finalPosition = params[1];
+                ListGamesResponse listGamesResponse = server.listGames(authToken);
+                var games = listGamesResponse.getGames();
+                ChessGame game1 = new Game(games.get(this.gameID - 1).getFenNotation());
+                game1.makeMove(new Move(new Position(initialPosition), new Position(finalPosition), null));
+                return "Moved " + initialPosition + " to " + finalPosition;
+            } else {
+                throw new RuntimeException();
+            }
+        } catch (RuntimeException | InvalidMoveException ex) {
+            throw new ResponseException(400, "Expected: <INITIAL POSITION> <FINAL POSITION>");
+        }
     }
 
     private String highlightMoves(String... params) throws ResponseException {
-        assertInGame();
         return null;
     }
 

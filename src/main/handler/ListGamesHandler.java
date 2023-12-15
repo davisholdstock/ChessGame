@@ -29,6 +29,5 @@ public class ListGamesHandler implements Route {
         ListGamesResponse res = service.listGames(request.headers("Authorization"));
         response.status(res.getSTATUS_CODE());
         return gson.toJson(res);
-//        return res.toString();
     }
 }

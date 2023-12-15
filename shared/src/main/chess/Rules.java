@@ -11,7 +11,6 @@ public class Rules {
         ArrayList<ChessMove> moves = new ArrayList<>();
 
         if (isOnBoard(startPosition)) {
-//            checkForPawnCapture(board, startPosition, moves);
             if (PawnOnStartingSquare(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move two squares at fist
                 checkForPawnCapture(board, startPosition, moves, null); // Capturing
                 for (int i = 1; i <= 2; ++i) {
@@ -20,7 +19,6 @@ public class Rules {
                     } else break;
                 }
             } else if (pawnCanPromote(startPosition, board.getPiece(startPosition).getTeamColor())) { // Move one square and Promote
-                //checkForPawnCapture(board, startPosition, moves, null); // Capturing
                 for (var type : ChessPiece.PieceType.values()) {
                     if (type != ChessPiece.PieceType.PAWN && type != ChessPiece.PieceType.KING)
                         checkForPawnCapture(board, startPosition, moves, type); // Capturing and Promotion

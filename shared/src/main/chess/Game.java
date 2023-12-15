@@ -180,7 +180,6 @@ public class Game implements ChessGame {
 
     @Override
     public boolean isInStalemate(TeamColor teamColor) {
-        // FIXME
         // Check to see if the king can move and not be in check
         Collection<ChessMove> validKingMoves = new ArrayList<ChessMove>();
         if (!isInCheck(teamColor)) {

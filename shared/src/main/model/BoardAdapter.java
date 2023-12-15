@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 public class BoardAdapter implements JsonDeserializer<ChessBoard> {
     @Override
     public ChessBoard deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-//        return new Gson().fromJson(jsonElement, Board.class);
         return jsonDeserializationContext.deserialize(jsonElement, ChessBoard.class);
     }
 }
